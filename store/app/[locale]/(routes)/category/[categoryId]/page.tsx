@@ -22,7 +22,6 @@ const CategoryPage = async ({ params, searchParams }: { params: Params, searchPa
     const sizes = await getSizes();
     const colors = await getColors();
     const category = await getCategory(categoryId)
-    console.log(category);
     const t = await getTranslations("CategoryPage");
     const locale = await getLocale();
     return (

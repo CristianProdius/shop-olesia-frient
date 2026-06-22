@@ -12,7 +12,15 @@ const ProductPage = async ({ params }: { params: Params }) => {
     const t = await getTranslations("Product");
     const { productId } = await params;
     const product = await getProduct(productId);
-    const suggestProducts = await getProducts({ categoryId: product?.category?.id })
+
+    // Related items: same category, excluding the current product. Rotate the
+    // list by a stable per-product seed and cap it, so a large category (e.g.
+    // mostly dresses) doesn't show the identical set on every product page.
+    const related = (await getProducts({ categoryId: product?.category?.id }))
+        .filter((p) => p.id !== product.id);
+    const seed = productId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+    const start = related.length ? seed % related.length : 0;
+    const suggestProducts = [...related.slice(start), ...related.slice(0, start)].slice(0, 8);
     return ( 
         <div className="bg-white">
             <Container>

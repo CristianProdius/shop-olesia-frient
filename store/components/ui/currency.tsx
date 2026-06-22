@@ -21,10 +21,11 @@ const Currency:React.FC<CurrencyProps> = ({ value }) => {
         return null;
     }
 
-    return ( 
-        <div className="font-semibold">
+    return (
+        // span (not div) so it's valid inside inline parents like <p> (e.g. Info)
+        <span className="font-semibold">
             {formatter.format(Number(value))}
-        </div>
+        </span>
     );
 }
 
