@@ -10,8 +10,8 @@ export async function POST(
         const userId = await getUserId();
         const body = await req.json();
 
-        const { name, billboardId } = body; 
-        const { storeId } = await params; 
+        const { name, nameI18n, billboardId } = body;
+        const { storeId } = await params;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
@@ -43,6 +43,7 @@ export async function POST(
         const category = await prismadb.category.create({
             data : {
                 name,
+                nameI18n: nameI18n ?? undefined,
                 billboardId,
                 storeId: storeId
             }

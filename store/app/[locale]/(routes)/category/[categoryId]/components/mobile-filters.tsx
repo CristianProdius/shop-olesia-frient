@@ -7,13 +7,18 @@ import { Plus, X } from "lucide-react";
 import { Dialog } from "@headlessui/react";
 import IconButton from "@/components/ui/icon-button";
 import Filter from "./filter";
+import { useTranslations } from "next-intl";
 
 interface MobileFiltersProps {
     sizes: Size[];
     colors: Color[];
+    sizesLabel: string;
+    colorsLabel: string;
+    locale: string;
 }
 
-const MobileFilters: React.FC<MobileFiltersProps> = ({ sizes, colors }) => {
+const MobileFilters: React.FC<MobileFiltersProps> = ({ sizes, colors, sizesLabel, colorsLabel, locale }) => {
+    const t = useTranslations("CategoryPage");
     const [open, setOpen] = useState(true);
     const onOpen = () => setOpen(true);
     const onClose = () => setOpen(false);
@@ -21,7 +26,7 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({ sizes, colors }) => {
     return (
         <>
             <Button className="flex items-center gap-x-2 lg:hidden" onClick={onOpen}>
-                Filters
+                {t("filters")}
                 <Plus size={20} />
             </Button>
             <Dialog open={open} as="div" className="relative z-40 lg:hidden" onClose={onClose}>
@@ -36,8 +41,8 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({ sizes, colors }) => {
                         </div>
                         {/* Render the filters */}
                         <div className="p-4">
-                            <Filter valueKey="sizeId" name="Sizes" data={sizes} />
-                            <Filter valueKey="colorId" name="Colors" data={colors} />
+                            <Filter valueKey="sizeId" name={sizesLabel} data={sizes} locale={locale} />
+                            <Filter valueKey="colorId" name={colorsLabel} data={colors} locale={locale} />
                         </div>
                     </Dialog.Panel>
                 </div>

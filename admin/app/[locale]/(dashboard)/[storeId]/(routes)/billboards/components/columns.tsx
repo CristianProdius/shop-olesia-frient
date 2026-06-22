@@ -1,5 +1,6 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { CellAction } from './cell-action';
 
 export type BillboardColumn = {
@@ -8,14 +9,24 @@ export type BillboardColumn = {
     createdAt: string
 }
 
+const LabelHeader = () => {
+    const t = useTranslations('Billboards');
+    return <>{t('columnLabel')}</>;
+}
+
+const DateHeader = () => {
+    const t = useTranslations('Billboards');
+    return <>{t('columnDate')}</>;
+}
+
 export const columns: ColumnDef<BillboardColumn>[] = [
     {
         accessorKey: 'label',
-        header: 'Label',
+        header: () => <LabelHeader />,
     },
     {
         accessorKey: 'createdAt',
-        header: 'Date',
+        header: () => <DateHeader />,
     },
     {
         id: 'actions',

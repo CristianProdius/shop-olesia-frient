@@ -4,7 +4,8 @@ import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 // import { Billboard } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
-import { OrderColumn, columns } from "./columns"
+import { useTranslations } from "next-intl"
+import { OrderColumn, useOrderColumns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 
 interface OrderClientProps {
@@ -16,11 +17,13 @@ export const OrderClient: React.FC<OrderClientProps> = ({
 }) => {
     const router = useRouter();
     const params = useParams();
+    const t = useTranslations('Orders');
+    const columns = useOrderColumns();
     return (
         <>
             <Heading
-                title={`Order (${data?.length})`}
-                description="Manage orders for your store"/>
+                title={t('title', { count: data?.length })}
+                description={t('description')}/>
             <Separator />
             <DataTable columns={columns} data={data} searchKey="products" />
         </>

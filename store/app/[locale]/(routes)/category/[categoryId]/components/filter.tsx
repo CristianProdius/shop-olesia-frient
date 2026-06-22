@@ -4,15 +4,18 @@ import Button from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Color, Size } from '@/types';
 import qs from 'query-string'
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { localizedField } from '@/lib/i18n-content';
 
 interface FilterProps {
     data: (Size | Color) [];
     name: string;
     valueKey: string;
+    locale: string;
 }
 
-const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
+const Filter: React.FC<FilterProps> = ({ data, name, valueKey, locale }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const selectedValue = searchParams.get(valueKey);
@@ -41,7 +44,7 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
                     <div key={filter.id} className='flex items-center'>
                         <Button className={cn("rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300", selectedValue === filter.id && "bg-black text-white")}
                         onClick={() => onClick(filter.id)}>
-                            {filter.name}
+                            {localizedField(filter.nameI18n, locale, filter.name)}
                         </Button>
                     </div>
                 ))}

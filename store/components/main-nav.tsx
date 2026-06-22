@@ -1,8 +1,10 @@
 "use client"
 import { cn } from '@/lib/utils';
 import { Category } from '@/types';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl';
+import { localizedField } from '@/lib/i18n-content';
 
 interface MainNavProps {
     data: Category[] | []
@@ -10,10 +12,11 @@ interface MainNavProps {
 
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
     const pathname = usePathname();
+    const locale = useLocale();
 
     const routes = data.map(route => ({
         href: `/category/${route.id}`,
-        label: route.name,
+        label: localizedField(route.nameI18n, locale, route.name),
         active: pathname === `/category/${route.id}`
     }))
 

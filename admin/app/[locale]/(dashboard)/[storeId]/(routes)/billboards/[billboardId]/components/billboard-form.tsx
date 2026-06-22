@@ -13,16 +13,23 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 
 interface SettingsFromProps {
-    initialData: Billboard | null; 
+    initialData: Billboard | null;
 }
 
 const formSchema = z.object({
     label: z.string().min(1),
+    labelI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
     imageUrl: z.string().optional(),
 })
 
@@ -32,20 +39,26 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
 
     const params = useParams();
     const router = useRouter();
+    const t = useTranslations('Billboards');
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? 'Edit billboard' : 'Create billboard'
-    const description = initialData ? 'Edit a billboard' : 'Add a new billboard'
-    const toastMessage = initialData ? 'Billboard updated.' : 'Billboard created.'
-    const action = initialData ? 'Save changes' : 'Create'
+    const title = initialData ? t('editTitle') : t('createTitle')
+    const description = initialData ? t('editDescription') : t('createDescription')
+    const toastMessage = initialData ? t('updatedToast') : t('createdToast')
+    const action = initialData ? t('saveChanges') : t('create')
 
     const form = useForm<BillboardFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
+        defaultValues: initialData ? {
+            label: initialData.label,
+            imageUrl: initialData.imageUrl,
+            labelI18n: (initialData.labelI18n as { en?: string; ru?: string; ro?: string } | null) || { en: '', ru: '', ro: '' },
+        } : {
             label: '',
-            imageUrl: ''
+            imageUrl: '',
+            labelI18n: { en: '', ru: '', ro: '' },
         }
     });
 
@@ -61,7 +74,7 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             router.push(`/${params.storeId}/billboards`);
             toast.success(toastMessage)
         } catch(err) {
-            toast.error("Something went wrong.");
+            toast.error(t('somethingWentWrong'));
         } finally {
             setLoading(false)
         }
@@ -73,9 +86,9 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`)
             router.refresh();
             router.push(`/${params.storeId}/billboards`)
-            toast.success("Billboard deleted.")
+            toast.success(t('deletedToast'))
         } catch(err) {
-            toast.error("Make sure you removed all categories using this billboard first.");
+            toast.error(t('deleteConstraintError'));
         } finally {
             setLoading(false)
             setOpen(false);
@@ -106,7 +119,7 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                         name="imageUrl"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>Background Image</FormLabel>
+                                <FormLabel>{t('backgroundImage')}</FormLabel>
                                 <FormControl>
                                     <ImageUpload
                                         value={field.value ? [field.value] : []}
@@ -121,18 +134,62 @@ export const BillboardForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                     />
                     <div className='grid grid-cols-3 gap-8'>
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="label"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Label</FormLabel>
+                                    <FormLabel>{t('labelField')}</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder='Billboard label' {...field} />
+                                        <Input disabled={loading} placeholder={t('labelPlaceholder')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className='space-y-4'>
+                        <FormLabel>{t('translations')}</FormLabel>
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="labelI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('labelPlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="labelI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('labelPlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="labelI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('labelPlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
                     <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
                 </form>

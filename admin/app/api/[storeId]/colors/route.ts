@@ -10,8 +10,8 @@ export async function POST(
         const userId = await getUserId();
         const body = await req.json();
 
-        const { name, value } = body;
-        const { storeId } = await params; 
+        const { name, value, nameI18n } = body;
+        const { storeId } = await params;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
@@ -44,6 +44,7 @@ export async function POST(
             data : {
                 name,
                 value,
+                nameI18n: nameI18n ?? undefined,
                 storeId: storeId
             }
         })

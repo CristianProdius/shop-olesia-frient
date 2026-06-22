@@ -8,6 +8,7 @@ import Filter from "./components/filter";
 import NoResults from "@/components/ui/no-results";
 import ProductCard from "@/components/ui/product-card";
 import MobileFilters from "./components/mobile-filters";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export const revalidate = 0;
 
@@ -22,25 +23,35 @@ const CategoryPage = async ({ params, searchParams }: { params: Params, searchPa
     const colors = await getColors();
     const category = await getCategory(categoryId)
     console.log(category);
-    return ( 
+    const t = await getTranslations("CategoryPage");
+    const locale = await getLocale();
+    return (
         <div className="bg-white">
             <Container>
                 <Billboard data={category?.billboard} />
                 <div className="px-4 pb-24 sm:px-6 lg:px-8">
                     <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
                         {/*Add Mobile Filters*/}
-                        <MobileFilters sizes={sizes} colors={colors} />
+                        <MobileFilters
+                            sizes={sizes}
+                            colors={colors}
+                            sizesLabel={t("sizes")}
+                            colorsLabel={t("colors")}
+                            locale={locale}
+                        />
                         {/*Add Computer Filters*/}
                         <div className="hidden lg:block">
                             <Filter
                                 valueKey="sizeId"
-                                name="Sizes"
+                                name={t("sizes")}
                                 data={sizes}
+                                locale={locale}
                             />
                             <Filter
                                 valueKey="colorId"
-                                name="Colors"
+                                name={t("colors")}
                                 data={colors}
+                                locale={locale}
                             />
                         </div>
                         <div className="mt-6 lg:col-span-4 lg:mt-0">

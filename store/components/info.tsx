@@ -1,15 +1,21 @@
+"use client";
+
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { localizedField } from "@/lib/i18n-content";
 
 interface InfoProps {
     data: Product;
 }
 const Info: React.FC<InfoProps> = ({ data }) => {
-    return ( 
+    const t = useTranslations("Product");
+    const locale = useLocale();
+    return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{localizedField(data.nameI18n, locale, data.name)}</h1>
             <div className="flex items-end justify-between mt-3">
                 <p className="text-2xl text-gray-900">
                     <Currency value={data?.price} />
@@ -18,19 +24,19 @@ const Info: React.FC<InfoProps> = ({ data }) => {
             <hr className="my-4" />
             <div className="flex flex-col gap-y-6">
                 <div className="flex items-center gap-x-4">
-                    <h3 className="font-semibold text-black">Size:</h3>
+                    <h3 className="font-semibold text-black">{t("size")}</h3>
                         <div>
                             {data?.size?.value}
                         </div>
                 </div>
                 <div className="flex items-center gap-x-4">
-                    <h3 className="font-semibold text-black">Color:</h3>
+                    <h3 className="font-semibold text-black">{t("color")}</h3>
                     <div className="w-6 h-6 border border-gray-600 rounded-full" style={{ backgroundColor: data?.color?.value }}/>
                 </div>
             </div>
             <div className="flex items-center mt-10 gap-x-4">
                 <Button className="flex items-center gap-x-2">
-                    Add To Cart
+                    {t("addToCart")}
                     <ShoppingCart />
                 </Button>
             </div>

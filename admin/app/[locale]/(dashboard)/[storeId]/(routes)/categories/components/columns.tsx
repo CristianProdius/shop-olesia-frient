@@ -1,5 +1,6 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { CellAction } from './cell-action';
 
 export type CategoryColumn = {
@@ -9,19 +10,34 @@ export type CategoryColumn = {
     createdAt: string
 }
 
+const HeaderName = () => {
+    const t = useTranslations('Categories');
+    return <>{t('colName')}</>;
+};
+
+const HeaderBillboard = () => {
+    const t = useTranslations('Categories');
+    return <>{t('colBillboard')}</>;
+};
+
+const HeaderDate = () => {
+    const t = useTranslations('Categories');
+    return <>{t('colDate')}</>;
+};
+
 export const columns: ColumnDef<CategoryColumn>[] = [
     {
         accessorKey: 'name',
-        header: 'Name',
+        header: () => <HeaderName />,
     },
     {
         accessorKey: 'billboard',
-        header: 'Billboard',
+        header: () => <HeaderBillboard />,
         cell: ({ row }) => row.original.billboardLabel,
     },
     {
         accessorKey: 'createdAt',
-        header: 'Date',
+        header: () => <HeaderDate />,
     },
     {
         id: 'actions',

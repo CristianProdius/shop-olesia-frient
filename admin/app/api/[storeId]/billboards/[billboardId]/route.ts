@@ -35,7 +35,7 @@ export async function PATCH (
 
         const { storeId, billboardId } = await params;
 
-        const { label, imageUrl } = body;
+        const { label, labelI18n, imageUrl } = body;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 })
@@ -70,6 +70,7 @@ export async function PATCH (
             },
             data: {
                 label,
+                labelI18n: labelI18n ?? undefined,
                 imageUrl
             }
         })

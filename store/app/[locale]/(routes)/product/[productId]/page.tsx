@@ -4,10 +4,12 @@ import Gallery from "@/components/gallery";
 import Info from "@/components/info";
 import ProductList from "@/components/product-list";
 import Container from "@/components/ui/container";
+import { getTranslations } from "next-intl/server";
 
 type Params = Promise<{ productId: string }>
 
 const ProductPage = async ({ params }: { params: Params }) => {
+    const t = await getTranslations("Product");
     const { productId } = await params;
     const product = await getProduct(productId);
     const suggestProducts = await getProducts({ categoryId: product?.category?.id })
@@ -24,7 +26,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
                         </div>
                     </div>
                     <hr className="my-10"/>
-                    <ProductList title="Related Items" items={suggestProducts} />
+                    <ProductList title={t("relatedItems")} items={suggestProducts} />
                 </div>
             </Container>
         </div>

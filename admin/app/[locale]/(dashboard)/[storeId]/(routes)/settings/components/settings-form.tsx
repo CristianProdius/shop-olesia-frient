@@ -13,7 +13,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { ApiAlert } from '@/components/ui/api-alert';
 import { useOrigin } from '@/hooks/use-origin';
@@ -33,6 +35,7 @@ export const SettingsForm: React.FC<SettingsFromProps> = ({ initialData }) => {
     const params = useParams();
     const router = useRouter();
     const origin = useOrigin();
+    const t = useTranslations('Settings');
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -47,9 +50,9 @@ export const SettingsForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             setLoading(true);
             await axios.patch(`/api/stores/${params.storeId}`, data)
             router.refresh();
-            toast.success("Store updated.")
+            toast.success(t('updated'))
         } catch(err) {
-            toast.error("Something went wrong.");
+            toast.error(t('somethingWrong'));
         } finally {
             setLoading(false)
         }
@@ -61,9 +64,9 @@ export const SettingsForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             await axios.delete(`/api/stores/${params.storeId}`)
             router.refresh();
             router.push("/")
-            toast.success("Store deleted.")
+            toast.success(t('deleted'))
         } catch(err) {
-            toast.error("Make sure you removed all products and categories first.");
+            toast.error(t('deleteError'));
         } finally {
             setLoading(false)
             setOpen(false);
@@ -79,7 +82,7 @@ export const SettingsForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             loading={loading}
             />
             <div className="flex items-center justify-between">
-                <Heading title="Settings" description="Manage Store preferences" />
+                <Heading title={t('title')} description={t('description')} />
                 <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
                     <Trash className="w-4 h-4" />
                 </Button>
@@ -93,15 +96,15 @@ export const SettingsForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                             name="name"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('nameLabel')}</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder='Store name' {...field} />
+                                        <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}/>
                     </div>
-                    <Button disabled={loading} className='ml-auto' type='submit'>Save Changes</Button>
+                    <Button disabled={loading} className='ml-auto' type='submit'>{t('saveChanges')}</Button>
                 </form>
             </Form>
             <Separator />

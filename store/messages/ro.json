@@ -1,11 +1,61 @@
 {
-  "Common": {
-    "loading": "Se încarcă...",
-    "signIn": "Autentificare",
-    "signOut": "Deconectare"
-  },
   "Navbar": {
-    "store": "MAGAZIN",
-    "cart": "Coș"
+    "brand": "STORE",
+    "signIn": "Autentificare",
+    "signOutWithEmail": "Deconectare ({email})",
+    "noResults": "Niciun rezultat găsit."
+  },
+  "Footer": {
+    "copyright": "© 2023 FakeStoreName, Inc. Toate drepturile rezervate."
+  },
+  "Home": {
+    "featuredProducts": "Produse recomandate",
+    "productImageAlt": "Imagine produs"
+  },
+  "Product": {
+    "size": "Mărime:",
+    "color": "Culoare:",
+    "addToCart": "Adaugă în coș",
+    "relatedItems": "Produse similare",
+    "imageAlt": "Imagine"
+  },
+  "CategoryPage": {
+    "sizes": "Mărimi",
+    "colors": "Culori",
+    "filters": "Filtre"
+  },
+  "Cart": {
+    "title": "Coș de cumpărături",
+    "empty": "Niciun produs adăugat în coș",
+    "orderSummary": "Rezumat comandă",
+    "orderTotal": "Total comandă",
+    "checkout": "Finalizează comanda",
+    "paymentCompleted": "Plată finalizată.",
+    "somethingWentWrong": "A apărut o eroare.",
+    "cartEmpty": "Coșul tău este gol.",
+    "checkoutFailed": "Finalizarea comenzii a eșuat. Te rugăm să încerci din nou.",
+    "checkoutTitle": "Finalizare comandă",
+    "simulatedPaymentNotice": "Plată simulată — nu se efectuează nicio plată reală.",
+    "fullName": "Nume complet",
+    "shippingAddress": "Adresă de livrare",
+    "phone": "Telefon",
+    "processing": "Se procesează...",
+    "paySimulated": "Plătește (simulat)"
+  },
+  "Auth": {
+    "signInTitle": "Autentificare",
+    "signIn": "Autentificare",
+    "signingIn": "Se autentifică...",
+    "email": "Email",
+    "password": "Parolă",
+    "invalidCredentials": "Date de autentificare invalide.",
+    "noAccount": "Nu ai cont?",
+    "createOne": "Creează unul",
+    "createAccountTitle": "Creează cont",
+    "createAccount": "Creează cont",
+    "creating": "Se creează...",
+    "name": "Nume",
+    "createAccountError": "Contul nu a putut fi creat.",
+    "alreadyHaveAccount": "Ai deja un cont?"
   }
 }

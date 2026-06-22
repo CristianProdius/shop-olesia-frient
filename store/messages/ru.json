@@ -1,11 +1,61 @@
 {
-  "Common": {
-    "loading": "Загрузка...",
-    "signIn": "Войти",
-    "signOut": "Выйти"
-  },
   "Navbar": {
-    "store": "МАГАЗИН",
-    "cart": "Корзина"
+    "brand": "STORE",
+    "signIn": "Войти",
+    "signOutWithEmail": "Выйти ({email})",
+    "noResults": "Ничего не найдено."
+  },
+  "Footer": {
+    "copyright": "© 2023 FakeStoreName, Inc. Все права защищены."
+  },
+  "Home": {
+    "featuredProducts": "Рекомендуемые товары",
+    "productImageAlt": "Изображение товара"
+  },
+  "Product": {
+    "size": "Размер:",
+    "color": "Цвет:",
+    "addToCart": "В корзину",
+    "relatedItems": "Похожие товары",
+    "imageAlt": "Изображение"
+  },
+  "CategoryPage": {
+    "sizes": "Размеры",
+    "colors": "Цвета",
+    "filters": "Фильтры"
+  },
+  "Cart": {
+    "title": "Корзина",
+    "empty": "В корзине нет товаров",
+    "orderSummary": "Сводка заказа",
+    "orderTotal": "Итого по заказу",
+    "checkout": "Оформить заказ",
+    "paymentCompleted": "Оплата завершена.",
+    "somethingWentWrong": "Что-то пошло не так.",
+    "cartEmpty": "Ваша корзина пуста.",
+    "checkoutFailed": "Не удалось оформить заказ. Попробуйте ещё раз.",
+    "checkoutTitle": "Оформление заказа",
+    "simulatedPaymentNotice": "Демонстрационная оплата — реальное списание не производится.",
+    "fullName": "Полное имя",
+    "shippingAddress": "Адрес доставки",
+    "phone": "Телефон",
+    "processing": "Обработка...",
+    "paySimulated": "Оплатить (демо)"
+  },
+  "Auth": {
+    "signInTitle": "Войти",
+    "signIn": "Войти",
+    "signingIn": "Вход...",
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "invalidCredentials": "Неверные учётные данные.",
+    "noAccount": "Нет аккаунта?",
+    "createOne": "Создать",
+    "createAccountTitle": "Создать аккаунт",
+    "createAccount": "Создать аккаунт",
+    "creating": "Создание...",
+    "name": "Имя",
+    "createAccountError": "Не удалось создать аккаунт.",
+    "alreadyHaveAccount": "Уже есть аккаунт?"
   }
 }

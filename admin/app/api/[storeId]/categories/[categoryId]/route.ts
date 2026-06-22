@@ -36,8 +36,8 @@ export async function PATCH (
         const userId = await getUserId();
         const body = await req.json();
 
-        const { name, billboardId } = body;
-        const { storeId, categoryId } = await params; 
+        const { name, nameI18n, billboardId } = body;
+        const { storeId, categoryId } = await params;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 })
@@ -72,6 +72,7 @@ export async function PATCH (
             },
             data: {
                 name,
+                nameI18n: nameI18n ?? undefined,
                 billboardId,
             }
         })

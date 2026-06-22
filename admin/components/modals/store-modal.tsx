@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-hot-toast' 
+import { toast } from 'react-hot-toast'
+import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
     name: z.string().min(1)
@@ -20,6 +21,7 @@ const formSchema = z.object({
 export const StoreModal = () => {
 
     const [loading, setLoading] = useState(false)
+    const t = useTranslations('Modals');
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,9 +40,9 @@ export const StoreModal = () => {
             window.location.assign(`/${response.data.id}`)
 
             console.log(response.data);
-            toast.success("Store created successfully")
+            toast.success(t('storeCreated'))
         } catch (err) {
-            toast.error(`Something went Wrong ${err}`);
+            toast.error(`${t('somethingWentWrong')} ${err}`);
         } finally {
             setLoading(false);
         }
@@ -49,8 +51,8 @@ export const StoreModal = () => {
     const storeModal = useStoreModal();
     return (
         <Modal
-            title="Create Store"
-            description="Add a new store to manage products and categories"
+            title={t('createStore')}
+            description={t('createStoreDescription')}
             isOpen={storeModal.isOpen}
             onClose={storeModal.onClose}
         >
@@ -63,11 +65,11 @@ export const StoreModal = () => {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>{t('name')}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 disabled={loading}
-                                                placeholder='E-commerce'
+                                                placeholder={t('namePlaceholder')}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -79,8 +81,8 @@ export const StoreModal = () => {
                                 <Button
                                     disabled={loading}
                                     variant="outline"
-                                    onClick={storeModal.onClose}>Cancel</Button>
-                                <Button disabled={loading} type='submit' >Continue</Button>
+                                    onClick={storeModal.onClose}>{t('cancel')}</Button>
+                                <Button disabled={loading} type='submit' >{t('continue')}</Button>
                             </div>
                         </form>
                     </Form>

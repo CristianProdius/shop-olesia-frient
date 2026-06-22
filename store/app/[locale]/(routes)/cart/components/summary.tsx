@@ -3,12 +3,15 @@
 import Button from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
 import useCart from '@/hooks/use-cart';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import { useSession } from '@/lib/auth-client';
 
 const Summary = () => {
+    const t = useTranslations('Cart');
     const router = useRouter();
     const searchParams = useSearchParams();
     const { data: session } = useSession();
@@ -18,13 +21,13 @@ const Summary = () => {
 
     useEffect(() => {
         if(searchParams.get('success')) {
-            toast.success("Payment completed.");
+            toast.success(t("paymentCompleted"));
             removeAll();
         }
         if(searchParams.get("canceled")) {
-            toast.error("Something went wrong.")
+            toast.error(t("somethingWentWrong"))
         }
-    }, [searchParams, removeAll])
+    }, [searchParams, removeAll, t])
 
     const onCheckout = () => {
         // Login required to checkout. Send guests to sign in, then on to the
@@ -39,17 +42,17 @@ const Summary = () => {
 
     return ( 
         <div className='px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8'>
-            <h2 className='text-lg font-medium text-gray-900'>Order Summary</h2>
+            <h2 className='text-lg font-medium text-gray-900'>{t("orderSummary")}</h2>
             <div className='mt-6 space-y-4'>
                 <div className='flex items-center justify-between pt-4 border-t border-gray-200'>
                     <div className='text-base font-medium text-gray-400'>
-                        Order Total
+                        {t("orderTotal")}
                     </div>
                     <Currency value={totalPrice} />
                 </div>
             </div>
             <Button disabled={items.length === 0} className='w-full mt-6' onClick={onCheckout}>
-                Checkout
+                {t("checkout")}
             </Button>
         </div>
      );

@@ -9,9 +9,11 @@ import { Separator } from "@/components/ui/separator";
 import prismadb from "@/lib/prismadb"
 import { formatter } from "@/lib/utils";
 import { CreditCard, DollarSign, Package } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> }) => {
   const { storeId } = await params;
+  const t = await getTranslations('Dashboard');
   const store = await prismadb.store.findFirst({
     where: { id: storeId }
   });
@@ -24,13 +26,13 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
   return (
     <div className="flex-col">
       <div className="flex-1 p-8 pt-6 space-y-4">
-        <Heading title="Dashboard" description="Overview of your store" />
+        <Heading title={t('title')} description={t('description')} />
         <Separator />
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
-                Total Revenue
+                {t('totalRevenue')}
               </CardTitle>
               <DollarSign className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
@@ -43,7 +45,7 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
-                Sales
+                {t('sales')}
               </CardTitle>
               <CreditCard className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
@@ -56,7 +58,7 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
-                Products in Stock
+                {t('productsInStock')}
               </CardTitle>
               <Package className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
@@ -69,7 +71,7 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
         </div>
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
+            <CardTitle>{t('overview')}</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
             <Overview data={graphRevenue} />

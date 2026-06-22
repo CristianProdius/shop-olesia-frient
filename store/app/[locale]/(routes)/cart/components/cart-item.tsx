@@ -4,8 +4,9 @@ import IconButton from '@/components/ui/icon-button';
 import useCart from '@/hooks/use-cart';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { toast } from 'react-hot-toast';
+import { useLocale } from 'next-intl';
 import { Product } from '@/types';
+import { localizedField } from '@/lib/i18n-content';
 
 interface CartItemProps {
     data: Product;
@@ -14,6 +15,7 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
 
     const cart = useCart();
+    const locale = useLocale();
 
     const onRemove = () => {
         cart.removeItem(data.id);
@@ -36,7 +38,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                 <div className='relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0'>
                     <div className='flex justify-between'>
                         <p className='text-lg font-semibold text-black'>
-                            {data.name}
+                            {localizedField(data.nameI18n, locale, data.name)}
                         </p>
                     </div>
                     <div className='flex mt-1 text-sm'>

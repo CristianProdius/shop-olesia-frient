@@ -1,5 +1,6 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 export type OrderColumn = {
     id: string
@@ -11,29 +12,32 @@ export type OrderColumn = {
     createdAt: string
 }
 
-export const columns: ColumnDef<OrderColumn>[] = [
-    {
-        accessorKey: 'products',
-        header: 'Products',
-    },
-    {
-        accessorKey: 'phone',
-        header: 'Phone',
-    },
-    {
-        accessorKey: 'address',
-        header: 'Address',
-    },
-    {
-        accessorKey: 'totalPrice',
-        header: 'Total Price',
-    },
-    {
-        accessorKey: 'isPaid',
-        header: 'Paid',
-    },
-    {
-        accessorKey: 'createdAt',
-        header: 'Date',
-    }
-]
+export const useOrderColumns = (): ColumnDef<OrderColumn>[] => {
+    const t = useTranslations('Orders');
+    return [
+        {
+            accessorKey: 'products',
+            header: t('products'),
+        },
+        {
+            accessorKey: 'phone',
+            header: t('phone'),
+        },
+        {
+            accessorKey: 'address',
+            header: t('address'),
+        },
+        {
+            accessorKey: 'totalPrice',
+            header: t('totalPrice'),
+        },
+        {
+            accessorKey: 'isPaid',
+            header: t('paid'),
+        },
+        {
+            accessorKey: 'createdAt',
+            header: t('date'),
+        }
+    ]
+}

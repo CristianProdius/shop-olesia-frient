@@ -13,12 +13,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 
 interface SettingsFromProps {
-    initialData: Color | null; 
+    initialData: Color | null;
 }
 
 const formSchema = z.object({
@@ -26,6 +28,11 @@ const formSchema = z.object({
     value: z.string().min(4).regex(/^#/, {
         message: 'String must be a valid hex code'
     }),
+    nameI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
 })
 
 type ColorFormValues = z.infer<typeof formSchema>;
@@ -34,20 +41,26 @@ export const ColorForm: React.FC<SettingsFromProps> = ({ initialData }) => {
 
     const params = useParams();
     const router = useRouter();
+    const t = useTranslations('Colors');
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? 'Edit color' : 'Create color'
-    const description = initialData ? 'Edit a color' : 'Add a new color'
-    const toastMessage = initialData ? 'Color updated.' : 'Color created.'
-    const action = initialData ? 'Save changes' : 'Create'
+    const title = initialData ? t('editTitle') : t('createTitle')
+    const description = initialData ? t('editDescription') : t('createDescription')
+    const toastMessage = initialData ? t('updated') : t('created')
+    const action = initialData ? t('saveChanges') : t('create')
 
     const form = useForm<ColorFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
+        defaultValues: initialData ? {
+            name: initialData.name,
+            value: initialData.value,
+            nameI18n: (initialData.nameI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+        } : {
             name: '',
-            value: ''
+            value: '',
+            nameI18n: { en: '', ru: '', ro: '' },
         }
     });
 
@@ -63,7 +76,7 @@ export const ColorForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             router.push(`/${params.storeId}/colors`);
             toast.success(toastMessage)
         } catch(err) {
-            toast.error("Something went wrong.");
+            toast.error(t('somethingWrong'));
         } finally {
             setLoading(false)
         }
@@ -75,9 +88,9 @@ export const ColorForm: React.FC<SettingsFromProps> = ({ initialData }) => {
             await axios.delete(`/api/${params.storeId}/colors/${params.colorId}`)
             router.refresh();
             router.push(`/${params.storeId}/colors`)
-            toast.success("Color deleted.")
+            toast.success(t('deleted'))
         } catch(err) {
-            toast.error("Make sure you removed all products using this color first.");
+            toast.error(t('deleteConstraint'));
         } finally {
             setLoading(false)
             setOpen(false);
@@ -105,27 +118,27 @@ export const ColorForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
                     <div className='grid grid-cols-3 gap-8'>
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="name"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('formName')}</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder='Color name' {...field} />
+                                        <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="value"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Value</FormLabel>
+                                    <FormLabel>{t('formValue')}</FormLabel>
                                     <FormControl>
                                         <div className='flex items-center gap-x-4'>
-                                            <Input disabled={loading} placeholder='Color value' {...field} />
+                                            <Input disabled={loading} placeholder={t('valuePlaceholder')} {...field} />
                                             <div className='p-4 border rounded-full' style={{ backgroundColor: field.value }} />
                                         </div>
                                     </FormControl>
@@ -133,6 +146,50 @@ export const ColorForm: React.FC<SettingsFromProps> = ({ initialData }) => {
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className='space-y-4'>
+                        <FormLabel>{t('translations')}</FormLabel>
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
                     <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
                 </form>

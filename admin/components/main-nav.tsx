@@ -1,44 +1,46 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export function MainNav({ className, ...props } : React.HTMLAttributes<HTMLElement>) {
     const pathname = usePathname();
     const params = useParams();
+    const t = useTranslations('Nav');
 
     const routes = [{
         href: `/${params.storeId}`,
-        label: 'Overview',
+        label: t('overview'),
         active: pathname === `/${params.storeId}`
     }, {
         href: `/${params.storeId}/billboards`,
-        label: 'Billboards',
+        label: t('billboards'),
         active: pathname === `/${params.storeId}/billboards`
     }, {
         href: `/${params.storeId}/categories`,
-        label: 'Categories',
+        label: t('categories'),
         active: pathname === `/${params.storeId}/categories`
     }, {
         href: `/${params.storeId}/sizes`,
-        label: 'Sizes',
+        label: t('sizes'),
         active: pathname === `/${params.storeId}/sizes`
     }, {
         href: `/${params.storeId}/colors`,
-        label: 'Colors',
+        label: t('colors'),
         active: pathname === `/${params.storeId}/colors`
     }, {
         href: `/${params.storeId}/products`,
-        label: 'Products',
+        label: t('products'),
         active: pathname === `/${params.storeId}/products`
     }, {
         href: `/${params.storeId}/orders`,
-        label: 'Orders',
+        label: t('orders'),
         active: pathname === `/${params.storeId}/orders`
     }, {
         href: `/${params.storeId}/settings`,
-        label: 'Settings',
+        label: t('settings'),
         active: pathname === `/${params.storeId}/settings`
     }];
     return (

@@ -5,17 +5,21 @@ import Image from "next/image";
 import IconButton from "@/components/ui/icon-button";
 import { Expand, ShoppingCart } from "lucide-react";
 import Currency from "@/components/ui/currency";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import PreviewModal from './../preview-modal';
 import usePreviewModal from "@/hooks/use-preview-modal";
 import { MouseEventHandler } from 'react';
 import useCart from "@/hooks/use-cart";
+import { useTranslations, useLocale } from "next-intl";
+import { localizedField } from "@/lib/i18n-content";
 
 interface ProductCard {
     data: Product;
 }
 
 const ProductCard: React.FC<ProductCard> = ({ data }) => {
+    const t = useTranslations('Home');
+    const locale = useLocale();
     const cart = useCart();
     const previewModal = usePreviewModal();
     const router = useRouter();
@@ -40,7 +44,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
                 <Image
                     fill
                     src={data?.images?.[0]?.url}
-                    alt="Images"
+                    alt={t('productImageAlt')}
                     className="object-cover rounded-md aspect-square" />
                 <div className="absolute w-full px-6 transition opacity-0 group-hover:opacity-100 bottom-5">
                     <div className="flex justify-center gap-x-6">
@@ -56,7 +60,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
             {/* Description */}
             <div>
                 <p className="text-lg font-semibold">
-                    {data?.name}
+                    {localizedField(data?.nameI18n, locale, data?.name)}
                 </p>
                 <p className="text-sm text-gray-500">
                     {data.category.name}

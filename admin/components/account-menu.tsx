@@ -1,6 +1,7 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { LogOut, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import { signOut, useSession } from "@/lib/auth-client";
 const AccountMenu = () => {
     const router = useRouter();
     const { data: session } = useSession();
+    const t = useTranslations('Nav');
 
     const onSignOut = async () => {
         await signOut();
@@ -32,12 +34,12 @@ const AccountMenu = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel className="font-normal">
-                    {session?.user?.email ?? "Account"}
+                    {session?.user?.email ?? t('account')}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onSignOut}>
                     <LogOut className="w-4 h-4 mr-2" />
-                    Sign out
+                    {t('signOut')}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "./alert";
 import { Badge, BadgeProps } from "./badge";
 import { Button } from "./button";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 interface ApiAlertProps {
     title: string;
@@ -11,10 +12,6 @@ interface ApiAlertProps {
     variant: 'public' | 'admin';
 }
 
-const textMap: Record<ApiAlertProps["variant"], string> = {
-    public: 'Public',
-    admin: 'Admin'
-}
 const variantMap: Record<ApiAlertProps["variant"], BadgeProps['variant']> = {
     public: 'secondary',
     admin: 'destructive'
@@ -25,9 +22,14 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
     description,
     variant = 'public'
 }) => {
+    const t = useTranslations('ApiAlert');
+    const textMap: Record<ApiAlertProps["variant"], string> = {
+        public: t('public'),
+        admin: t('admin')
+    }
     const onCopy = () => {
         navigator.clipboard.writeText(description);
-        toast.success("API Route copied to the clipboard");
+        toast.success(t('copied'));
     };
     return (
         <Alert>

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter, Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { signIn } from "@/lib/auth-client";
 
 export default function SignInPage() {
     const router = useRouter();
+    const t = useTranslations("AuthAdmin");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ export default function SignInPage() {
         setLoading(false);
 
         if (error) {
-            toast.error(error.message || "Invalid credentials.");
+            toast.error(error.message || t("invalidCredentials"));
             return;
         }
 
@@ -33,23 +34,23 @@ export default function SignInPage() {
     return (
         <form onSubmit={onSubmit} className="w-full max-w-sm p-6 space-y-4 border rounded-lg">
             <div className="space-y-1">
-                <h1 className="text-2xl font-semibold">Sign in</h1>
-                <p className="text-sm text-muted-foreground">Welcome back to your dashboard.</p>
+                <h1 className="text-2xl font-semibold">{t("signInTitle")}</h1>
+                <p className="text-sm text-muted-foreground">{t("signInSubtitle")}</p>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? t("signingIn") : t("signIn")}
             </Button>
             <p className="text-sm text-center text-muted-foreground">
-                No account?{" "}
-                <Link href="/sign-up" className="underline">Create one</Link>
+                {t("noAccount")}{" "}
+                <Link href="/sign-up" className="underline">{t("createOne")}</Link>
             </p>
         </form>
     );

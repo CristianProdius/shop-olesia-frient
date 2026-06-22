@@ -13,7 +13,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -24,6 +26,11 @@ interface SettingsFromProps {
 
 const formSchema = z.object({
     name: z.string().min(1),
+    nameI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
     billboardId: z.string().min(1),
 })
 
@@ -33,19 +40,25 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
 
     const params = useParams();
     const router = useRouter();
+    const t = useTranslations('Categories');
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? 'Edit category' : 'Create category'
-    const description = initialData ? 'Edit a category' : 'Add a new category'
-    const toastMessage = initialData ? 'Category updated.' : 'Category created.'
-    const action = initialData ? 'Save changes' : 'Create'
+    const title = initialData ? t('editTitle') : t('createTitle')
+    const description = initialData ? t('editDescription') : t('createDescription')
+    const toastMessage = initialData ? t('updated') : t('created')
+    const action = initialData ? t('saveChanges') : t('create')
 
     const form = useForm<CategoryFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
+        defaultValues: initialData ? {
+            name: initialData.name,
+            nameI18n: (initialData.nameI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            billboardId: initialData.billboardId,
+        } : {
             name: '',
+            nameI18n: { en: '', ru: '', ro: '' },
             billboardId: ''
         }
     });
@@ -62,7 +75,7 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
             router.push(`/${params.storeId}/categories`);
             toast.success(toastMessage)
         } catch(err) {
-            toast.error("Something went wrong.");
+            toast.error(t('genericError'));
         } finally {
             setLoading(false)
         }
@@ -74,9 +87,9 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
             await axios.delete(`/api/${params.storeId}/categories/${params.categoryId}`)
             router.refresh();
             router.push(`/${params.storeId}/categories`)
-            toast.success("Category deleted.")
+            toast.success(t('deleted'))
         } catch(err) {
-            toast.error("Make sure you removed all products using this category first.");
+            toast.error(t('deleteError'));
         } finally {
             setLoading(false)
             setOpen(false);
@@ -104,24 +117,24 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
                     <div className='grid grid-cols-3 gap-8'>
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="name"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('nameLabel')}</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder='Category name' {...field} />
+                                        <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="billboardId"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Billboard</FormLabel>
+                                    <FormLabel>{t('billboardLabel')}</FormLabel>
                                     <Select
                                         disabled={loading}
                                         onValueChange={field.onChange}
@@ -132,7 +145,7 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
                                             <SelectTrigger>
                                                 <SelectValue
                                                     defaultValue={field.value}
-                                                    placeholder='Select a billboard'
+                                                    placeholder={t('billboardPlaceholder')}
                                                 />
                                             </SelectTrigger>
                                         </FormControl>
@@ -148,6 +161,50 @@ export const CategoryForm: React.FC<SettingsFromProps> = ({ initialData, billboa
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className='space-y-4'>
+                        <Heading title={t('translationsTitle')} description={t('translationsDescription')} />
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
                     <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
                 </form>

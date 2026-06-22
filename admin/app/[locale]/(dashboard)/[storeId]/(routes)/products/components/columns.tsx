@@ -1,6 +1,12 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { CellAction } from './cell-action';
+
+const HeaderCell = ({ id }: { id: string }) => {
+    const t = useTranslations('Products');
+    return <>{t(id)}</>;
+};
 
 export type ProductColumn = {
     id: string
@@ -17,31 +23,31 @@ export type ProductColumn = {
 export const columns: ColumnDef<ProductColumn>[] = [
     {
         accessorKey: 'name',
-        header: 'Name',
+        header: () => <HeaderCell id="colName" />,
     },
     {
         accessorKey: 'isArchived',
-        header: 'Archived',
+        header: () => <HeaderCell id="colArchived" />,
     },
     {
         accessorKey: 'isFeatured',
-        header: 'Featured',
+        header: () => <HeaderCell id="colFeatured" />,
     },
     {
         accessorKey: 'price',
-        header: 'Price',
+        header: () => <HeaderCell id="colPrice" />,
     },
     {
         accessorKey: 'category',
-        header: 'Category',
+        header: () => <HeaderCell id="colCategory" />,
     },
     {
         accessorKey: 'size',
-        header: 'Size',
+        header: () => <HeaderCell id="colSize" />,
     },
     {
         accessorKey: 'color',
-        header: 'Color',
+        header: () => <HeaderCell id="colColor" />,
         cell: ({ row }) => (
             <div className='flex items-center gap-x-2'>
                 {row.original.color}
@@ -51,7 +57,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
     },
     {
         accessorKey: 'createdAt',
-        header: 'Date',
+        header: () => <HeaderCell id="colDate" />,
     },
     {
         id: 'actions',

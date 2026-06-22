@@ -1,5 +1,6 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { CellAction } from './cell-action';
 
 export type SizeColumn = {
@@ -9,21 +10,24 @@ export type SizeColumn = {
     createdAt: string
 }
 
-export const columns: ColumnDef<SizeColumn>[] = [
-    {
-        accessorKey: 'name',
-        header: 'Name',
-    },
-    {
-        accessorKey: 'value',
-        header: 'Value',
-    },
-    {
-        accessorKey: 'createdAt',
-        header: 'Date',
-    },
-    {
-        id: 'actions',
-        cell: ({ row }) => <CellAction data={row.original} />
-    }
-]
+export const useColumns = (): ColumnDef<SizeColumn>[] => {
+    const t = useTranslations('Sizes');
+    return [
+        {
+            accessorKey: 'name',
+            header: t('columnName'),
+        },
+        {
+            accessorKey: 'value',
+            header: t('columnValue'),
+        },
+        {
+            accessorKey: 'createdAt',
+            header: t('columnDate'),
+        },
+        {
+            id: 'actions',
+            cell: ({ row }) => <CellAction data={row.original} />
+        }
+    ]
+}

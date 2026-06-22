@@ -5,7 +5,9 @@ import { ColorColumn } from "./columns"
 import { Button } from "@/components/ui/button"
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react"
 import { toast } from "react-hot-toast"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import axios from "axios"
 import { AlertModal } from "@/components/modals/alert-modal"
@@ -21,10 +23,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
     const router = useRouter();
     const params = useParams();
+    const t = useTranslations('Colors');
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success('Color Id copied to the clipboard.')
+        toast.success(t('idCopied'))
     }
 
     const onDelete = async () => {
@@ -32,9 +35,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             setLoading(true);
             await axios.delete(`/api/${params.storeId}/colors/${data.id}`)
             router.refresh();
-            toast.success("Color deleted successfully.")
+            toast.success(t('deleteSuccess'))
         } catch {
-            toast.error('Error deleting');
+            toast.error(t('deleteError'));
         } finally {
             setLoading(false);
             setOpen(false);
@@ -51,25 +54,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="w-8 h-8 p-0">
-                        <span className="sr-only">Open menu</span>
+                        <span className="sr-only">{t('openMenu')}</span>
                         <MoreHorizontal className="w-4 h-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>
-                        Actions
+                        {t('actions')}
                     </DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => onCopy(data.id)}>
                         <Copy className="w-4 h-4 mr-2" />
-                        Copy Id
+                        {t('copyId')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/colors/${data.id}`)}>
                         <Edit className="w-4 h-4 mr-2" />
-                        Update
+                        {t('update')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-red-500" onClick={() => setOpen(true)}>
                         <Trash className="w-4 h-4 mr-2" />
-                        Delete
+                        {t('delete')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

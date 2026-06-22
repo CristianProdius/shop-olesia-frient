@@ -1,14 +1,15 @@
 "use client"
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter, Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import { signUp } from "@/lib/auth-client";
 
 const SignUpPage = () => {
+    const t = useTranslations("Auth");
     const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const SignUpPage = () => {
         setLoading(false);
 
         if (error) {
-            toast.error(error.message || "Could not create account.");
+            toast.error(error.message || t("createAccountError"));
             return;
         }
 
@@ -33,28 +34,28 @@ const SignUpPage = () => {
     return (
         <Container>
             <form onSubmit={onSubmit} className="w-full max-w-sm mx-auto mt-16 space-y-4">
-                <h1 className="text-2xl font-bold">Create account</h1>
+                <h1 className="text-2xl font-bold">{t("createAccountTitle")}</h1>
                 <div className="space-y-1">
-                    <label htmlFor="name" className="text-sm font-medium">Name</label>
+                    <label htmlFor="name" className="text-sm font-medium">{t("name")}</label>
                     <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
                         className="w-full p-2 border rounded-md" />
                 </div>
                 <div className="space-y-1">
-                    <label htmlFor="email" className="text-sm font-medium">Email</label>
+                    <label htmlFor="email" className="text-sm font-medium">{t("email")}</label>
                     <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                         className="w-full p-2 border rounded-md" />
                 </div>
                 <div className="space-y-1">
-                    <label htmlFor="password" className="text-sm font-medium">Password</label>
+                    <label htmlFor="password" className="text-sm font-medium">{t("password")}</label>
                     <input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
                         className="w-full p-2 border rounded-md" />
                 </div>
                 <Button type="submit" disabled={loading} className="w-full">
-                    {loading ? "Creating..." : "Create account"}
+                    {loading ? t("creating") : t("createAccount")}
                 </Button>
                 <p className="text-sm text-center text-gray-500">
-                    Already have an account?{" "}
-                    <Link href="/sign-in" className="underline">Sign in</Link>
+                    {t("alreadyHaveAccount")}{" "}
+                    <Link href="/sign-in" className="underline">{t("signIn")}</Link>
                 </p>
             </form>
         </Container>

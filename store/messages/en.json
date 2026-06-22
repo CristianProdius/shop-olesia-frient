@@ -1,11 +1,61 @@
 {
-  "Common": {
-    "loading": "Loading...",
-    "signIn": "Sign in",
-    "signOut": "Sign out"
-  },
   "Navbar": {
-    "store": "STORE",
-    "cart": "Cart"
+    "brand": "STORE",
+    "signIn": "Sign in",
+    "signOutWithEmail": "Sign out ({email})",
+    "noResults": "No results found."
+  },
+  "Footer": {
+    "copyright": "© 2023 FakeStoreName, Inc. All rights reserved."
+  },
+  "Home": {
+    "featuredProducts": "Featured Products",
+    "productImageAlt": "Product image"
+  },
+  "Product": {
+    "size": "Size:",
+    "color": "Color:",
+    "addToCart": "Add To Cart",
+    "relatedItems": "Related Items",
+    "imageAlt": "Image"
+  },
+  "CategoryPage": {
+    "sizes": "Sizes",
+    "colors": "Colors",
+    "filters": "Filters"
+  },
+  "Cart": {
+    "title": "Shopping Cart",
+    "empty": "No items added to cart",
+    "orderSummary": "Order Summary",
+    "orderTotal": "Order Total",
+    "checkout": "Checkout",
+    "paymentCompleted": "Payment completed.",
+    "somethingWentWrong": "Something went wrong.",
+    "cartEmpty": "Your cart is empty.",
+    "checkoutFailed": "Checkout failed. Please try again.",
+    "checkoutTitle": "Checkout",
+    "simulatedPaymentNotice": "Simulated payment — no real charge is made.",
+    "fullName": "Full name",
+    "shippingAddress": "Shipping address",
+    "phone": "Phone",
+    "processing": "Processing...",
+    "paySimulated": "Pay (simulated)"
+  },
+  "Auth": {
+    "signInTitle": "Sign in",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "email": "Email",
+    "password": "Password",
+    "invalidCredentials": "Invalid credentials.",
+    "noAccount": "No account?",
+    "createOne": "Create one",
+    "createAccountTitle": "Create account",
+    "createAccount": "Create account",
+    "creating": "Creating...",
+    "name": "Name",
+    "createAccountError": "Could not create account.",
+    "alreadyHaveAccount": "Already have an account?"
   }
 }
