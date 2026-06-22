@@ -6,6 +6,7 @@ import StoreSwitcher from '@/components/store-switcher';
 import { redirect } from 'next/navigation'
 import prismadb from '@/lib/prismadb';
 import { ThemeToggle } from '@/components/theme-toggle';
+import LanguageSwitcher from '@/components/language-switcher';
 
 const Navbar = async () => {
   const userId = await getUserId();
@@ -26,6 +27,7 @@ const Navbar = async () => {
             <StoreSwitcher items={stores} />
             <MainNav className='mx-6' />
             <div className='flex items-center ml-auto space-x-4'>
+              <LanguageSwitcher />
               <ThemeToggle />
                 <AccountMenu />
             </div>

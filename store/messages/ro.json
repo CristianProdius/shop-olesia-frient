@@ -1,0 +1,11 @@
+{
+  "Common": {
+    "loading": "Se încarcă...",
+    "signIn": "Autentificare",
+    "signOut": "Deconectare"
+  },
+  "Navbar": {
+    "store": "MAGAZIN",
+    "cart": "Coș"
+  }
+}

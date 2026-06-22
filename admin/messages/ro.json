@@ -1,0 +1,20 @@
+{
+  "Common": {
+    "loading": "Se încarcă...",
+    "save": "Salvează modificările",
+    "create": "Creează",
+    "delete": "Șterge",
+    "cancel": "Anulează",
+    "signOut": "Deconectare"
+  },
+  "Nav": {
+    "overview": "Prezentare generală",
+    "billboards": "Bannere",
+    "categories": "Categorii",
+    "sizes": "Mărimi",
+    "colors": "Culori",
+    "products": "Produse",
+    "orders": "Comenzi",
+    "settings": "Setări"
+  }
+}

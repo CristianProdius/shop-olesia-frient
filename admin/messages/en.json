@@ -1,0 +1,20 @@
+{
+  "Common": {
+    "loading": "Loading...",
+    "save": "Save changes",
+    "create": "Create",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "signOut": "Sign out"
+  },
+  "Nav": {
+    "overview": "Overview",
+    "billboards": "Billboards",
+    "categories": "Categories",
+    "sizes": "Sizes",
+    "colors": "Colors",
+    "products": "Products",
+    "orders": "Orders",
+    "settings": "Settings"
+  }
+}

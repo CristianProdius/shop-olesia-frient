@@ -1,0 +1,11 @@
+{
+  "Common": {
+    "loading": "Loading...",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "Navbar": {
+    "store": "STORE",
+    "cart": "Cart"
+  }
+}

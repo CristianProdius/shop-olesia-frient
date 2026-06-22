@@ -1,0 +1,20 @@
+{
+  "Common": {
+    "loading": "Загрузка...",
+    "save": "Сохранить изменения",
+    "create": "Создать",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "signOut": "Выйти"
+  },
+  "Nav": {
+    "overview": "Обзор",
+    "billboards": "Баннеры",
+    "categories": "Категории",
+    "sizes": "Размеры",
+    "colors": "Цвета",
+    "products": "Товары",
+    "orders": "Заказы",
+    "settings": "Настройки"
+  }
+}

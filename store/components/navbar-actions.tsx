@@ -5,6 +5,7 @@ import { LogOut, ShoppingBag, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from '@/lib/auth-client';
+import LanguageSwitcher from '@/components/language-switcher';
 
 const NavbarActions = () => {
     const [isMounted, setIsMounted] = useState(false)
@@ -28,6 +29,7 @@ const NavbarActions = () => {
 
     return (
         <div className="flex items-center ml-auto gap-x-4">
+            <LanguageSwitcher />
             {session ? (
                 <Button
                     className='flex items-center px-3 py-2 bg-black rounded-full'

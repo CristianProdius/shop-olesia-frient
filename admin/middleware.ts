@@ -1,32 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
 import { getSessionCookie } from "better-auth/cookies";
+import { routing } from "./i18n/routing";
 
-// Lightweight edge check: presence of a Better Auth session cookie.
-// Full session validation still happens in server components / route handlers.
-export function middleware(request: NextRequest) {
-    const sessionCookie = getSessionCookie(request, { cookiePrefix: "admin" });
+const intlMiddleware = createMiddleware(routing);
+
+const LOCALE_PREFIX = /^\/(en|ru|ro)(?=\/|$)/;
+
+// Composes the Better Auth gate with next-intl locale routing.
+// Auth redirects (locale-aware) take precedence; otherwise next-intl handles
+// locale detection / prefixing. API routes are excluded via the matcher and do
+// their own auth.
+export default function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    const isAuthPage = pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up");
+    const localeMatch = pathname.match(LOCALE_PREFIX);
+    const locale = localeMatch?.[1] ?? routing.defaultLocale;
+    const pathnameWithoutLocale = pathname.replace(LOCALE_PREFIX, "") || "/";
 
-    // Not signed in and not on an auth page -> go sign in.
+    const isAuthPage =
+        pathnameWithoutLocale.startsWith("/sign-in") ||
+        pathnameWithoutLocale.startsWith("/sign-up");
+
+    const sessionCookie = getSessionCookie(request, { cookiePrefix: "admin" });
+
     if (!sessionCookie && !isAuthPage) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+        return NextResponse.redirect(new URL(`/${locale}/sign-in`, request.url));
     }
 
-    // Already signed in but visiting an auth page -> go home.
     if (sessionCookie && isAuthPage) {
-        return NextResponse.redirect(new URL("/", request.url));
+        return NextResponse.redirect(new URL(`/${locale}`, request.url));
     }
 
-    return NextResponse.next();
+    return intlMiddleware(request);
 }
 
 export const config = {
-    matcher: [
-        // Guard PAGES only. Exclude all API routes (they do their own auth and
-        // must not be redirected — e.g. the public cross-origin checkout endpoint),
-        // Next internals, and static assets.
-        "/((?!api|_next/static|_next/image|favicon.ico|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    ],
+    matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };
