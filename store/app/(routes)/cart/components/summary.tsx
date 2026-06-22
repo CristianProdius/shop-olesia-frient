@@ -3,13 +3,15 @@
 import Button from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
 import useCart from '@/hooks/use-cart';
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import { useSession } from '@/lib/auth-client';
 
 const Summary = () => {
+    const router = useRouter();
     const searchParams = useSearchParams();
+    const { data: session } = useSession();
     const items = useCart(state => state.items);
     const removeAll = useCart(state => state.removeAll);
     const totalPrice = items.reduce((total, item) => total + Number(item.price), 0)
@@ -24,12 +26,15 @@ const Summary = () => {
         }
     }, [searchParams, removeAll])
 
-    const onCheckout = async () => {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-            productIds: items.map(item => item.id),
-        });
+    const onCheckout = () => {
+        // Login required to checkout. Send guests to sign in, then on to the
+        // simulated checkout form (which finalizes the order via the admin API).
+        if (!session) {
+            router.push("/sign-in?redirect=/checkout");
+            return;
+        }
 
-        window.location = response.data.url
+        router.push("/checkout");
     }
 
     return ( 

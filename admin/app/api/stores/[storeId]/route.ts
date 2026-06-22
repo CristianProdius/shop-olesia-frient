@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { auth } from '@clerk/nextjs/server'
+import { getUserId } from '@/lib/server-auth'
 import { NextResponse } from "next/server"
 
 export async function PATCH (
@@ -7,7 +7,7 @@ export async function PATCH (
     { params }: { params: Promise<{ storeId: string }>}
 ) {
     try {
-        const { userId } = await auth();
+        const userId = await getUserId();
         const { storeId } = await params;
         const body = await req.json();
 
@@ -51,7 +51,7 @@ export async function DELETE (
     { params }: { params: Promise<{ storeId: string }>}
 ) {
     try {
-        const { userId } = await auth();
+        const userId = await getUserId();
         const { storeId } = await params;
 
         if (!userId) {

@@ -22,9 +22,10 @@
 ## Section 1 — Database & Prisma
 
 - **Admin `schema.prisma`** gains Better Auth staff tables: `User`, `Session`, `Account` (password hash), `Verification`.
-- **Store** gets its own Prisma setup (`store/lib/prismadb.ts` + `store/prisma/schema.prisma`) pointed at the **same** `DATABASE_URL`, owning only **customer** tables, prefixed to avoid collision: `Customer`, `CustomerSession`, `CustomerAccount`, `CustomerVerification`.
+- **Store** gets its own Prisma setup (`store/lib/prismadb.ts` + `store/prisma/schema.prisma`) pointed at the **same** `DATABASE_URL`, declaring only the **customer** tables, prefixed to avoid collision: `Customer`, `CustomerSession`, `CustomerAccount`, `CustomerVerification`.
 - **`Order`** gains `customerId String?` (plain string, no FK — `relationMode = "prisma"`; customer tables live in store's schema).
-- Repo uses `prisma db push` (no migrations dir). Each app pushes the tables it owns.
+- **DB ownership:** the repo uses `prisma db push` (no migrations dir). Because `db push` makes the DB match a single schema (and would drop tables it doesn't know about), the **admin schema is canonical and owns `db push`** — it therefore also contains the `Customer*` models. The store **only runs `prisma generate`** against its copy of the `Customer*` models (never `db push`). The two `Customer*` definitions are kept in sync by hand.
+- **Cookie isolation:** both apps run on `localhost` and cookies are not port-isolated, so each Better Auth instance sets a distinct `advanced.cookiePrefix` (`admin` / `store`); the admin middleware reads its prefixed cookie.
 
 ## Section 2 — Auth (Clerk → Better Auth)
 

@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { getUserId } from '@/lib/server-auth'
 import { redirect } from "next/navigation"
 import prismadb from "@/lib/prismadb";
 import Navbar from "@/components/navbar";
@@ -9,7 +9,7 @@ interface DashboardType {
 }
 
 export default async function Dashboard({children, params}: DashboardType) {
-    const { userId } = await auth();
+    const userId = await getUserId();
     const { storeId } = await params;
 
     if (!userId) {

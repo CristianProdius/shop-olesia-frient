@@ -1,11 +1,11 @@
-import { auth } from '@clerk/nextjs/server'
+import { getUserId } from '@/lib/server-auth'
 import { redirect } from "next/navigation";
 import  prismadb from '@/lib/prismadb';
 import { SettingsForm } from "./components/settings-form";
 
 const SettingsPage = async ({ params }:{ params: Promise<{ storeId: string }> }) => {
     const { storeId } = await params;
-    const { userId } = await auth();
+    const userId = await getUserId();
 
     if(!userId) {
         redirect('/sign-in');

@@ -1,0 +1,73 @@
+// Store app Prisma schema — customer account pool ONLY.
+//
+// IMPORTANT: the admin app owns `prisma db push` for the shared database. This
+// schema exists so the store can `prisma generate` a typed client for the
+// customer auth tables. DO NOT run `prisma db push` from the store — it would
+// try to drop the admin-owned tables it doesn't know about. Keep these models
+// in sync with the Customer* models in admin/prisma/schema.prisma.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Customer {
+  id            String            @id
+  name          String
+  email         String            @unique
+  emailVerified Boolean           @default(false)
+  image         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  sessions      CustomerSession[]
+  accounts      CustomerAccount[]
+}
+
+model CustomerSession {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      Customer @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CustomerAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  Customer  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model CustomerVerification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@index([identifier])
+}

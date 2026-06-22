@@ -83,6 +83,9 @@ model Order {
   isPaid     Boolean   @default(false)
   phone      String    @default("")
   address    String    @default("")
+  // Store customer who placed the order. Plain string (no FK): customer tables
+  // live in the store app's separate Prisma schema. relationMode = "prisma".
+  customerId String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -136,4 +139,127 @@ model Image {
   updatedAt   DateTime @updatedAt
 
   @@index([productId])
+}
+
+// ----------------------------------------------------------------------------
+// Better Auth — admin/staff account pool. Standard Better Auth schema.
+// ----------------------------------------------------------------------------
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@index([identifier])
+}
+
+// ----------------------------------------------------------------------------
+// Better Auth — store customer account pool. Separate tables from the staff
+// pool above. The admin app owns `prisma db push`, so these tables are defined
+// here (the canonical schema); the store app only runs `prisma generate`
+// against an equivalent copy of just these models. Keep the two in sync.
+// ----------------------------------------------------------------------------
+
+model Customer {
+  id            String            @id
+  name          String
+  email         String            @unique
+  emailVerified Boolean           @default(false)
+  image         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  sessions      CustomerSession[]
+  accounts      CustomerAccount[]
+}
+
+model CustomerSession {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      Customer @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CustomerAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  Customer  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model CustomerVerification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@index([identifier])
 }

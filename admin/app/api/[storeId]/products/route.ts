@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from '@clerk/nextjs/server'
+import { getUserId } from '@/lib/server-auth'
 import prismadb from "@/lib/prismadb";
 
 export async function POST(
@@ -7,7 +7,7 @@ export async function POST(
     { params }: { params: Promise<{ storeId: string }> }
 ) {
     try {
-        const { userId } = await auth();
+        const userId = await getUserId();
         const body = await req.json();
 
         const {

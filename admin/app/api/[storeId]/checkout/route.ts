@@ -1,7 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -13,41 +11,33 @@ export async function OPTIONS() {
     return NextResponse.json({}, { headers: corsHeaders });
 }
 
+// Simulated checkout. No real payment provider — the order is created and
+// immediately marked paid, mirroring what the old Stripe webhook did on
+// `checkout.session.completed`.
+//
+// SECURITY NOTE: this trusts `customerId` from the request body; it does not
+// verify the store customer's session cross-origin. Acceptable for a payment
+// simulation. When integrating a real provider, verify a signed token / shared
+// secret between the store and admin before trusting customer/payment data.
 export async function POST(req: Request, { params }: { params: Promise<{ storeId: string }> }) {
-    const { productIds } = await req.json();
-    const { storeId } = await params; 
+    const { productIds, customerId, name, address, phone } = await req.json();
+    const { storeId } = await params;
 
-    if(!productIds || productIds.length === 0) {
-        return new NextResponse("Product ids are required", { status: 400 });
+    // `name` is collected by the simulated checkout form for display; the Order
+    // model has no name field, so fold it into the stored address line.
+    const fullAddress = [name, address].filter(Boolean).join(" — ");
+
+    if (!productIds || productIds.length === 0) {
+        return new NextResponse("Product ids are required", { status: 400, headers: corsHeaders });
     }
-
-    const products = await prismadb.product.findMany({
-        where: {
-            id: {
-                in: productIds
-            }
-        }
-    })
-
-    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-
-    products.forEach((product) => {
-        line_items.push({
-            quantity: 1,
-            price_data: {
-                currency: 'USD',
-                product_data: {
-                    name: product.name,
-                },
-                unit_amount: Number(product.price) * 100
-            }
-        })
-    })
 
     const order = await prismadb.order.create({
         data: {
             storeId: storeId,
-            isPaid: false,
+            isPaid: true,
+            customerId: customerId ?? null,
+            address: fullAddress,
+            phone: phone ?? "",
             orderItems: {
                 create: productIds.map((productId: string) => ({
                     product: {
@@ -57,24 +47,28 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
                     }
                 }))
             }
-        }
-    })
-
-    const session = await stripe.checkout.sessions.create({
-        line_items,
-        mode: "payment",
-        billing_address_collection: "required",
-        phone_number_collection: {
-            enabled: true,
         },
-        success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
-        cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?cancelled=1`,
-        metadata: {
-            orderId: order.id
+        include: {
+            orderItems: true,
         }
-    })
+    });
 
-    return NextResponse.json({ url: session.url }, {
-        headers: corsHeaders,
-    })
+    // Archive the purchased products (old webhook behavior).
+    const purchasedProductIds = order.orderItems.map((orderItem) => orderItem.productId);
+
+    await prismadb.product.updateMany({
+        where: {
+            id: {
+                in: [...purchasedProductIds]
+            },
+        },
+        data: {
+            isArchived: true,
+        }
+    });
+
+    return NextResponse.json(
+        { success: true, orderId: order.id },
+        { headers: corsHeaders }
+    );
 }

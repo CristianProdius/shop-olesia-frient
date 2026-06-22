@@ -1,6 +1,6 @@
 import React from 'react'
-import { auth } from '@clerk/nextjs/server'
-import { UserButton } from '@clerk/nextjs';
+import { getUserId } from '@/lib/server-auth'
+import AccountMenu from '@/components/account-menu';
 import { MainNav } from '@/components/main-nav';
 import StoreSwitcher from '@/components/store-switcher';
 import { redirect } from 'next/navigation'
@@ -8,7 +8,7 @@ import prismadb from '@/lib/prismadb';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 const Navbar = async () => {
-  const { userId } = await auth();
+  const userId = await getUserId();
 
   if(!userId) {
     redirect("/sign-in")
@@ -27,7 +27,7 @@ const Navbar = async () => {
             <MainNav className='mx-6' />
             <div className='flex items-center ml-auto space-x-4'>
               <ThemeToggle />
-                <UserButton afterSignOutUrl='/'/>
+                <AccountMenu />
             </div>
         </div>
     </div>

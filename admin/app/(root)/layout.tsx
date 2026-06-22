@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { getUserId } from '@/lib/server-auth'
 import { redirect } from "next/navigation"
 import prismadb from "@/lib/prismadb";
 
@@ -7,7 +7,7 @@ interface DashboardType {
 }
 
 export default async function SetupLayout({children}: DashboardType) {
-    const { userId } = await auth();
+    const userId = await getUserId();
 
     if (!userId) {
         redirect('/sign-in')
