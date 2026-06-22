@@ -3,7 +3,8 @@
     "brand": "STORE",
     "signIn": "Autentificare",
     "signOutWithEmail": "Deconectare ({email})",
-    "noResults": "Niciun rezultat găsit."
+    "noResults": "Niciun rezultat găsit.",
+    "language": "Limbă"
   },
   "Footer": {
     "copyright": "© 2023 FakeStoreName, Inc. Toate drepturile rezervate."
@@ -57,5 +58,9 @@
     "name": "Nume",
     "createAccountError": "Contul nu a putut fi creat.",
     "alreadyHaveAccount": "Ai deja un cont?"
+  },
+  "Metadata": {
+    "title": "Magazin",
+    "description": "Magazin online"
   }
 }

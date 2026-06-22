@@ -1,6 +1,6 @@
 "use client"
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -13,6 +13,7 @@ const LABELS: Record<string, string> = {
 
 const LanguageSwitcher = () => {
     const locale = useLocale();
+    const t = useTranslations("Nav");
     const router = useRouter();
     const pathname = usePathname();
     const [isPending, startTransition] = useTransition();
@@ -26,7 +27,7 @@ const LanguageSwitcher = () => {
 
     return (
         <select
-            aria-label="Language"
+            aria-label={t("language")}
             value={locale}
             onChange={onChange}
             disabled={isPending}

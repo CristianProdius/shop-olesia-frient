@@ -3,7 +3,8 @@
     "brand": "STORE",
     "signIn": "Войти",
     "signOutWithEmail": "Выйти ({email})",
-    "noResults": "Ничего не найдено."
+    "noResults": "Ничего не найдено.",
+    "language": "Язык"
   },
   "Footer": {
     "copyright": "© 2023 FakeStoreName, Inc. Все права защищены."
@@ -57,5 +58,9 @@
     "name": "Имя",
     "createAccountError": "Не удалось создать аккаунт.",
     "alreadyHaveAccount": "Уже есть аккаунт?"
+  },
+  "Metadata": {
+    "title": "Магазин",
+    "description": "Интернет-магазин"
   }
 }

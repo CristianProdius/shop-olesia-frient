@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ImagePlus, Trash } from 'lucide-react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface ImageUploadProps {
     disabled?: boolean;
@@ -23,6 +24,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const [isMounted, setIsMounted] = useState(false);
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const t = useTranslations('ImageUpload');
 
     useEffect(() => {
         setIsMounted(true);
@@ -62,7 +64,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             onChange(publicUrl);
         } catch (err) {
             console.error(err);
-            toast.error('Image upload failed.');
+            toast.error(t('uploadFailed'));
         } finally {
             setUploading(false);
             if (inputRef.current) inputRef.current.value = '';
@@ -101,7 +103,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 onClick={() => inputRef.current?.click()}
             >
                 <ImagePlus className='w-4 h-4 mr-2' />
-                {uploading ? 'Uploading...' : 'Upload an Image'}
+                {uploading ? t('uploading') : t('uploadImage')}
             </Button>
         </div>
     )

@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Urbanist } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import ModalProvider from '@/providers/modal-provider'
 import ToastProvider from '@/providers/toast-provider'
 import { routing } from '@/i18n/routing'
@@ -12,9 +12,14 @@ import { routing } from '@/i18n/routing'
 // Urbanist has no Cyrillic subset; Russian falls back to the system sans-serif.
 const urban = Urbanist({ subsets: ['latin', 'latin-ext'] })
 
-export const metadata: Metadata = {
-  title: 'Store',
-  description: 'Store',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+  return { title: t('title'), description: t('description') }
 }
 
 export function generateStaticParams() {

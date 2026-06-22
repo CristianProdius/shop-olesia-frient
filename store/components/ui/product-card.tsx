@@ -63,7 +63,7 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
                     {localizedField(data?.nameI18n, locale, data?.name)}
                 </p>
                 <p className="text-sm text-gray-500">
-                    {data.category.name}
+                    {localizedField(data?.category?.nameI18n, locale, data?.category?.name)}
                 </p>
             </div>
             {/* Price */}

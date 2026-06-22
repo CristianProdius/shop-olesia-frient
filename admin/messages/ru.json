@@ -9,7 +9,8 @@
     "orders": "Заказы",
     "settings": "Настройки",
     "account": "Аккаунт",
-    "signOut": "Выйти"
+    "signOut": "Выйти",
+    "language": "Язык"
   },
   "StoreSwitcher": {
     "selectStore": "Выберите магазин",
@@ -278,5 +279,20 @@
     "createAccount": "Создать аккаунт",
     "alreadyHaveAccount": "Уже есть аккаунт?",
     "couldNotCreateAccount": "Не удалось создать аккаунт."
+  },
+  "ThemeToggle": {
+    "toggleTheme": "Переключить тему",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
+  "ImageUpload": {
+    "uploadImage": "Загрузить изображение",
+    "uploading": "Загрузка...",
+    "uploadFailed": "Не удалось загрузить изображение."
+  },
+  "Metadata": {
+    "title": "Панель администратора",
+    "description": "Панель администратора"
   }
 }

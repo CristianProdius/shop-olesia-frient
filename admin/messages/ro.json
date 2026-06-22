@@ -9,7 +9,8 @@
     "orders": "Comenzi",
     "settings": "Setări",
     "account": "Cont",
-    "signOut": "Deconectare"
+    "signOut": "Deconectare",
+    "language": "Limbă"
   },
   "StoreSwitcher": {
     "selectStore": "Selectează un magazin",
@@ -278,5 +279,20 @@
     "createAccount": "Creează cont",
     "alreadyHaveAccount": "Ai deja un cont?",
     "couldNotCreateAccount": "Contul nu a putut fi creat."
+  },
+  "ThemeToggle": {
+    "toggleTheme": "Comută tema",
+    "light": "Luminoasă",
+    "dark": "Întunecată",
+    "system": "Sistem"
+  },
+  "ImageUpload": {
+    "uploadImage": "Încarcă o imagine",
+    "uploading": "Se încarcă...",
+    "uploadFailed": "Încărcarea imaginii a eșuat."
+  },
+  "Metadata": {
+    "title": "Panou de administrare",
+    "description": "Panou de administrare"
   }
 }

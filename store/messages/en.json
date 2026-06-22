@@ -3,7 +3,8 @@
     "brand": "STORE",
     "signIn": "Sign in",
     "signOutWithEmail": "Sign out ({email})",
-    "noResults": "No results found."
+    "noResults": "No results found.",
+    "language": "Language"
   },
   "Footer": {
     "copyright": "© 2023 FakeStoreName, Inc. All rights reserved."
@@ -57,5 +58,9 @@
     "name": "Name",
     "createAccountError": "Could not create account.",
     "alreadyHaveAccount": "Already have an account?"
+  },
+  "Metadata": {
+    "title": "Store",
+    "description": "Online store"
   }
 }
