@@ -1,6 +1,6 @@
 import Container from "@/components/ui/container";
 import Billboard from "@/components/billboard";
-import getBillboard from "@/actions/get-billboard";
+import getBillboards from "@/actions/get-billboards";
 import getProducts from "@/actions/get-products";
 import ProductList from "@/components/product-list";
 import { getTranslations } from "next-intl/server";
@@ -9,7 +9,9 @@ export const revalidate = 0;
 
 const HomePage = async () => {
     const t = await getTranslations('Home');
-    const billboard = await getBillboard('1ed54d58-f16f-420e-8750-9c9cccdeedb3');
+    // Use the first available billboard as the hero (no hardcoded id).
+    const billboards = await getBillboards();
+    const billboard = billboards[0];
     const products = await getProducts({ isFeatured: true })
     return (
         <Container>
