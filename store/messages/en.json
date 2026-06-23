@@ -54,7 +54,9 @@
     "shippingAddress": "Shipping address",
     "phone": "Phone",
     "processing": "Processing...",
-    "paySimulated": "Pay (simulated)"
+    "paySimulated": "Pay (simulated)",
+    "email": "Email",
+    "outOfStockError": "Sorry, one or more items just sold out. Please review your cart."
   },
   "Auth": {
     "signInTitle": "Sign in",

@@ -54,7 +54,9 @@
     "shippingAddress": "Adresă de livrare",
     "phone": "Telefon",
     "processing": "Se procesează...",
-    "paySimulated": "Plătește (simulat)"
+    "paySimulated": "Plătește (simulat)",
+    "email": "E-mail",
+    "outOfStockError": "Ne pare rău, unul sau mai multe produse tocmai s-au epuizat. Te rugăm să verifici coșul."
   },
   "Auth": {
     "signInTitle": "Autentificare",

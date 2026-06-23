@@ -11,64 +11,181 @@ export async function OPTIONS() {
     return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// Simulated checkout. No real payment provider — the order is created and
-// immediately marked paid, mirroring what the old Stripe webhook did on
-// `checkout.session.completed`.
+// Normalized cart line used internally.
+type CheckoutLine = {
+    productId: string;
+    variantId: string | null;
+    quantity: number;
+};
+
+// Accepted request body shapes:
 //
-// SECURITY NOTE: this trusts `customerId` from the request body; it does not
-// verify the store customer's session cross-origin. Acceptable for a payment
-// simulation. When integrating a real provider, verify a signed token / shared
-// secret between the store and admin before trusting customer/payment data.
+// New (preferred):
+//   {
+//     items: [{ productId: string, variantId?: string, quantity?: number }],
+//     customerName: string,
+//     email?: string,
+//     phone?: string,
+//     address?: string,
+//     locale?: "en" | "ru" | "ro",
+//     customerId: string,
+//   }
+//
+// Back-compat (old store builds):
+//   { productIds: string[], customerId, name, address, phone }
+//   -> each productId becomes a line of quantity 1 with no variant; `name` is
+//      used as the customer name (no longer folded into the address string).
+//
+// Simulated checkout: no real payment provider. The order is created and
+// immediately marked paid (status "paid"), mirroring what the old Stripe
+// webhook did on `checkout.session.completed`.
+//
+// SECURITY NOTE (residual trust gap): `customerId` is taken from the request
+// body and only validated for presence/format below. The store customer's
+// session is NOT verified here because the Customer tables live in the store
+// app's SEPARATE Prisma schema (cross-schema, no foreign key), so we cannot
+// join/look them up from this admin connection. A real fix requires a shared
+// signed token (or shared secret) minted by the store and verified here before
+// trusting the customer identity. Acceptable only for the payment simulation.
 export async function POST(req: Request, { params }: { params: Promise<{ storeId: string }> }) {
-    const { productIds, customerId, name, address, phone } = await req.json();
+    const body = await req.json();
     const { storeId } = await params;
 
-    // `name` is collected by the simulated checkout form for display; the Order
-    // model has no name field, so fold it into the stored address line.
-    const fullAddress = [name, address].filter(Boolean).join(" — ");
+    const {
+        items,
+        productIds,
+        customerId,
+        customerName,
+        name,
+        email,
+        address,
+        phone,
+        locale,
+    } = body ?? {};
 
-    if (!productIds || productIds.length === 0) {
-        return new NextResponse("Product ids are required", { status: 400, headers: corsHeaders });
+    // --- Validate customerId (presence/format only — see SECURITY NOTE above).
+    if (typeof customerId !== "string" || customerId.trim().length === 0) {
+        return new NextResponse("A valid customerId is required", {
+            status: 400,
+            headers: corsHeaders,
+        });
     }
 
-    const order = await prismadb.order.create({
-        data: {
-            storeId: storeId,
-            isPaid: true,
-            customerId: customerId ?? null,
-            address: fullAddress,
-            phone: phone ?? "",
-            orderItems: {
-                create: productIds.map((productId: string) => ({
-                    product: {
-                        connect: {
-                            id: productId
-                        }
-                    }
-                }))
+    // --- Normalize the incoming lines from either body shape.
+    let lines: CheckoutLine[] = [];
+    if (Array.isArray(items) && items.length > 0) {
+        lines = items.map((it: { productId: string; variantId?: string; quantity?: number }) => ({
+            productId: it.productId,
+            variantId: it.variantId ?? null,
+            quantity: Math.max(1, Number(it.quantity) || 1),
+        }));
+    } else if (Array.isArray(productIds) && productIds.length > 0) {
+        // Back-compat: bare product ids, quantity 1, no variant.
+        lines = productIds.map((productId: string) => ({
+            productId,
+            variantId: null,
+            quantity: 1,
+        }));
+    }
+
+    if (lines.length === 0 || lines.some((l) => !l.productId)) {
+        return new NextResponse("Order items are required", {
+            status: 400,
+            headers: corsHeaders,
+        });
+    }
+
+    const resolvedName: string = (customerName ?? name ?? "").toString();
+    const resolvedLocale: string = ["en", "ru", "ro"].includes(locale) ? locale : "en";
+
+    // Snapshot current product prices for unitPrice.
+    const products = await prismadb.product.findMany({
+        where: { id: { in: lines.map((l) => l.productId) }, storeId },
+        select: { id: true, price: true },
+    });
+    const priceById = new Map(products.map((p) => [p.id, p.price]));
+
+    if (lines.some((l) => !priceById.has(l.productId))) {
+        return new NextResponse("One or more products were not found", {
+            status: 400,
+            headers: corsHeaders,
+        });
+    }
+
+    try {
+        // Transactionally create the order, its items, and decrement stock.
+        // No overselling: if any variant lacks sufficient stock the whole
+        // transaction is rolled back and a 400 is returned.
+        const order = await prismadb.$transaction(async (tx) => {
+            const created = await tx.order.create({
+                data: {
+                    storeId,
+                    isPaid: true,
+                    status: "paid",
+                    customerId,
+                    customerName: resolvedName,
+                    email: email ?? "",
+                    address: address ?? "",
+                    phone: phone ?? "",
+                    locale: resolvedLocale,
+                    orderItems: {
+                        create: lines.map((l) => ({
+                            productId: l.productId,
+                            variantId: l.variantId,
+                            quantity: l.quantity,
+                            unitPrice: priceById.get(l.productId) ?? null,
+                        })),
+                    },
+                },
+            });
+
+            // Decrement stock for each line that has a variant. Guarded by a
+            // conditional updateMany (stockQty >= quantity); if it matches 0
+            // rows, stock is insufficient -> throw to roll back the whole order.
+            for (const line of lines) {
+                if (!line.variantId) continue;
+
+                const result = await tx.productVariant.updateMany({
+                    where: {
+                        id: line.variantId,
+                        productId: line.productId,
+                        stockQty: { gte: line.quantity },
+                    },
+                    data: {
+                        stockQty: { decrement: line.quantity },
+                    },
+                });
+
+                if (result.count === 0) {
+                    // Insufficient stock (or unknown variant) -> abort everything.
+                    throw new OutOfStockError(line.variantId);
+                }
             }
-        },
-        include: {
-            orderItems: true,
+
+            return created;
+        });
+
+        return NextResponse.json(
+            { success: true, orderId: order.id },
+            { headers: corsHeaders }
+        );
+    } catch (err) {
+        if (err instanceof OutOfStockError) {
+            return new NextResponse(
+                JSON.stringify({ error: "OUT_OF_STOCK", variantId: err.variantId }),
+                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
         }
-    });
+        console.error("[CHECKOUT_POST]", err);
+        return new NextResponse("Internal error", { status: 500, headers: corsHeaders });
+    }
+}
 
-    // Archive the purchased products (old webhook behavior).
-    const purchasedProductIds = order.orderItems.map((orderItem) => orderItem.productId);
-
-    await prismadb.product.updateMany({
-        where: {
-            id: {
-                in: [...purchasedProductIds]
-            },
-        },
-        data: {
-            isArchived: true,
-        }
-    });
-
-    return NextResponse.json(
-        { success: true, orderId: order.id },
-        { headers: corsHeaders }
-    );
+class OutOfStockError extends Error {
+    variantId: string;
+    constructor(variantId: string) {
+        super(`Insufficient stock for variant ${variantId}`);
+        this.name = "OutOfStockError";
+        this.variantId = variantId;
+    }
 }

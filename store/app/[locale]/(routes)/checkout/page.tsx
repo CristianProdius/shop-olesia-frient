@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/button";
@@ -14,11 +14,13 @@ import TrustBadges from "@/components/trust-badges";
 
 const CheckoutPage = () => {
     const t = useTranslations("Cart");
+    const locale = useLocale();
     const router = useRouter();
     const { data: session, isPending } = useSession();
     const items = useCart((state) => state.items);
 
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
     const [phone, setPhone] = useState("");
     const [submitting, setSubmitting] = useState(false);
@@ -32,9 +34,10 @@ const CheckoutPage = () => {
         }
     }, [isPending, session, router]);
 
-    // Prefill name from the customer profile when available.
+    // Prefill name + email from the customer profile when available.
     useEffect(() => {
         if (session?.user?.name) setName(session.user.name);
+        if (session?.user?.email) setEmail(session.user.email);
     }, [session]);
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -47,19 +50,35 @@ const CheckoutPage = () => {
         setSubmitting(true);
         try {
             // Simulated payment: the admin API creates the order and marks it paid.
+            // The cart keeps one line per variant; quantity is 1 per line.
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-                productIds: items.map((item) => item.id),
+                items: items.map((item) => ({
+                    productId: item.id,
+                    variantId: item.variantId,
+                    quantity: 1,
+                })),
                 customerId: session?.user?.id,
-                name,
+                customerName: name,
+                email,
                 address,
                 phone,
+                locale,
             });
 
             // summary.tsx handles cart clearing + toast on the success param.
             window.location.href = "/cart?success=1";
         } catch (err) {
-            console.error(err);
-            toast.error(t("checkoutFailed"));
+            // 400 with OUT_OF_STOCK means a variant ran out before checkout.
+            if (
+                axios.isAxiosError(err) &&
+                err.response?.status === 400 &&
+                err.response?.data?.error === "OUT_OF_STOCK"
+            ) {
+                toast.error(t("outOfStockError"));
+            } else {
+                console.error(err);
+                toast.error(t("checkoutFailed"));
+            }
             setSubmitting(false);
         }
     };
@@ -81,6 +100,11 @@ const CheckoutPage = () => {
                         <div className="space-y-1">
                             <label htmlFor="name" className="text-sm font-medium">{t("fullName")}</label>
                             <input id="name" required value={name} onChange={(e) => setName(e.target.value)}
+                                className="w-full p-2 border" />
+                        </div>
+                        <div className="space-y-1">
+                            <label htmlFor="email" className="text-sm font-medium">{t("email")}</label>
+                            <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                                 className="w-full p-2 border" />
                         </div>
                         <div className="space-y-1">

@@ -110,6 +110,15 @@ model Order {
   phone      String    @default("")
   address    String    @default("")
   email      String    @default("")
+  // Fulfillment fields (additive). `status` tracks lifecycle:
+  // pending | paid | shipped | delivered | cancelled.
+  status         String  @default("pending")
+  carrier        String?
+  trackingNumber String?
+  // Real customer name (no longer folded into `address`).
+  customerName   String  @default("")
+  // Locale the order was placed in (en | ru | ro) for localized comms.
+  locale         String  @default("en")
   // Store customer who placed the order. Plain string (no FK): customer tables
   // live in the store app's separate Prisma schema. relationMode = "prisma".
   customerId String?
@@ -126,6 +135,10 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
   productId String  // Foreign Key to Product
   product   Product @relation(fields: [productId], references: [id])
+  // Fulfillment fields (additive).
+  quantity  Int      @default(1)
+  unitPrice Decimal? // price snapshot at purchase time
+  variantId String?  // selected ProductVariant (no FK; relationMode = "prisma")
 
   @@index([orderId])
   @@index([productId])
