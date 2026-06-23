@@ -91,7 +91,9 @@ model ProductVariant {
   productId String
   product   Product  @relation(fields: [productId], references: [id])
   sizeId    String
+  size      Size     @relation(fields: [sizeId], references: [id])
   colorId   String
+  color     Color    @relation(fields: [colorId], references: [id])
   sku       String?
   stockQty  Int      @default(0)
   createdAt DateTime @default(now())
@@ -152,6 +154,7 @@ model Size {
   nameI18n    Json?     // { en, ru, ro } translations; falls back to `name`
   value       String
   products    Product[] // Relation to Product model
+  variants    ProductVariant[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -166,6 +169,7 @@ model Color {
   nameI18n    Json?    // { en, ru, ro } translations; falls back to `name`
   value       String
   products    Product[] // Relation to Product model
+  variants    ProductVariant[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
