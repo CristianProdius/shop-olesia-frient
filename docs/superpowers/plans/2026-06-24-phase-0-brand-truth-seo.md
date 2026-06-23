@@ -219,6 +219,19 @@ git commit -m "feat(store): MDL locale-aware currency with sale price support"
 
 ---
 
+## ✅ STATUS: PHASE 0 COMPLETE (2026-06-24)
+
+Commits: `a52d432` (vitest+MDL formatter), `7911b6d` (MDL Currency), `64ec0bd` (design-system
+foundation), `5a5204f` (hreflang/sitemap/robots), `29ab727` (JSON-LD), schema-sync, `23179de`
+(product copy fields). All gates green (vitest + lint + tsc) for both apps.
+
+**Key discovery for Phase 1:** the live DB already contains uncommitted models the catalog seed
+created — **`BlogPost` (full i18n blog)** and **`Subscriber` (newsletter)** tables, plus `Order.email`
+and Product `description/material/care/sku` columns. These are now in the canonical schema (commit
+`fix(admin): sync canonical Prisma schema with live DB`). **Phase 1's newsletter + blog are partly
+pre-built at the DB layer** — Phase 1 planning should wire/extend these rather than create them. Set
+up `admin/.env` (gitignored, points at docker Postgres :5433) enables `prisma db push`/runtime.
+
 ## ⚠️ Amendment (2026-06-24): design system not present — build it
 
 Discovery during execution: the storefront design system MEMORY describes does **not** exist on
