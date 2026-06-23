@@ -4,6 +4,7 @@ import getBillboards from "@/actions/get-billboards";
 import getProducts from "@/actions/get-products";
 import ProductList from "@/components/product-list";
 import WhyChooseUs from "@/components/why-choose-us";
+import SocialProof from "@/components/social-proof";
 import { getTranslations } from "next-intl/server";
 
 export const revalidate = 0;
@@ -26,6 +27,7 @@ const HomePage = async ({
                 <div className="flex flex-col px-4 gap-y-8 sm:px-6 lg:px-8">
                     <ProductList title={t('featuredProducts')} items={products} />
                 </div>
+                <SocialProof locale={locale} />
                 <WhyChooseUs locale={locale} />
             </div>
         </Container>

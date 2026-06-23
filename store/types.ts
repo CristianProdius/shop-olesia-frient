@@ -65,6 +65,16 @@ export interface Faq {
     isPublished: boolean;
 }
 
+export interface Stat {
+    id: string;
+    key: string;
+    label: string;
+    labelI18n?: I18nField | null;
+    value: string;
+    order: number;
+    isPublished: boolean;
+}
+
 export interface Image {
     id: string;
     url: string;

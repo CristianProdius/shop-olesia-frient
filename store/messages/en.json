@@ -106,6 +106,9 @@
       "body": "Changed your mind? Returns are straightforward and hassle-free."
     }
   },
+  "SocialProof": {
+    "heading": "Trusted by our community"
+  },
   "TrustBadges": {
     "payment": "Secure checkout",
     "delivery": "Worldwide delivery",
