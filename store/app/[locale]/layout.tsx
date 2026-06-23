@@ -8,6 +8,9 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import ModalProvider from '@/providers/modal-provider'
 import ToastProvider from '@/providers/toast-provider'
 import { routing } from '@/i18n/routing'
+import { buildAlternates } from '@/lib/seo'
+
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://liletti.md'
 
 // Montserrat includes the Cyrillic subset required for RU product content.
 const montserrat = Montserrat({
@@ -22,7 +25,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Metadata' })
-  return { title: t('title'), description: t('description') }
+  return {
+    metadataBase: new URL(BASE),
+    title: t('title'),
+    description: t('description'),
+    alternates: buildAlternates(BASE, locale, '/'),
+  }
 }
 
 export function generateStaticParams() {
