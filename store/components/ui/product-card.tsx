@@ -9,7 +9,7 @@ import { useRouter } from "@/i18n/navigation";
 import PreviewModal from './../preview-modal';
 import usePreviewModal from "@/hooks/use-preview-modal";
 import { MouseEventHandler } from 'react';
-import useCart from "@/hooks/use-cart";
+import useCart, { CartLine } from "@/hooks/use-cart";
 import { useTranslations, useLocale } from "next-intl";
 import { localizedField } from "@/lib/i18n-content";
 
@@ -34,7 +34,23 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
 
     const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.stopPropagation();
-        cart.addItem(data);
+        // Quick-add only works when there is a single, unambiguous variant.
+        // For multi-variant products, send the user to the detail page so they
+        // can pick size/color.
+        const variants = data.variants ?? [];
+        if (variants.length === 1) {
+            const variant = variants[0];
+            const line: CartLine = {
+                ...data,
+                variantId: variant.id,
+                selectedSize: variant.size,
+                selectedColor: variant.color,
+                unitPrice: data.price,
+            };
+            cart.addItem(line);
+            return;
+        }
+        router.push(`/product/${data?.id}`);
     }
 
     return ( 

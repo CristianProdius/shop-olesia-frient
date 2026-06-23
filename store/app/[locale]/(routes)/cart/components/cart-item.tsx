@@ -1,15 +1,14 @@
 "use client"
 import Currency from '@/components/ui/currency';
 import IconButton from '@/components/ui/icon-button';
-import useCart from '@/hooks/use-cart';
+import useCart, { CartLine } from '@/hooks/use-cart';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
-import { Product } from '@/types';
 import { localizedField } from '@/lib/i18n-content';
 
 interface CartItemProps {
-    data: Product;
+    data: CartLine;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
@@ -17,8 +16,14 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
     const cart = useCart();
     const locale = useLocale();
 
+    // Back-compat: lines from an older persisted cart may lack variantId.
+    const lineId = data.variantId ?? data.id;
+    // Prefer the variant-scoped labels; fall back to the product's scalar size/color.
+    const color = data.selectedColor ?? data.color;
+    const size = data.selectedSize ?? data.size;
+
     const onRemove = () => {
-        cart.removeItem(data.id);
+        cart.removeItem(lineId);
     }
 
     return (
@@ -42,10 +47,14 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                         </p>
                     </div>
                     <div className='flex mt-1 text-sm'>
-                        <p className='text-gray-500'>{localizedField(data.color.nameI18n, locale, data.color.name)}</p>
-                        <p className='pl-4 ml-4 text-gray-500 border-l border-gray-200'>{localizedField(data.size.nameI18n, locale, data.size.name)}</p>
+                        {color && (
+                            <p className='text-gray-500'>{localizedField(color.nameI18n, locale, color.name)}</p>
+                        )}
+                        {size && (
+                            <p className='pl-4 ml-4 text-gray-500 border-l border-gray-200'>{localizedField(size.nameI18n, locale, size.name)}</p>
+                        )}
                     </div>
-                    <Currency value={data.price} />
+                    <Currency value={data.unitPrice ?? data.price} />
                 </div>
             </div>
         </li>

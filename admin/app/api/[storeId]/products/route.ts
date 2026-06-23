@@ -160,7 +160,13 @@ export async function GET(
                 images: true,
                 category: true,
                 color: true,
-                size: true
+                size: true,
+                variants: {
+                    include: {
+                        size: true,
+                        color: true
+                    }
+                }
             },
             orderBy: {
                 createdAt: 'desc'

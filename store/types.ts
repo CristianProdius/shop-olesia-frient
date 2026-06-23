@@ -32,7 +32,18 @@ export interface Product {
     isFeatured: boolean;
     size: Size;
     color: Color;
+    variants: ProductVariant[];
     images: Image[]
+}
+
+export interface ProductVariant {
+    id: string;
+    sku?: string | null;
+    stockQty: number;
+    sizeId: string;
+    colorId: string;
+    size: Size;
+    color: Color;
 }
 
 export type ContentBlockType =

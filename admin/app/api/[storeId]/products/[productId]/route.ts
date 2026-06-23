@@ -22,7 +22,13 @@ export async function GET (
                 images: true,
                 category: true,
                 size: true,
-                color: true
+                color: true,
+                variants: {
+                    include: {
+                        size: true,
+                        color: true
+                    }
+                }
             }
         })
 
