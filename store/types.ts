@@ -53,6 +53,18 @@ export interface ContentBlock {
     isPublished: boolean;
 }
 
+export interface Faq {
+    id: string;
+    category?: string | null;
+    categoryI18n?: I18nField | null;
+    question: string;
+    questionI18n?: I18nField | null;
+    answer: string;
+    answerI18n?: I18nField | null;
+    order: number;
+    isPublished: boolean;
+}
+
 export interface Image {
     id: string;
     url: string;

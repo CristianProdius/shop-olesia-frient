@@ -4,6 +4,7 @@ import {
   productJsonLd,
   breadcrumbJsonLd,
   organizationJsonLd,
+  faqPageJsonLd,
 } from "./seo";
 
 describe("buildAlternates", () => {
@@ -41,5 +42,17 @@ describe("breadcrumbJsonLd", () => {
 describe("organizationJsonLd", () => {
   it("names LILETTI", () => {
     expect(organizationJsonLd("https://liletti.md").name).toBe("LILETTI");
+  });
+});
+
+describe("faqPageJsonLd", () => {
+  const ld = faqPageJsonLd([{ question: "Shipping?", answer: "Worldwide." }, { question: "Returns?", answer: "14 days." }]);
+  it("is a schema.org FAQPage", () => expect(ld["@type"]).toBe("FAQPage"));
+  it("maps each item to a Question with an acceptedAnswer", () => {
+    expect(ld.mainEntity).toHaveLength(2);
+    expect(ld.mainEntity[0]["@type"]).toBe("Question");
+    expect(ld.mainEntity[0].name).toBe("Shipping?");
+    expect(ld.mainEntity[0].acceptedAnswer["@type"]).toBe("Answer");
+    expect(ld.mainEntity[0].acceptedAnswer.text).toBe("Worldwide.");
   });
 });

@@ -77,7 +77,8 @@
   },
   "FooterLinks": {
     "about": "Povestea noastră",
-    "atelier": "Atelier"
+    "atelier": "Atelier",
+    "faq": "Întrebări"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -102,5 +103,10 @@
     "delivery": "Livrare în toată lumea",
     "ownProduction": "Producție proprie",
     "returns": "Retururi simple"
+  },
+  "Faq": {
+    "title": "Întrebări frecvente",
+    "intro": "Răspunsuri la întrebările uzuale despre comenzi, livrare, mărimi și retururi. Nu găsiți ce căutați? Contactați atelierul nostru.",
+    "empty": "Încă nu există întrebări. Reveniți în curând."
   }
 }

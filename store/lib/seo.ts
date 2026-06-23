@@ -29,6 +29,16 @@ export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   };
 }
 
+export function faqPageJsonLd(items: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org", "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question", name: it.question,
+      acceptedAnswer: { "@type": "Answer", text: it.answer },
+    })),
+  };
+}
+
 export function organizationJsonLd(baseUrl: string) {
   return { "@context": "https://schema.org", "@type": "Organization", name: "LILETTI", url: baseUrl };
 }

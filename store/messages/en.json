@@ -77,7 +77,8 @@
   },
   "FooterLinks": {
     "about": "Our Story",
-    "atelier": "Atelier"
+    "atelier": "Atelier",
+    "faq": "FAQ"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -102,5 +103,10 @@
     "delivery": "Worldwide delivery",
     "ownProduction": "Made in our atelier",
     "returns": "Easy returns"
+  },
+  "Faq": {
+    "title": "Frequently Asked Questions",
+    "intro": "Answers to common questions about orders, shipping, sizing and returns. Can't find what you're looking for? Reach out to our atelier.",
+    "empty": "No questions yet. Check back soon."
   }
 }
