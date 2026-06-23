@@ -1,13 +1,12 @@
 {
   "Navbar": {
-    "brand": "STORE",
     "signIn": "Sign in",
     "signOutWithEmail": "Sign out ({email})",
     "noResults": "No results found.",
     "language": "Language"
   },
   "Footer": {
-    "copyright": "© 2023 FakeStoreName, Inc. All rights reserved."
+    "copyright": "© 2026 LILETTI. All rights reserved."
   },
   "Home": {
     "featuredProducts": "Featured Products",
@@ -60,7 +59,7 @@
     "alreadyHaveAccount": "Already have an account?"
   },
   "Metadata": {
-    "title": "Store",
-    "description": "Online store"
+    "title": "LILETTI",
+    "description": "LILETTI — Moldovan fashion, own production, worldwide delivery."
   }
 }

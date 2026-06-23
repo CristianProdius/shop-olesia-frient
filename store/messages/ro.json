@@ -1,13 +1,12 @@
 {
   "Navbar": {
-    "brand": "STORE",
     "signIn": "Autentificare",
     "signOutWithEmail": "Deconectare ({email})",
     "noResults": "Niciun rezultat găsit.",
     "language": "Limbă"
   },
   "Footer": {
-    "copyright": "© 2023 FakeStoreName, Inc. Toate drepturile rezervate."
+    "copyright": "© 2026 LILETTI. Toate drepturile rezervate."
   },
   "Home": {
     "featuredProducts": "Produse recomandate",
@@ -60,7 +59,7 @@
     "alreadyHaveAccount": "Ai deja un cont?"
   },
   "Metadata": {
-    "title": "Magazin",
-    "description": "Magazin online"
+    "title": "LILETTI",
+    "description": "LILETTI — modă moldovenească, producție proprie, livrare în toată lumea."
   }
 }

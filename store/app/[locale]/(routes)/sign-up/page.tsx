@@ -38,17 +38,17 @@ const SignUpPage = () => {
                 <div className="space-y-1">
                     <label htmlFor="name" className="text-sm font-medium">{t("name")}</label>
                     <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full p-2 border" />
                 </div>
                 <div className="space-y-1">
                     <label htmlFor="email" className="text-sm font-medium">{t("email")}</label>
                     <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full p-2 border" />
                 </div>
                 <div className="space-y-1">
                     <label htmlFor="password" className="text-sm font-medium">{t("password")}</label>
                     <input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full p-2 border" />
                 </div>
                 <Button type="submit" disabled={loading} className="w-full">
                     {loading ? t("creating") : t("createAccount")}

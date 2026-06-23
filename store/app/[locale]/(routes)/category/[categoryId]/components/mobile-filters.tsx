@@ -34,7 +34,7 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({ sizes, colors, sizesLabel
                 <div className="fixed inset-0 bg-black bg-opacity-25"/>
                 {/* Dialog Position */}
                 <div className="fixed inset-0 z-40 flex">
-                    <Dialog.Panel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-6 ml-auto overflow-y-auto bg-white shadow-xl">
+                    <Dialog.Panel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-6 ml-auto overflow-y-auto bg-white shadow-[var(--shadow-overlay)]">
                         {/* Close Button */}
                         <div className="flex items-center justify-end px-4">
                             <IconButton icon={<X size={15} onClick={onClose} />} />

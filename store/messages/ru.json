@@ -1,13 +1,12 @@
 {
   "Navbar": {
-    "brand": "STORE",
     "signIn": "Войти",
     "signOutWithEmail": "Выйти ({email})",
     "noResults": "Ничего не найдено.",
     "language": "Язык"
   },
   "Footer": {
-    "copyright": "© 2023 FakeStoreName, Inc. Все права защищены."
+    "copyright": "© 2026 LILETTI. Все права защищены."
   },
   "Home": {
     "featuredProducts": "Рекомендуемые товары",
@@ -60,7 +59,7 @@
     "alreadyHaveAccount": "Уже есть аккаунт?"
   },
   "Metadata": {
-    "title": "Магазин",
-    "description": "Интернет-магазин"
+    "title": "LILETTI",
+    "description": "LILETTI — молдавская мода, собственное производство, доставка по всему миру."
   }
 }

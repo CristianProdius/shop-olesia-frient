@@ -38,14 +38,14 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
     }
 
     return ( 
-        <div onClick={handleClick} className="p-3 space-y-4 bg-white border cursor-pointer group rounded-xl">
+        <div onClick={handleClick} className="p-3 space-y-4 bg-white border cursor-pointer group">
             {/* Images and Actions */}
-            <div className="relative bg-gray-100 aspect-square rounded-xl">
+            <div className="relative bg-gray-100 aspect-square">
                 <Image
                     fill
                     src={data?.images?.[0]?.url}
                     alt={t('productImageAlt')}
-                    className="object-cover rounded-md aspect-square" />
+                    className="object-cover aspect-square" />
                 <div className="absolute w-full px-6 transition opacity-0 group-hover:opacity-100 bottom-5">
                     <div className="flex justify-center gap-x-6">
                         <IconButton

@@ -1,7 +1,7 @@
 import { Footer, Navbar } from '@/components'
 import '../globals.css'
 import type { Metadata } from 'next'
-import { Urbanist } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
@@ -9,8 +9,11 @@ import ModalProvider from '@/providers/modal-provider'
 import ToastProvider from '@/providers/toast-provider'
 import { routing } from '@/i18n/routing'
 
-// Urbanist has no Cyrillic subset; Russian falls back to the system sans-serif.
-const urban = Urbanist({ subsets: ['latin', 'latin-ext'] })
+// Montserrat includes the Cyrillic subset required for RU product content.
+const montserrat = Montserrat({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  variable: '--font-montserrat',
+})
 
 export async function generateMetadata({
   params,
@@ -41,7 +44,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className={urban.className}>
+      <body className={`${montserrat.variable} ${montserrat.className}`}>
         <NextIntlClientProvider>
           <ModalProvider />
           <ToastProvider />

@@ -80,24 +80,24 @@ const CheckoutPage = () => {
                         <div className="space-y-1">
                             <label htmlFor="name" className="text-sm font-medium">{t("fullName")}</label>
                             <input id="name" required value={name} onChange={(e) => setName(e.target.value)}
-                                className="w-full p-2 border rounded-md" />
+                                className="w-full p-2 border" />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="address" className="text-sm font-medium">{t("shippingAddress")}</label>
                             <input id="address" required value={address} onChange={(e) => setAddress(e.target.value)}
-                                className="w-full p-2 border rounded-md" />
+                                className="w-full p-2 border" />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="phone" className="text-sm font-medium">{t("phone")}</label>
                             <input id="phone" required value={phone} onChange={(e) => setPhone(e.target.value)}
-                                className="w-full p-2 border rounded-md" />
+                                className="w-full p-2 border" />
                         </div>
                         <Button type="submit" disabled={submitting || items.length === 0} className="w-full">
                             {submitting ? t("processing") : t("paySimulated")}
                         </Button>
                     </form>
 
-                    <div className="px-4 py-6 mt-16 rounded-lg bg-gray-50 lg:col-span-5 lg:mt-0 lg:p-8">
+                    <div className="px-4 py-6 mt-16 bg-gray-50 lg:col-span-5 lg:mt-0 lg:p-8">
                         <h2 className="text-lg font-medium text-gray-900">{t("orderSummary")}</h2>
                         <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200">
                             <div className="text-base font-medium text-gray-900">{t("orderTotal")}</div>

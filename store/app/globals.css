@@ -8,14 +8,38 @@
   );
 
   /* LILETTI brand tokens (source of truth). Tailwind v4 generates
-     text-sale / text-muted-strong utilities from these. */
+     text-sale / text-muted-strong / text-text / border-border etc.
+     utilities from these. */
   --color-sale: #e95144;
   --color-muted-strong: #6e6e6e;
+  --color-text: #232323; /* default body text */
+  --color-ink: #000000; /* max-contrast / headings */
+  --color-border: #cfcfcf;
+  --color-badge: #f5d9dc; /* cart-count badge background */
+
+  /* Minimal-luxury editorial: sharp corners everywhere. The only rounded
+     element allowed is the cart-count badge (rounded-full). */
+  --radius: 0px;
+
+  /* Subtle shadows. Overlays for menus/drawers/modals; nav for the
+     scrolled navbar. No other shadows anywhere. */
+  --shadow-overlay: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-nav: 0 1px 0 rgba(0, 0, 0, 0.06);
+
+  /* Montserrat (incl. Cyrillic) drives font-sans utilities. */
+  --font-sans: var(--font-montserrat);
 }
 
 /* Semantic hook for price rendering. Never uppercase prices. */
 .price {
   text-transform: none;
+}
+
+@layer base {
+  body {
+    color: var(--color-text);
+    font-family: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  }
 }
 
 /*
