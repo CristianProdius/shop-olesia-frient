@@ -1,32 +1,33 @@
-"use client"
-import { useState, useEffect } from 'react';
-
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-})
+"use client";
+import { useLocale } from "next-intl";
+import { useState, useEffect } from "react";
+import { formatCompareAt } from "@/lib/format";
 
 interface CurrencyProps {
-    value?: string | number;
+  value?: string | number;
+  compareAtValue?: string | number;
 }
 
-const Currency:React.FC<CurrencyProps> = ({ value }) => {
-    const [isMounted, setIsMounted] = useState(false);
+const Currency: React.FC<CurrencyProps> = ({ value, compareAtValue }) => {
+  const locale = useLocale();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, [])
+  const { current, compareAt, onSale } = formatCompareAt(
+    Number(value),
+    compareAtValue !== undefined ? Number(compareAtValue) : undefined,
+    locale
+  );
 
-    if (!isMounted) {
-        return null;
-    }
-
-    return (
-        // span (not div) so it's valid inside inline parents like <p> (e.g. Info)
-        <span className="font-semibold">
-            {formatter.format(Number(value))}
-        </span>
-    );
-}
+  return (
+    <span className="price font-semibold">
+      {onSale && (
+        <span className="text-muted-strong line-through mr-2 font-normal">{compareAt}</span>
+      )}
+      <span className={onSale ? "text-sale" : undefined}>{current}</span>
+    </span>
+  );
+};
 
 export default Currency;

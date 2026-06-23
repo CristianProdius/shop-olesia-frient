@@ -15,3 +15,12 @@ export function formatCurrency(value: number, locale: string): string {
     currency: "MDL",
   }).format(value);
 }
+
+export function formatCompareAt(value: number, compareAt: number | undefined, locale: string) {
+  const onSale = typeof compareAt === "number" && compareAt > value;
+  return {
+    current: formatCurrency(value, locale),
+    compareAt: onSale ? formatCurrency(compareAt as number, locale) : undefined,
+    onSale,
+  };
+}

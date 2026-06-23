@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { localeTag, formatCurrency } from "./format";
+import { formatCompareAt } from "./format";
 
 describe("localeTag", () => {
   it("maps ro to ro-MD", () => expect(localeTag("ro")).toBe("ro-MD"));
@@ -15,5 +16,18 @@ describe("formatCurrency", () => {
   });
   it("uses locale grouping for ru", () => {
     expect(formatCurrency(1200, "ru")).toMatch(/1[\s  ]?200/);
+  });
+});
+
+describe("formatCompareAt", () => {
+  it("returns current + struck price when compareAt is higher", () => {
+    const r = formatCompareAt(800, 1000, "en");
+    expect(r.current).toBe(formatCurrency(800, "en"));
+    expect(r.compareAt).toBe(formatCurrency(1000, "en"));
+    expect(r.onSale).toBe(true);
+  });
+  it("no sale when compareAt missing or not higher", () => {
+    expect(formatCompareAt(800, undefined, "en").onSale).toBe(false);
+    expect(formatCompareAt(800, 800, "en").onSale).toBe(false);
   });
 });

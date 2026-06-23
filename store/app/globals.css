@@ -6,6 +6,16 @@
     from 180deg at 50% 50%,
     var(--tw-gradient-stops)
   );
+
+  /* LILETTI brand tokens (source of truth). Tailwind v4 generates
+     text-sale / text-muted-strong utilities from these. */
+  --color-sale: #e95144;
+  --color-muted-strong: #6e6e6e;
+}
+
+/* Semantic hook for price rendering. Never uppercase prices. */
+.price {
+  text-transform: none;
 }
 
 /*
