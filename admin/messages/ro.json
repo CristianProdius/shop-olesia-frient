@@ -260,7 +260,15 @@
     "featured": "Recomandat",
     "featuredDescription": "Produsul va apărea pe pagina principală.",
     "archived": "Arhivat",
-    "archivedDescription": "Produsul va apărea oriunde în magazin."
+    "archivedDescription": "Produsul va apărea oriunde în magazin.",
+    "sku": "SKU",
+    "skuPlaceholder": "Unitate de stoc (SKU)",
+    "descriptionLabel": "Descriere",
+    "descriptionPlaceholder": "Descrierea produsului",
+    "materialLabel": "Compoziție / Materiale",
+    "materialPlaceholder": "Materiale și compoziție",
+    "careLabel": "Îngrijire",
+    "carePlaceholder": "Instrucțiuni de îngrijire"
   },
   "AuthAdmin": {
     "signInTitle": "Autentificare",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserId } from '@/lib/server-auth'
 import prismadb from "@/lib/prismadb";
+import { buildI18nField } from "@/lib/i18n-content";
 
 export async function POST(
     req: Request,
@@ -13,6 +14,13 @@ export async function POST(
         const {
             name,
             nameI18n,
+            sku,
+            description,
+            descriptionI18n,
+            material,
+            materialI18n,
+            care,
+            careI18n,
             price,
             categoryId,
             colorId,
@@ -22,7 +30,7 @@ export async function POST(
             isArchived
         } = body;
 
-        const { storeId } = await params; 
+        const { storeId } = await params;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
@@ -63,10 +71,28 @@ export async function POST(
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
+        // Build i18n JSON maps from the per-locale form inputs (dropping blanks),
+        // and persist a plain default-locale (en) fallback column alongside each,
+        // mirroring the name / nameI18n convention.
+        const descriptionMap = descriptionI18n ? buildI18nField(descriptionI18n) : {};
+        const materialMap = materialI18n ? buildI18nField(materialI18n) : {};
+        const careMap = careI18n ? buildI18nField(careI18n) : {};
+
+        const descriptionPlain = description ?? descriptionMap.en ?? null;
+        const materialPlain = material ?? materialMap.en ?? null;
+        const carePlain = care ?? careMap.en ?? null;
+
         const product = await prismadb.product.create({
             data : {
                 name,
-                nameI18n: nameI18n ?? undefined,
+                nameI18n: nameI18n ? buildI18nField(nameI18n) : undefined,
+                sku: sku || null,
+                description: descriptionPlain,
+                descriptionI18n: Object.keys(descriptionMap).length ? descriptionMap : undefined,
+                material: materialPlain,
+                materialI18n: Object.keys(materialMap).length ? materialMap : undefined,
+                care: carePlain,
+                careI18n: Object.keys(careMap).length ? careMap : undefined,
                 images: {
                     createMany: {
                         data: [

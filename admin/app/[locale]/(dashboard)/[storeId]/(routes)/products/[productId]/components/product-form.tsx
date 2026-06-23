@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
@@ -33,6 +34,25 @@ interface ProductFromProps {
 const formSchema = z.object({
     name: z.string().min(1),
     nameI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    sku: z.string().optional().nullable(),
+    description: z.string().optional().nullable(),
+    descriptionI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    material: z.string().optional().nullable(),
+    materialI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    care: z.string().optional().nullable(),
+    careI18n: z.object({
         en: z.string().optional(),
         ru: z.string().optional(),
         ro: z.string().optional(),
@@ -73,10 +93,21 @@ export const ProductForm: React.FC<ProductFromProps> = ({
         defaultValues: initialData ? {
             ...initialData,
             nameI18n: (initialData?.nameI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            descriptionI18n: (initialData?.descriptionI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            materialI18n: (initialData?.materialI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            careI18n: (initialData?.careI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            sku: initialData?.sku ?? '',
             price: parseFloat(String(initialData?.price))
         } : {
             name: '',
             nameI18n: { en: '', ru: '', ro: '' },
+            sku: '',
+            description: '',
+            descriptionI18n: { en: '', ru: '', ro: '' },
+            material: '',
+            materialI18n: { en: '', ru: '', ro: '' },
+            care: '',
+            careI18n: { en: '', ru: '', ro: '' },
             images: [],
             price: 0,
             categoryId: '',
@@ -172,7 +203,20 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                             )}
                         />
                         <FormField
-                            control={form.control} 
+                            control={form.control}
+                            name="sku"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>{t('sku')}</FormLabel>
+                                    <FormControl>
+                                        <Input disabled={loading} placeholder={t('skuPlaceholder')} {...field} value={field.value ?? ''} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="price"
                             render={({field}) => (
                                 <FormItem>
@@ -364,6 +408,138 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                                         <FormLabel>{t('romanian')}</FormLabel>
                                         <FormControl>
                                             <Input disabled={loading} placeholder={t('namePlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                    <div className='space-y-4'>
+                        <FormLabel>{t('descriptionLabel')}</FormLabel>
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="descriptionI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('descriptionPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="descriptionI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('descriptionPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="descriptionI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('descriptionPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                    <div className='space-y-4'>
+                        <FormLabel>{t('materialLabel')}</FormLabel>
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="materialI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="materialI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="materialI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                    <div className='space-y-4'>
+                        <FormLabel>{t('careLabel')}</FormLabel>
+                        <div className='grid grid-cols-3 gap-8'>
+                            <FormField
+                                control={form.control}
+                                name="careI18n.en"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('english')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="careI18n.ru"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('russian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="careI18n.ro"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('romanian')}</FormLabel>
+                                        <FormControl>
+                                            <Textarea disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

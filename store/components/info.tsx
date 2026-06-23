@@ -13,6 +13,11 @@ interface InfoProps {
 const Info: React.FC<InfoProps> = ({ data }) => {
     const t = useTranslations("Product");
     const locale = useLocale();
+
+    const description = localizedField(data.descriptionI18n, locale, data.description ?? "");
+    const materials = localizedField(data.materialI18n, locale, data.material ?? "");
+    const care = localizedField(data.careI18n, locale, data.care ?? "");
+
     return (
         <div>
             <h1 className="text-3xl font-bold text-gray-900">{localizedField(data.nameI18n, locale, data.name)}</h1>
@@ -40,6 +45,28 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                     <ShoppingCart />
                 </Button>
             </div>
+            {(description || materials || care) && (
+                <div className="flex flex-col mt-10 gap-y-6">
+                    {description && (
+                        <div>
+                            <h3 className="font-semibold text-black">{t("description")}</h3>
+                            <p className="mt-2 whitespace-pre-line text-gray-700">{description}</p>
+                        </div>
+                    )}
+                    {materials && (
+                        <div>
+                            <h3 className="font-semibold text-black">{t("materials")}</h3>
+                            <p className="mt-2 whitespace-pre-line text-gray-700">{materials}</p>
+                        </div>
+                    )}
+                    {care && (
+                        <div>
+                            <h3 className="font-semibold text-black">{t("care")}</h3>
+                            <p className="mt-2 whitespace-pre-line text-gray-700">{care}</p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
      );
 }

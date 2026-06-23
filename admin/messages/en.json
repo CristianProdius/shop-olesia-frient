@@ -260,7 +260,15 @@
     "featured": "Featured",
     "featuredDescription": "The product will appear on the home page.",
     "archived": "Archived",
-    "archivedDescription": "The product will appear anywhere in the store."
+    "archivedDescription": "The product will appear anywhere in the store.",
+    "sku": "SKU",
+    "skuPlaceholder": "Stock keeping unit",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Product description",
+    "materialLabel": "Composition / Materials",
+    "materialPlaceholder": "Materials and composition",
+    "careLabel": "Care",
+    "carePlaceholder": "Care instructions"
   },
   "AuthAdmin": {
     "signInTitle": "Sign in",

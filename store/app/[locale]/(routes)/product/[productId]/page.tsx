@@ -27,7 +27,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
 
     const productLd = productJsonLd({
         name: productName,
-        description: productName,
+        description: localizedField(product.descriptionI18n, locale, productName),
         images: product.images.map((i) => i.url),
         price: Number(product.price),
         currency: "MDL",

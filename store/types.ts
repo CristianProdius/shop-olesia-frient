@@ -21,6 +21,13 @@ export interface Product {
     category: Category;
     name: string;
     nameI18n?: I18nField | null;
+    sku?: string | null;
+    description?: string | null;
+    descriptionI18n?: I18nField | null;
+    material?: string | null;
+    materialI18n?: I18nField | null;
+    care?: string | null;
+    careI18n?: I18nField | null;
     price: string;
     isFeatured: boolean;
     size: Size;

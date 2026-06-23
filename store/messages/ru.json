@@ -17,7 +17,10 @@
     "color": "Цвет:",
     "addToCart": "В корзину",
     "relatedItems": "Похожие товары",
-    "imageAlt": "Изображение"
+    "imageAlt": "Изображение",
+    "description": "Описание",
+    "materials": "Состав",
+    "care": "Уход"
   },
   "CategoryPage": {
     "sizes": "Размеры",

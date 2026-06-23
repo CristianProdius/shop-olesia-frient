@@ -260,7 +260,15 @@
     "featured": "Рекомендуемый",
     "featuredDescription": "Товар будет отображаться на главной странице.",
     "archived": "В архиве",
-    "archivedDescription": "Товар будет отображаться в магазине."
+    "archivedDescription": "Товар будет отображаться в магазине.",
+    "sku": "Артикул",
+    "skuPlaceholder": "Складская единица (SKU)",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Описание товара",
+    "materialLabel": "Состав / Материалы",
+    "materialPlaceholder": "Материалы и состав",
+    "careLabel": "Уход",
+    "carePlaceholder": "Инструкции по уходу"
   },
   "AuthAdmin": {
     "signInTitle": "Вход",

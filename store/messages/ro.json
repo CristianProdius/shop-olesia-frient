@@ -17,7 +17,10 @@
     "color": "Culoare:",
     "addToCart": "Adaugă în coș",
     "relatedItems": "Produse similare",
-    "imageAlt": "Imagine"
+    "imageAlt": "Imagine",
+    "description": "Descriere",
+    "materials": "Compoziție",
+    "care": "Îngrijire"
   },
   "CategoryPage": {
     "sizes": "Mărimi",

@@ -17,7 +17,10 @@
     "color": "Color:",
     "addToCart": "Add To Cart",
     "relatedItems": "Related Items",
-    "imageAlt": "Image"
+    "imageAlt": "Image",
+    "description": "Description",
+    "materials": "Composition",
+    "care": "Care"
   },
   "CategoryPage": {
     "sizes": "Sizes",
