@@ -7,6 +7,7 @@
     "colors": "Цвета",
     "products": "Товары",
     "orders": "Заказы",
+    "subscribers": "Подписчики",
     "settings": "Настройки",
     "account": "Аккаунт",
     "signOut": "Выйти",
@@ -157,6 +158,14 @@
     "totalPrice": "Итого",
     "paid": "Оплачено",
     "date": "Дата"
+  },
+  "Subscribers": {
+    "title": "Подписчики ({count})",
+    "description": "Подписчики на рассылку вашего магазина",
+    "email": "Эл. почта",
+    "createdAt": "Дата подписки",
+    "downloadCsv": "Скачать CSV",
+    "empty": "Пока нет подписчиков."
   },
   "Dashboard": {
     "title": "Панель управления",

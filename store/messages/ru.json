@@ -8,6 +8,14 @@
   "Footer": {
     "copyright": "© 2026 LILETTI. Все права защищены."
   },
+  "Newsletter": {
+    "heading": "Подпишитесь на рассылку LILETTI",
+    "placeholder": "Ваш адрес эл. почты",
+    "subscribe": "Подписаться",
+    "success": "Спасибо за подписку.",
+    "error": "Что-то пошло не так. Попробуйте ещё раз.",
+    "invalid": "Введите корректный адрес эл. почты."
+  },
   "Home": {
     "featuredProducts": "Рекомендуемые товары",
     "productImageAlt": "Изображение товара"

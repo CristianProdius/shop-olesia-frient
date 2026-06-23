@@ -8,6 +8,14 @@
   "Footer": {
     "copyright": "© 2026 LILETTI. Toate drepturile rezervate."
   },
+  "Newsletter": {
+    "heading": "Abonează-te la newsletterul LILETTI",
+    "placeholder": "Adresa ta de email",
+    "subscribe": "Abonează-te",
+    "success": "Îți mulțumim pentru abonare.",
+    "error": "Ceva nu a funcționat. Încearcă din nou.",
+    "invalid": "Introdu o adresă de email validă."
+  },
   "Home": {
     "featuredProducts": "Produse recomandate",
     "productImageAlt": "Imagine produs"

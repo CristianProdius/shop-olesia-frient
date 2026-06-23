@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import Newsletter from "@/components/newsletter";
 
 const Footer = async () => {
     const t = await getTranslations("Footer");
@@ -7,7 +8,8 @@ const Footer = async () => {
 
     return (
         <footer className="bg-white border-t">
-            <div className="flex flex-col items-center px-4 py-10 mx-auto gap-y-4">
+            <div className="flex flex-col items-center px-4 py-10 mx-auto gap-y-6">
+                <Newsletter />
                 <nav className="flex items-center gap-x-6">
                     <Link
                         href="/about"
