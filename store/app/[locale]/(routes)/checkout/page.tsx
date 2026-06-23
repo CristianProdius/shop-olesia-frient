@@ -10,6 +10,7 @@ import Container from "@/components/ui/container";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
 import { useSession } from "@/lib/auth-client";
+import TrustBadges from "@/components/trust-badges";
 
 const CheckoutPage = () => {
     const t = useTranslations("Cart");
@@ -102,6 +103,9 @@ const CheckoutPage = () => {
                         <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200">
                             <div className="text-base font-medium text-gray-900">{t("orderTotal")}</div>
                             <Currency value={totalPrice} />
+                        </div>
+                        <div className="pt-6 mt-6 border-t border-border">
+                            <TrustBadges />
                         </div>
                     </div>
                 </div>

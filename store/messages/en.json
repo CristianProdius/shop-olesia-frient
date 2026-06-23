@@ -78,5 +78,29 @@
   "FooterLinks": {
     "about": "Our Story",
     "atelier": "Atelier"
+  },
+  "WhyChooseUs": {
+    "ownProduction": {
+      "heading": "Made in our atelier",
+      "body": "Every piece is cut and sewn in-house, so we stand behind the quality of each stitch."
+    },
+    "delivery": {
+      "heading": "Worldwide delivery",
+      "body": "We ship across the country and beyond, with careful packaging for every order."
+    },
+    "payment": {
+      "heading": "Secure checkout",
+      "body": "Your details stay protected throughout a simple, reassuring checkout."
+    },
+    "returns": {
+      "heading": "Easy returns",
+      "body": "Changed your mind? Returns are straightforward and hassle-free."
+    }
+  },
+  "TrustBadges": {
+    "payment": "Secure checkout",
+    "delivery": "Worldwide delivery",
+    "ownProduction": "Made in our atelier",
+    "returns": "Easy returns"
   }
 }

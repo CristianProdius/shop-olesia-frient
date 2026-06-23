@@ -78,5 +78,29 @@
   "FooterLinks": {
     "about": "Povestea noastră",
     "atelier": "Atelier"
+  },
+  "WhyChooseUs": {
+    "ownProduction": {
+      "heading": "Producție proprie",
+      "body": "Fiecare piesă este croită și cusută în atelierul nostru — garantăm calitatea fiecărei cusături."
+    },
+    "delivery": {
+      "heading": "Livrare în toată lumea",
+      "body": "Expediem în toată țara și dincolo de ea, cu ambalare atentă pentru fiecare comandă."
+    },
+    "payment": {
+      "heading": "Plată securizată",
+      "body": "Datele tale rămân protejate pe tot parcursul unei comenzi simple și sigure."
+    },
+    "returns": {
+      "heading": "Retururi simple",
+      "body": "Te-ai răzgândit? Returul se face simplu și fără bătăi de cap."
+    }
+  },
+  "TrustBadges": {
+    "payment": "Plată securizată",
+    "delivery": "Livrare în toată lumea",
+    "ownProduction": "Producție proprie",
+    "returns": "Retururi simple"
   }
 }

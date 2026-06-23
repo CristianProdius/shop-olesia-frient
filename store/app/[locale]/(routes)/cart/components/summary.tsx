@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { useSession } from '@/lib/auth-client';
+import TrustBadges from '@/components/trust-badges';
 
 const Summary = () => {
     const t = useTranslations('Cart');
@@ -54,6 +55,9 @@ const Summary = () => {
             <Button disabled={items.length === 0} className='w-full mt-6' onClick={onCheckout}>
                 {t("checkout")}
             </Button>
+            <div className='pt-6 mt-6 border-t border-border'>
+                <TrustBadges />
+            </div>
         </div>
      );
 }
