@@ -64,5 +64,19 @@
   "Metadata": {
     "title": "LILETTI",
     "description": "LILETTI — modă moldovenească, producție proprie, livrare în toată lumea."
+  },
+  "About": {
+    "title": "Povestea noastră",
+    "intro": "LILETTI este un atelier din Moldova care creează vestimentație feminină modernă, cu o atenție constantă la detalii. Aceasta este povestea din spatele brandului.",
+    "empty": "Povestea noastră se scrie. Reveniți în curând."
+  },
+  "Atelier": {
+    "title": "În atelier",
+    "intro": "O privire dincolo de cusături — mâinile, materialele și procesul care dau formă fiecărei piese LILETTI.",
+    "empty": "Poveștile din culise vor apărea în curând."
+  },
+  "FooterLinks": {
+    "about": "Povestea noastră",
+    "atelier": "Atelier"
   }
 }

@@ -64,5 +64,19 @@
   "Metadata": {
     "title": "LILETTI",
     "description": "LILETTI — Moldovan fashion, own production, worldwide delivery."
+  },
+  "About": {
+    "title": "Our Story",
+    "intro": "LILETTI is a Moldovan atelier crafting modern womenswear with an enduring sense of detail. This is the story behind the label.",
+    "empty": "Our story is being written. Check back soon."
+  },
+  "Atelier": {
+    "title": "Inside the Atelier",
+    "intro": "A look behind the seams — the hands, materials, and process that shape every LILETTI piece.",
+    "empty": "Behind-the-scenes stories are coming soon."
+  },
+  "FooterLinks": {
+    "about": "Our Story",
+    "atelier": "Atelier"
   }
 }

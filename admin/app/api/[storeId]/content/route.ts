@@ -77,6 +77,8 @@ export async function GET(
 ) {
     try {
         const { storeId } = await params;
+        const { searchParams } = new URL(req.url);
+        const type = searchParams.get('type') || undefined;
 
         if (!storeId) {
             return new NextResponse("Store Id is required", { status: 400 });
@@ -84,7 +86,8 @@ export async function GET(
 
         const contentBlocks = await prismadb.contentBlock.findMany({
             where: {
-                storeId: storeId
+                storeId: storeId,
+                type
             },
             orderBy: {
                 order: 'asc'

@@ -35,6 +35,24 @@ export interface Product {
     images: Image[]
 }
 
+export type ContentBlockType =
+    | "brand-story"
+    | "behind-the-scenes"
+    | "why-choose-us"
+    | "social-proof";
+
+export interface ContentBlock {
+    id: string;
+    type: ContentBlockType;
+    heading?: string | null;
+    headingI18n?: I18nField | null;
+    body?: string | null;
+    bodyI18n?: I18nField | null;
+    mediaUrl?: string | null;
+    order: number;
+    isPublished: boolean;
+}
+
 export interface Image {
     id: string;
     url: string;
