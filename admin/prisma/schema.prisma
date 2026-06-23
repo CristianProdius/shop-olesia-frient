@@ -76,6 +76,7 @@ model Product {
   color       Color     @relation(fields: [colorId], references: [id])
   images      Image[]   // Relation to Image model
   orderItems  OrderItem[]   // Relation to Order model
+  variants    ProductVariant[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -83,6 +84,21 @@ model Product {
   @@index([categoryId])
   @@index([sizeId])
   @@index([colorId])
+}
+
+model ProductVariant {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  sizeId    String
+  colorId   String
+  sku       String?
+  stockQty  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, sizeId, colorId])
+  @@index([productId])
 }
 
 model Order {
