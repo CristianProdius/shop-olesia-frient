@@ -8,7 +8,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import ModalProvider from '@/providers/modal-provider'
 import ToastProvider from '@/providers/toast-provider'
 import { routing } from '@/i18n/routing'
-import { buildAlternates } from '@/lib/seo'
+import { buildAlternates, organizationJsonLd } from '@/lib/seo'
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://liletti.md'
 
@@ -53,6 +53,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={`${montserrat.variable} ${montserrat.className}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd(BASE)),
+          }}
+        />
         <NextIntlClientProvider>
           <ModalProvider />
           <ToastProvider />
