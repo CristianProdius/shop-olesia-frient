@@ -312,3 +312,53 @@ model CustomerVerification {
 
   @@index([identifier])
 }
+
+model ContentBlock {
+  id          String   @id @default(uuid())
+  storeId     String
+  type        String // "brand-story" | "behind-the-scenes" | "why-choose-us" | "social-proof"
+  heading     String?
+  headingI18n Json?
+  body        String?
+  bodyI18n    Json?
+  mediaUrl    String?
+  order       Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([storeId, type])
+}
+
+model Faq {
+  id           String   @id @default(uuid())
+  storeId      String
+  category     String?
+  categoryI18n Json?
+  question     String
+  questionI18n Json?
+  answer       String
+  answerI18n   Json?
+  order        Int      @default(0)
+  isPublished  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model Stat {
+  id          String   @id @default(uuid())
+  storeId     String
+  key         String
+  label       String
+  labelI18n   Json?
+  value       String
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
+}
