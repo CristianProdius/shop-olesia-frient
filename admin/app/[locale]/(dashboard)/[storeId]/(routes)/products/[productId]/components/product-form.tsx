@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import * as z from 'zod'
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import { Category, Color, Image, Product, ProductVariant, Size } from "@prisma/client";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Trash } from "lucide-react";
-import { useForm } from 'react-hook-form';
+import { Plus, Trash } from "lucide-react";
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -25,6 +25,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 interface ProductFromProps {
     initialData: Product & {
         images: Image[]
+        variants: ProductVariant[]
     } | null;
     categories: Category[]
     colors: Color[]
@@ -63,8 +64,13 @@ const formSchema = z.object({
     colorId: z.string().min(1),
     sizeId: z.string().min(1),
     isFeatured: z.boolean().default(false).optional(),
-    isArchived: z.boolean().default(false).optional()
-    
+    isArchived: z.boolean().default(false).optional(),
+    variants: z.array(z.object({
+        sizeId: z.string().min(1),
+        colorId: z.string().min(1),
+        sku: z.string().optional().nullable(),
+        stockQty: z.coerce.number().int().min(0)
+    }))
 })
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -97,7 +103,13 @@ export const ProductForm: React.FC<ProductFromProps> = ({
             materialI18n: (initialData?.materialI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
             careI18n: (initialData?.careI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
             sku: initialData?.sku ?? '',
-            price: parseFloat(String(initialData?.price))
+            price: parseFloat(String(initialData?.price)),
+            variants: (initialData?.variants ?? []).map((variant) => ({
+                sizeId: variant.sizeId,
+                colorId: variant.colorId,
+                sku: variant.sku ?? '',
+                stockQty: variant.stockQty,
+            }))
         } : {
             name: '',
             nameI18n: { en: '', ru: '', ro: '' },
@@ -115,10 +127,39 @@ export const ProductForm: React.FC<ProductFromProps> = ({
             sizeId: '',
             isFeatured: false,
             isArchived: false,
+            variants: [],
         }
     });
 
+    const { fields: variantFields, append: appendVariant, remove: removeVariant } = useFieldArray({
+        control: form.control,
+        name: 'variants',
+    });
+
+    const watchedVariants = form.watch('variants');
+
+    const duplicateVariantIndexes = (() => {
+        const seen = new Map<string, number>();
+        const duplicates = new Set<number>();
+        (watchedVariants ?? []).forEach((variant, index) => {
+            if (!variant?.sizeId || !variant?.colorId) return;
+            const key = `${variant.sizeId}:${variant.colorId}`;
+            if (seen.has(key)) {
+                duplicates.add(index);
+            } else {
+                seen.set(key, index);
+            }
+        });
+        return duplicates;
+    })();
+
+    const hasDuplicateVariants = duplicateVariantIndexes.size > 0;
+
     const onSubmit = async (data: ProductFormValues) => {
+        if (hasDuplicateVariants) {
+            toast.error(t('duplicateVariant'));
+            return;
+        }
         try {
             setLoading(true);
             if (initialData) {
@@ -547,7 +588,123 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                             />
                         </div>
                     </div>
-                    <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
+                    <div className='space-y-4'>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('variants')}</FormLabel>
+                            <Button
+                                type='button'
+                                size='sm'
+                                variant='secondary'
+                                disabled={loading}
+                                onClick={() => appendVariant({ sizeId: '', colorId: '', sku: '', stockQty: 0 })}
+                            >
+                                <Plus className='w-4 h-4 mr-2' />
+                                {t('addVariant')}
+                            </Button>
+                        </div>
+                        {variantFields.map((field, index) => (
+                            <div key={field.id} className='space-y-2'>
+                                <div className='grid grid-cols-1 gap-4 md:grid-cols-5 md:items-end'>
+                                    <FormField
+                                        control={form.control}
+                                        name={`variants.${index}.sizeId`}
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>{t('size')}</FormLabel>
+                                                <Select
+                                                    disabled={loading}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    defaultValue={field.value}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue defaultValue={field.value} placeholder={t('selectSize')} />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {sizes.map(size => (
+                                                            <SelectItem key={size.id} value={size.id}>{size.name}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`variants.${index}.colorId`}
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>{t('color')}</FormLabel>
+                                                <Select
+                                                    disabled={loading}
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    defaultValue={field.value}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue defaultValue={field.value} placeholder={t('selectColor')} />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {colors.map(color => (
+                                                            <SelectItem style={{ display: 'flex' }} key={color.id} value={color.id}>
+                                                                <span style={{ color: color.value }}>{color.name}</span>
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`variants.${index}.sku`}
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>{t('sku')}</FormLabel>
+                                                <FormControl>
+                                                    <Input disabled={loading} placeholder={t('skuPlaceholder')} {...field} value={field.value ?? ''} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`variants.${index}.stockQty`}
+                                        render={({field}) => (
+                                            <FormItem>
+                                                <FormLabel>{t('stock')}</FormLabel>
+                                                <FormControl>
+                                                    <Input type='number' min={0} disabled={loading} {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button
+                                        type='button'
+                                        variant='destructive'
+                                        size='sm'
+                                        disabled={loading}
+                                        onClick={() => removeVariant(index)}
+                                    >
+                                        <Trash className='w-4 h-4 mr-2' />
+                                        {t('removeVariant')}
+                                    </Button>
+                                </div>
+                                {duplicateVariantIndexes.has(index) && (
+                                    <p className='text-sm font-medium text-destructive'>{t('duplicateVariant')}</p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    <Button disabled={loading || hasDuplicateVariants} className='ml-auto' type='submit'>{action}</Button>
                 </form>
             </Form>
             {/* <Separator /> */}

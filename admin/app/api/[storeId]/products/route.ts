@@ -26,6 +26,7 @@ export async function POST(
             colorId,
             sizeId,
             images,
+            variants,
             isFeatured,
             isArchived
         } = body;
@@ -100,6 +101,18 @@ export async function POST(
                         ]
                     }
                 },
+                variants: variants && variants.length ? {
+                    createMany: {
+                        data: [
+                            ...variants.map((variant: { sizeId: string; colorId: string; sku?: string | null; stockQty: number }) => ({
+                                sizeId: variant.sizeId,
+                                colorId: variant.colorId,
+                                sku: variant.sku || null,
+                                stockQty: variant.stockQty,
+                            }))
+                        ]
+                    }
+                } : undefined,
                 price,
                 isFeatured,
                 isArchived,

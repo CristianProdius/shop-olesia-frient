@@ -280,7 +280,12 @@
     "materialLabel": "Состав / Материалы",
     "materialPlaceholder": "Материалы и состав",
     "careLabel": "Уход",
-    "carePlaceholder": "Инструкции по уходу"
+    "carePlaceholder": "Инструкции по уходу",
+    "variants": "Варианты",
+    "addVariant": "Добавить вариант",
+    "stock": "Остаток",
+    "removeVariant": "Удалить",
+    "duplicateVariant": "Дублирующая комбинация размера и цвета."
   },
   "AuthAdmin": {
     "signInTitle": "Вход",

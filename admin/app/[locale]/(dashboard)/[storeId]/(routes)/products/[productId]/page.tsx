@@ -8,7 +8,8 @@ const ProductPage = async ({ params }: { params: Promise<{ productId: string, st
             id: productId
         },
         include: {
-            images: true
+            images: true,
+            variants: true
         }
     });
 
