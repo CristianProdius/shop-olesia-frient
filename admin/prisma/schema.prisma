@@ -60,6 +60,13 @@ model Product {
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
   nameI18n    Json?     // { en, ru, ro } translations; falls back to `name`
+  description     String?   // long-form copy
+  descriptionI18n Json?     // { en, ru, ro }; falls back to `description`
+  material        String?   // e.g. "100% silk"
+  materialI18n    Json?     // { en, ru, ro }; falls back to `material`
+  care            String?   // care instructions
+  careI18n        Json?     // { en, ru, ro }; falls back to `care`
+  sku             String?   // stock-keeping unit
   price       Decimal
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
@@ -86,6 +93,7 @@ model Order {
   isPaid     Boolean   @default(false)
   phone      String    @default("")
   address    String    @default("")
+  email      String    @default("")
   // Store customer who placed the order. Plain string (no FK): customer tables
   // live in the store app's separate Prisma schema. relationMode = "prisma".
   customerId String?
@@ -144,6 +152,42 @@ model Image {
   updatedAt   DateTime @updatedAt
 
   @@index([productId])
+}
+
+// ----------------------------------------------------------------------------
+// Editorial / marketing content. storeId-scoped (no DB FK; relationMode=prisma),
+// matching the existing per-model i18n JSON pattern. Created out-of-band by the
+// catalog seed; modeled here so the canonical schema matches the live DB.
+// ----------------------------------------------------------------------------
+
+model BlogPost {
+  id          String    @id @default(uuid())
+  storeId     String
+  slug        String
+  title       String
+  titleI18n   Json?     // { en, ru, ro }; falls back to `title`
+  excerpt     String?
+  excerptI18n Json?     // { en, ru, ro }; falls back to `excerpt`
+  content     String
+  contentI18n Json?     // { en, ru, ro }; falls back to `content`
+  coverImage  String?
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([storeId, slug])
+  @@index([storeId])
+}
+
+model Subscriber {
+  id        String   @id @default(uuid())
+  storeId   String
+  email     String
+  createdAt DateTime @default(now())
+
+  @@unique([storeId, email])
+  @@index([storeId])
 }
 
 // ----------------------------------------------------------------------------
