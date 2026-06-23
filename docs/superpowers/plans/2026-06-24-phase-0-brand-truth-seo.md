@@ -219,7 +219,16 @@ git commit -m "feat(store): MDL locale-aware currency with sale price support"
 
 ---
 
-## Task 3: LILETTI branding + Montserrat-cyrillic + radius compliance (0.2)
+## ⚠️ Amendment (2026-06-24): design system not present — build it
+
+Discovery during execution: the storefront design system MEMORY describes does **not** exist on
+this branch *or* `master` (starter `globals.css`, no Montserrat, no radius-0, no brand tokens, no
+`Wordmark`). It cannot be pulled from anywhere. Decision (owner-approved): **build it from the
+documented MEMORY target values** as the foundation, folded into Task 3 below. Verify gate for all
+Phase 0 tasks is **vitest + lint + `tsc --noEmit`** (full `npm run build` fails on missing env —
+pre-existing). Tasks 1–2 already complete (`a52d432`, `7911b6d`).
+
+## Task 3: LILETTI design-system foundation + branding (0.2, expanded)
 
 **Files:**
 - Modify: `store/messages/en.json`, `store/messages/ru.json`, `store/messages/ro.json`
