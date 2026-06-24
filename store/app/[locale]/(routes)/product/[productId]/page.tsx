@@ -1,12 +1,14 @@
 import getProduct from "@/actions/get-product";
 import getProducts from "@/actions/get-products";
+import getReviews from "@/actions/get-reviews";
 import Gallery from "@/components/gallery";
 import Info from "@/components/info";
 import ProductList from "@/components/product-list";
+import ProductReviews from "@/components/product-reviews";
 import Container from "@/components/ui/container";
 import { getTranslations } from "next-intl/server";
 import { localizedField } from "@/lib/i18n-content";
-import { buildAlternates, productJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { buildAlternates, productJsonLd, breadcrumbJsonLd, aggregateRatingJsonLd } from "@/lib/seo";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
 
@@ -16,6 +18,8 @@ const ProductPage = async ({ params }: { params: Params }) => {
     const t = await getTranslations("Product");
     const { productId, locale } = await params;
     const product = await getProduct(productId);
+    const reviews = await getReviews(productId);
+    const aggregateRating = aggregateRatingJsonLd(reviews) ?? undefined;
 
     const productName = localizedField(product.nameI18n, locale, product.name);
     const categoryName = localizedField(
@@ -32,6 +36,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
         price: Number(product.price),
         currency: "MDL",
         url: canonical,
+        aggregateRating,
     });
     const breadcrumbLd = breadcrumbJsonLd([
         { name: "LILETTI", url: `${BASE}/${locale}` },
@@ -70,6 +75,8 @@ const ProductPage = async ({ params }: { params: Params }) => {
                             <Info data={product} />
                         </div>
                     </div>
+                    <hr className="my-10"/>
+                    <ProductReviews reviews={reviews} locale={locale} />
                     <hr className="my-10"/>
                     <ProductList title={t("relatedItems")} items={suggestProducts} />
                 </div>

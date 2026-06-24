@@ -125,5 +125,17 @@
     "title": "Frequently Asked Questions",
     "intro": "Answers to common questions about orders, shipping, sizing and returns. Can't find what you're looking for? Reach out to our atelier.",
     "empty": "No questions yet. Check back soon."
+  },
+  "Reviews": {
+    "reviews": "Reviews",
+    "reviewsCount": "{count} reviews",
+    "verifiedBuyer": "Verified buyer",
+    "fitLabel": "Fit",
+    "fitSmall": "Runs small",
+    "fitTrue": "True to size",
+    "fitLarge": "Runs large",
+    "writeReview": "Write a review",
+    "noReviews": "No reviews yet.",
+    "buyerPhotoAlt": "Customer photo"
   }
 }

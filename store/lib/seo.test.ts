@@ -5,6 +5,7 @@ import {
   breadcrumbJsonLd,
   organizationJsonLd,
   faqPageJsonLd,
+  aggregateRatingJsonLd,
 } from "./seo";
 
 describe("buildAlternates", () => {
@@ -29,6 +30,32 @@ describe("productJsonLd", () => {
     expect(ld["@type"]).toBe("Product");
     expect(ld.offers.priceCurrency).toBe("MDL");
     expect(ld.offers.price).toBe("1200");
+  });
+});
+
+describe("aggregateRatingJsonLd", () => {
+  it("returns null when there are no reviews", () => {
+    expect(aggregateRatingJsonLd([])).toBeNull();
+  });
+  it("averages the ratings and counts the reviews", () => {
+    const agg = aggregateRatingJsonLd([{ rating: 5 }, { rating: 4 }, { rating: 3 }]);
+    expect(agg).toEqual({ ratingValue: 4, reviewCount: 3 });
+  });
+  it("rounds the average to one decimal place", () => {
+    const agg = aggregateRatingJsonLd([{ rating: 5 }, { rating: 4 }]);
+    expect(agg).toEqual({ ratingValue: 4.5, reviewCount: 2 });
+    const agg2 = aggregateRatingJsonLd([{ rating: 5 }, { rating: 4 }, { rating: 4 }]);
+    expect(agg2?.ratingValue).toBe(4.3);
+  });
+  it("feeds the productJsonLd AggregateRating", () => {
+    const agg = aggregateRatingJsonLd([{ rating: 5 }, { rating: 5 }]);
+    const ld = productJsonLd({
+      name: "Silk Dress", description: "x", images: [], price: 10, currency: "MDL",
+      url: "u", aggregateRating: agg ?? undefined,
+    });
+    expect(ld.aggregateRating).toEqual({
+      "@type": "AggregateRating", ratingValue: 5, reviewCount: 2,
+    });
   });
 });
 

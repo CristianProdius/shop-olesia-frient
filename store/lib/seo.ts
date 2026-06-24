@@ -22,6 +22,18 @@ export function productJsonLd(p: {
   };
 }
 
+// Computes the AggregateRating payload (ratingValue rounded to one decimal +
+// reviewCount) from a list of approved reviews, or null when there are none so
+// callers can omit the field entirely (Google rejects an empty AggregateRating).
+export function aggregateRatingJsonLd(
+  reviews: { rating: number }[]
+): { ratingValue: number; reviewCount: number } | null {
+  if (!reviews || reviews.length === 0) return null;
+  const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+  const ratingValue = Math.round((sum / reviews.length) * 10) / 10;
+  return { ratingValue, reviewCount: reviews.length };
+}
+
 export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org", "@type": "BreadcrumbList",

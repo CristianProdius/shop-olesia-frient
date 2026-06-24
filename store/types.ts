@@ -91,6 +91,26 @@ export interface Image {
     url: string;
 }
 
+export interface ReviewImage {
+    id: string;
+    url: string;
+}
+
+export interface Review {
+    id: string;
+    productId: string;
+    customerName: string;
+    rating: number;
+    body?: string | null;
+    bodyI18n?: I18nField | null;
+    status: string;
+    source: string;
+    fitVote?: string | null;
+    verified: boolean;
+    createdAt: string;
+    images: ReviewImage[];
+}
+
 export interface Size {
     id: string;
     name: string;

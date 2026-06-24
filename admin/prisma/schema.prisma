@@ -188,6 +188,45 @@ model Image {
 }
 
 // ----------------------------------------------------------------------------
+// Product reviews + moderation. storeId/productId-scoped (no DB FK on those;
+// relationMode=prisma). Incoming reviews land as `status = pending` and are
+// surfaced on the storefront only once `approved`. ReviewImage holds buyer-photo
+// uploads (cascade-deleted with the parent review, mirroring the Image model).
+// ----------------------------------------------------------------------------
+
+model Review {
+  id           String   @id @default(uuid())
+  storeId      String
+  productId    String
+  customerId   String?
+  customerName String   @default("")
+  rating       Int
+  body         String?
+  bodyI18n     Json?
+  status       String   @default("pending") // pending | approved | rejected
+  source       String   @default("web")     // web | instagram | import
+  fitVote      String?
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  images       ReviewImage[]
+
+  @@index([storeId])
+  @@index([productId])
+  @@index([status])
+}
+
+model ReviewImage {
+  id        String   @id @default(uuid())
+  reviewId  String
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+
+  @@index([reviewId])
+}
+
+// ----------------------------------------------------------------------------
 // Editorial / marketing content. storeId-scoped (no DB FK; relationMode=prisma),
 // matching the existing per-model i18n JSON pattern. Created out-of-band by the
 // catalog seed; modeled here so the canonical schema matches the live DB.

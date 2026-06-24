@@ -125,5 +125,17 @@
     "title": "Întrebări frecvente",
     "intro": "Răspunsuri la întrebările uzuale despre comenzi, livrare, mărimi și retururi. Nu găsiți ce căutați? Contactați atelierul nostru.",
     "empty": "Încă nu există întrebări. Reveniți în curând."
+  },
+  "Reviews": {
+    "reviews": "Recenzii",
+    "reviewsCount": "{count} recenzii",
+    "verifiedBuyer": "Cumpărător verificat",
+    "fitLabel": "Mărime",
+    "fitSmall": "Mică la mărime",
+    "fitTrue": "Conform mărimii",
+    "fitLarge": "Mare la mărime",
+    "writeReview": "Scrie o recenzie",
+    "noReviews": "Încă nu există recenzii.",
+    "buyerPhotoAlt": "Fotografie client"
   }
 }
