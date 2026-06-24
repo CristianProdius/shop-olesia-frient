@@ -1,5 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { getUserId } from "@/lib/server-auth";
+import { sendEmail } from "@/lib/email";
+import { orderShippedEmail } from "@/lib/email-templates";
 import { NextResponse } from "next/server";
 import * as z from "zod";
 
@@ -84,7 +86,19 @@ export async function PATCH(
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
-        const order = await prismadb.order.updateMany({
+        // Read the previous status so we can detect the transition INTO
+        // "shipped" and only send the shipped email on that transition (not on
+        // unrelated PATCHes that keep status === "shipped").
+        const existing = await prismadb.order.findFirst({
+            where: { id: orderId, storeId },
+            select: { status: true },
+        });
+
+        if (!existing) {
+            return new NextResponse("Order not found", { status: 404 });
+        }
+
+        await prismadb.order.updateMany({
             where: {
                 id: orderId,
                 storeId,
@@ -96,7 +110,31 @@ export async function PATCH(
             },
         });
 
-        return NextResponse.json(order);
+        // Send the shipped email only on the transition into "shipped".
+        if (status === "shipped" && existing.status !== "shipped") {
+            const updated = await prismadb.order.findFirst({
+                where: { id: orderId, storeId },
+                select: {
+                    id: true,
+                    email: true,
+                    customerName: true,
+                    locale: true,
+                    carrier: true,
+                    trackingNumber: true,
+                },
+            });
+
+            if (updated?.email) {
+                try {
+                    const { subject, html } = orderShippedEmail(updated, updated.locale);
+                    await sendEmail({ to: updated.email, subject, html });
+                } catch (mailErr) {
+                    console.error("[ORDER_SHIPPED_EMAIL]", mailErr);
+                }
+            }
+        }
+
+        return NextResponse.json({ count: 1 });
     } catch (err) {
         console.log("[ORDER_PATCH]", err);
         return new NextResponse("Internal error", { status: 500 });

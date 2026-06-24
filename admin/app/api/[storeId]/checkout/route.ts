@@ -1,4 +1,6 @@
 import prismadb from "@/lib/prismadb";
+import { sendEmail } from "@/lib/email";
+import { orderConfirmationEmail } from "@/lib/email-templates";
 import { NextResponse } from "next/server";
 
 const corsHeaders = {
@@ -101,9 +103,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
     // Snapshot current product prices for unitPrice.
     const products = await prismadb.product.findMany({
         where: { id: { in: lines.map((l) => l.productId) }, storeId },
-        select: { id: true, price: true },
+        select: { id: true, price: true, name: true },
     });
     const priceById = new Map(products.map((p) => [p.id, p.price]));
+    const nameById = new Map(products.map((p) => [p.id, p.name]));
 
     if (lines.some((l) => !priceById.has(l.productId))) {
         return new NextResponse("One or more products were not found", {
@@ -164,6 +167,31 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
 
             return created;
         });
+
+        // Fire the order-confirmation email (env-gated; sendEmail never throws,
+        // but we still guard so a comms failure can never break checkout).
+        if (order.email) {
+            try {
+                const { subject, html } = orderConfirmationEmail(
+                    {
+                        id: order.id,
+                        email: order.email,
+                        customerName: order.customerName,
+                        locale: order.locale,
+                        orderItems: lines.map((l) => ({
+                            quantity: l.quantity,
+                            unitPrice: priceById.get(l.productId) ?? null,
+                            productName: nameById.get(l.productId) ?? l.productId,
+                            productId: l.productId,
+                        })),
+                    },
+                    order.locale,
+                );
+                await sendEmail({ to: order.email, subject, html });
+            } catch (mailErr) {
+                console.error("[CHECKOUT_EMAIL]", mailErr);
+            }
+        }
 
         return NextResponse.json(
             { success: true, orderId: order.id },
