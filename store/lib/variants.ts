@@ -1,7 +1,14 @@
-import { Color, ProductVariant, Size } from "@/types";
+import { Color, Product, ProductVariant, Size } from "@/types";
 
 // Pure helpers for deriving variant-selector state from a product's variants.
 // Kept framework-free so they can be unit tested without React.
+
+// True when a product carries at least one real ProductVariant row. Variant-less
+// products (only scalar size/color) get a synthetic, sold-out fallback variant
+// whose id is the product id — NOT a real variantId — so callers must avoid
+// posting it to checkout / stock-notification endpoints.
+export const hasRealVariants = (product: Pick<Product, "variants">): boolean =>
+    !!product.variants && product.variants.length > 0;
 
 // Distinct sizes across the given variants, de-duplicated by size id,
 // preserving first-seen order.

@@ -118,6 +118,20 @@ export async function PATCH (
         const materialPlain = material ?? materialMap.en ?? null;
         const carePlain = care ?? careMap.en ?? null;
 
+        // Guarantee every product keeps >=1 real ProductVariant row. The update
+        // does deleteMany -> createMany for variants; when the editor submits no
+        // variants, recreate a single fallback from the product's scalar
+        // size/color, sold out by default (honest: stockQty 0, no sku) rather
+        // than leaving the product with zero variants.
+        const variantData = variants && variants.length
+            ? variants.map((variant: { sizeId: string; colorId: string; sku?: string | null; stockQty: number }) => ({
+                  sizeId: variant.sizeId,
+                  colorId: variant.colorId,
+                  sku: variant.sku || null,
+                  stockQty: variant.stockQty,
+              }))
+            : [{ sizeId, colorId, sku: null, stockQty: 0 }];
+
         await prismadb.product.update({
             where: {
                 id: productId
@@ -160,18 +174,11 @@ export async function PATCH (
                         ]
                     }
                 },
-                variants: variants && variants.length ? {
+                variants: {
                     createMany: {
-                        data: [
-                            ...variants.map((variant: { sizeId: string; colorId: string; sku?: string | null; stockQty: number }) => ({
-                                sizeId: variant.sizeId,
-                                colorId: variant.colorId,
-                                sku: variant.sku || null,
-                                stockQty: variant.stockQty,
-                            }))
-                        ]
+                        data: variantData
                     }
-                } : undefined
+                }
             }
         })
 

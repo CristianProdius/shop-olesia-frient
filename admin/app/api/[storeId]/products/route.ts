@@ -83,6 +83,20 @@ export async function POST(
         const materialPlain = material ?? materialMap.en ?? null;
         const carePlain = care ?? careMap.en ?? null;
 
+        // Guarantee every product has >=1 real ProductVariant row. When the
+        // editor submits no variants, synthesize a single fallback from the
+        // product's scalar size/color, sold out by default (honest: stockQty 0,
+        // no sku) until the operator sets stock. This keeps checkout's
+        // variant-based stock decrement and the storefront variant UX correct.
+        const variantData = variants && variants.length
+            ? variants.map((variant: { sizeId: string; colorId: string; sku?: string | null; stockQty: number }) => ({
+                  sizeId: variant.sizeId,
+                  colorId: variant.colorId,
+                  sku: variant.sku || null,
+                  stockQty: variant.stockQty,
+              }))
+            : [{ sizeId, colorId, sku: null, stockQty: 0 }];
+
         const product = await prismadb.product.create({
             data : {
                 name,
@@ -101,18 +115,11 @@ export async function POST(
                         ]
                     }
                 },
-                variants: variants && variants.length ? {
+                variants: {
                     createMany: {
-                        data: [
-                            ...variants.map((variant: { sizeId: string; colorId: string; sku?: string | null; stockQty: number }) => ({
-                                sizeId: variant.sizeId,
-                                colorId: variant.colorId,
-                                sku: variant.sku || null,
-                                stockQty: variant.stockQty,
-                            }))
-                        ]
+                        data: variantData
                     }
-                } : undefined,
+                },
                 price,
                 isFeatured,
                 isArchived,

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
     distinctSizes,
     distinctColors,
+    hasRealVariants,
     resolveVariant,
     isCombinationAvailable,
     stockState,
@@ -92,6 +93,19 @@ describe("totalStock", () => {
     });
     it("is zero when every variant is sold out", () => {
         expect(totalStock([v("a", sizeS, red, 0), v("b", sizeM, blue, 0)])).toBe(0);
+    });
+});
+
+describe("hasRealVariants", () => {
+    it("is true when the product has >=1 variant", () => {
+        expect(hasRealVariants({ variants })).toBe(true);
+    });
+    it("is false for an empty variants array", () => {
+        expect(hasRealVariants({ variants: [] })).toBe(false);
+    });
+    it("is false when variants is missing", () => {
+        // variant-less product (only scalar size/color)
+        expect(hasRealVariants({ variants: undefined as unknown as ProductVariant[] })).toBe(false);
     });
 });
 

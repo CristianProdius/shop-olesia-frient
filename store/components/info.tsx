@@ -14,6 +14,7 @@ import useCart, { CartLine } from "@/hooks/use-cart";
 import {
     distinctColors,
     distinctSizes,
+    hasRealVariants,
     isCombinationAvailable,
     resolveVariant,
     stockState,
@@ -27,15 +28,21 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     const locale = useLocale();
     const cart = useCart();
 
+    // A product with real ProductVariant rows drives the full variant UX; a
+    // variant-less product (only scalar size/color) gets a synthetic fallback.
+    const realVariants = hasRealVariants(data);
+
     // Fall back to a synthetic single-variant list when (older) products carry
-    // only scalar size/color, so single-variant UX is preserved everywhere.
+    // only scalar size/color, so the size/color UI is preserved everywhere.
+    // The fallback is SOLD OUT (stockQty 0) — its id is the product id, not a
+    // real variantId, so we must never post it to checkout / notify endpoints.
     const variants = useMemo(() => {
         if (data.variants && data.variants.length) return data.variants;
         if (data.size && data.color) {
             return [
                 {
                     id: data.id,
-                    stockQty: 1,
+                    stockQty: 0,
                     sizeId: data.size.id,
                     colorId: data.color.id,
                     size: data.size,
@@ -76,7 +83,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
     const onNotifySubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedVariant) return;
+        // No real variant id to wait on for variant-less products; the synthetic
+        // fallback's id is the product id, so never post it.
+        if (!selectedVariant || !realVariants) return;
 
         const trimmed = notifyEmail.trim();
         if (!EMAIL_RE.test(trimmed)) {
@@ -204,6 +213,10 @@ const Info: React.FC<InfoProps> = ({ data }) => {
             {scarcity === "out" && selectedVariant && (
                 <div className="mt-4">
                     <p className="text-sm text-muted-strong">{t("soldOut")}</p>
+                    {/* Notify-me needs a real variantId to wait on; hidden for
+                        variant-less products whose fallback id is the product id. */}
+                    {realVariants && (
+                    <>
                     <p className="mt-3 text-sm font-medium text-text">{t("notifyTitle")}</p>
                     <form onSubmit={onNotifySubmit} className="flex w-full max-w-sm mt-2">
                         <label htmlFor="notify-email" className="sr-only">
@@ -225,6 +238,8 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                             {t("notifyButton")}
                         </Button>
                     </form>
+                    </>
+                    )}
                 </div>
             )}
             {scarcity === "low" && selectedVariant && (
