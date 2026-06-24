@@ -3,7 +3,8 @@
     "signIn": "Sign in",
     "signOutWithEmail": "Sign out ({email})",
     "noResults": "No results found.",
-    "language": "Language"
+    "language": "Language",
+    "account": "My account"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. All rights reserved."
@@ -137,5 +138,33 @@
     "writeReview": "Write a review",
     "noReviews": "No reviews yet.",
     "buyerPhotoAlt": "Customer photo"
+  },
+  "Account": {
+    "title": "My Account",
+    "loading": "Loading your orders...",
+    "noOrders": "You have no orders yet.",
+    "orderNumber": "Order",
+    "total": "Total",
+    "tracking": "Tracking",
+    "statusPending": "Pending",
+    "statusPaid": "Paid",
+    "statusPacked": "Packed",
+    "statusShipped": "Shipped",
+    "statusDelivered": "Delivered",
+    "statusCancelled": "Cancelled",
+    "leaveReview": "Leave a review",
+    "rating": "Rating",
+    "ratingRequired": "Please select a rating.",
+    "reviewBody": "Your review",
+    "fit": "Fit",
+    "fitNone": "No comment",
+    "fitSmall": "Runs small",
+    "fitTrue": "True to size",
+    "fitLarge": "Runs large",
+    "submitReview": "Submit review",
+    "submitting": "Submitting...",
+    "reviewSubmitted": "Thank you! Your review is pending moderation.",
+    "reviewPending": "Your review is pending moderation.",
+    "reviewError": "Could not submit your review. Please try again."
   }
 }

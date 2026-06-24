@@ -111,6 +111,28 @@ export interface Review {
     images: ReviewImage[];
 }
 
+// A single line of a customer's order, as returned by the account hub API
+// (admin orders?customerId=). Prices are strings (Decimal serialized).
+export interface OrderItem {
+    id: string;
+    productId: string;
+    variantId?: string | null;
+    quantity: number;
+    unitPrice?: string | null;
+    productName: string;
+}
+
+// A customer's order, shaped for the account hub.
+export interface Order {
+    id: string;
+    status: string;
+    carrier?: string | null;
+    trackingNumber?: string | null;
+    createdAt: string;
+    total: string;
+    items: OrderItem[];
+}
+
 export interface Size {
     id: string;
     name: string;

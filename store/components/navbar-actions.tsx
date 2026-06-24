@@ -33,13 +33,22 @@ const NavbarActions = () => {
         <div className="flex items-center ml-auto gap-x-4">
             <LanguageSwitcher />
             {session ? (
-                <Button
-                    className='flex items-center px-3 py-2 bg-black rounded-full'
-                    onClick={onSignOut}
-                    title={t('signOutWithEmail', { email: session.user?.email ?? '' })}
-                >
-                    <LogOut size={18} color='white' />
-                </Button>
+                <>
+                    <Button
+                        className='flex items-center px-3 py-2 bg-black rounded-full'
+                        onClick={() => router.push('/account')}
+                        title={t('account')}
+                    >
+                        <User size={18} color='white' />
+                    </Button>
+                    <Button
+                        className='flex items-center px-3 py-2 bg-black rounded-full'
+                        onClick={onSignOut}
+                        title={t('signOutWithEmail', { email: session.user?.email ?? '' })}
+                    >
+                        <LogOut size={18} color='white' />
+                    </Button>
+                </>
             ) : (
                 <Button
                     className='flex items-center px-3 py-2 bg-black rounded-full'

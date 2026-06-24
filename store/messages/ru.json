@@ -3,7 +3,8 @@
     "signIn": "Войти",
     "signOutWithEmail": "Выйти ({email})",
     "noResults": "Ничего не найдено.",
-    "language": "Язык"
+    "language": "Язык",
+    "account": "Мой аккаунт"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. Все права защищены."
@@ -137,5 +138,33 @@
     "writeReview": "Написать отзыв",
     "noReviews": "Пока нет отзывов.",
     "buyerPhotoAlt": "Фото покупателя"
+  },
+  "Account": {
+    "title": "Мой аккаунт",
+    "loading": "Загрузка ваших заказов...",
+    "noOrders": "У вас пока нет заказов.",
+    "orderNumber": "Заказ",
+    "total": "Итого",
+    "tracking": "Отслеживание",
+    "statusPending": "В ожидании",
+    "statusPaid": "Оплачен",
+    "statusPacked": "Упакован",
+    "statusShipped": "Отправлен",
+    "statusDelivered": "Доставлен",
+    "statusCancelled": "Отменён",
+    "leaveReview": "Оставить отзыв",
+    "rating": "Оценка",
+    "ratingRequired": "Пожалуйста, выберите оценку.",
+    "reviewBody": "Ваш отзыв",
+    "fit": "Посадка",
+    "fitNone": "Без комментария",
+    "fitSmall": "Маломерит",
+    "fitTrue": "Соответствует размеру",
+    "fitLarge": "Большемерит",
+    "submitReview": "Отправить отзыв",
+    "submitting": "Отправка...",
+    "reviewSubmitted": "Спасибо! Ваш отзыв ожидает модерации.",
+    "reviewPending": "Ваш отзыв ожидает модерации.",
+    "reviewError": "Не удалось отправить отзыв. Попробуйте ещё раз."
   }
 }

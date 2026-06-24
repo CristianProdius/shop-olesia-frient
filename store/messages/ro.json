@@ -3,7 +3,8 @@
     "signIn": "Autentificare",
     "signOutWithEmail": "Deconectare ({email})",
     "noResults": "Niciun rezultat găsit.",
-    "language": "Limbă"
+    "language": "Limbă",
+    "account": "Contul meu"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. Toate drepturile rezervate."
@@ -137,5 +138,33 @@
     "writeReview": "Scrie o recenzie",
     "noReviews": "Încă nu există recenzii.",
     "buyerPhotoAlt": "Fotografie client"
+  },
+  "Account": {
+    "title": "Contul meu",
+    "loading": "Se încarcă comenzile tale...",
+    "noOrders": "Nu ai încă nicio comandă.",
+    "orderNumber": "Comandă",
+    "total": "Total",
+    "tracking": "Urmărire",
+    "statusPending": "În așteptare",
+    "statusPaid": "Plătită",
+    "statusPacked": "Împachetată",
+    "statusShipped": "Expediată",
+    "statusDelivered": "Livrată",
+    "statusCancelled": "Anulată",
+    "leaveReview": "Lasă o recenzie",
+    "rating": "Evaluare",
+    "ratingRequired": "Te rugăm să selectezi o evaluare.",
+    "reviewBody": "Recenzia ta",
+    "fit": "Potrivire",
+    "fitNone": "Fără comentariu",
+    "fitSmall": "Mai mic",
+    "fitTrue": "Conform mărimii",
+    "fitLarge": "Mai mare",
+    "submitReview": "Trimite recenzia",
+    "submitting": "Se trimite...",
+    "reviewSubmitted": "Mulțumim! Recenzia ta așteaptă moderarea.",
+    "reviewPending": "Recenzia ta așteaptă moderarea.",
+    "reviewError": "Nu am putut trimite recenzia. Încearcă din nou."
   }
 }
