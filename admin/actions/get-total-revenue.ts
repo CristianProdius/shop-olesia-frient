@@ -1,26 +1,9 @@
-import prismadb from "@/lib/prismadb";
+import { getRevenueOrders } from "@/actions/get-revenue-orders";
+import { computeTotalRevenue } from "@/lib/analytics";
 
-export const getTotalRevenue = async (storeId: string) => {
-    const paidOrders = await prismadb.order.findMany({
-        where: {
-            storeId,
-            isPaid: true,
-        },
-        include: {
-            orderItems: {
-                include: {
-                    product: true
-                }
-            }
-        }
-    });
-
-    const totalRevenue = paidOrders.reduce((total, order) => {
-        const orderTotal = order.orderItems.reduce((orderSum, item) => {
-            return orderSum + Number(item.product.price);
-        }, 0);
-        return total + orderTotal;
-    }, 0);
-
-    return totalRevenue;
-}
+// Total revenue (USD) across paid, non-cancelled orders, summed over their line
+// items as quantity * (unitPrice ?? product.price).
+export const getTotalRevenue = async (storeId: string, since?: Date) => {
+  const orders = await getRevenueOrders(storeId, since);
+  return computeTotalRevenue(orders);
+};

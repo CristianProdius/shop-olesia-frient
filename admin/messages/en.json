@@ -206,7 +206,14 @@
     "totalRevenue": "Total Revenue",
     "sales": "Sales",
     "productsInStock": "Products in Stock",
-    "overview": "Overview"
+    "overview": "Overview",
+    "averageOrderValue": "Average Order Value",
+    "topSellers": "Top Sellers",
+    "topSellersDescription": "Best-selling products by units (last 12 months)",
+    "product": "Product",
+    "units": "Units",
+    "revenue": "Revenue",
+    "noSales": "No sales yet"
   },
   "Settings": {
     "title": "Settings",

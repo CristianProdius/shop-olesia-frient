@@ -206,7 +206,14 @@
     "totalRevenue": "Общий доход",
     "sales": "Продажи",
     "productsInStock": "Товаров в наличии",
-    "overview": "Обзор"
+    "overview": "Обзор",
+    "averageOrderValue": "Средний чек",
+    "topSellers": "Лидеры продаж",
+    "topSellersDescription": "Самые продаваемые товары по штукам (за 12 месяцев)",
+    "product": "Товар",
+    "units": "Штук",
+    "revenue": "Доход",
+    "noSales": "Продаж пока нет"
   },
   "Settings": {
     "title": "Настройки",

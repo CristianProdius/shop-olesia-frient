@@ -206,7 +206,14 @@
     "totalRevenue": "Venit total",
     "sales": "Vânzări",
     "productsInStock": "Produse în stoc",
-    "overview": "Prezentare generală"
+    "overview": "Prezentare generală",
+    "averageOrderValue": "Valoarea medie a comenzii",
+    "topSellers": "Cele mai vândute",
+    "topSellersDescription": "Cele mai vândute produse după bucăți (ultimele 12 luni)",
+    "product": "Produs",
+    "units": "Bucăți",
+    "revenue": "Venit",
+    "noSales": "Încă nicio vânzare"
   },
   "Settings": {
     "title": "Setări",
