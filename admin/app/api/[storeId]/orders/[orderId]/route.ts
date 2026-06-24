@@ -22,17 +22,35 @@ const patchSchema = z.object({
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ orderId: string }> }
+    { params }: { params: Promise<{ storeId: string; orderId: string }> }
 ) {
     try {
-        const { orderId } = await params;
+        const userId = await getUserId();
+        const { storeId, orderId } = await params;
+
+        if (!userId) {
+            return new NextResponse("Unauthenticated", { status: 401 });
+        }
+
         if (!orderId) {
             return new NextResponse("Order id is required", { status: 400 });
         }
 
-        const order = await prismadb.order.findUnique({
+        const storeByUserId = await prismadb.store.findFirst({
+            where: {
+                id: storeId,
+                userId,
+            },
+        });
+
+        if (!storeByUserId) {
+            return new NextResponse("Unauthorized", { status: 403 });
+        }
+
+        const order = await prismadb.order.findFirst({
             where: {
                 id: orderId,
+                storeId,
             },
             include: {
                 orderItems: {
@@ -42,6 +60,10 @@ export async function GET(
                 },
             },
         });
+
+        if (!order) {
+            return new NextResponse("Order not found", { status: 404 });
+        }
 
         return NextResponse.json(order);
     } catch (err) {

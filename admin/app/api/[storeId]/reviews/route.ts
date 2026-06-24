@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserId } from '@/lib/server-auth'
 import prismadb from "@/lib/prismadb";
 import { buildI18nField } from "@/lib/i18n-content";
+import { rateLimit } from "@/lib/rate-limit";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -19,11 +20,13 @@ export async function OPTIONS() {
 //   admin-entered). Honors caller-supplied `status`, `verified`, `bodyI18n`,
 //   `images`, `source`, mirroring billboards/faqs.
 //
-// - Public (no admin auth, cross-origin storefront): verified customer
-//   submission. Always forced to `status: "pending"` for moderation and
-//   `source: "web"`. `verified` is computed server-side (NOT trusted from the
-//   body): true only when a delivered Order exists for that customerId
-//   containing that productId. Requires a customerId.
+// - Public (no admin auth, cross-origin storefront): shopper submission.
+//   Always forced to `status: "pending"` and `verified: false`. The `verified`
+//   flag is NEVER trusted from the body: verification is granted only by an
+//   admin during moderation (the admin-authed PATCH supports setting it),
+//   because the cross-app customerId is not authenticated here. A real fix
+//   needs a store-minted signed token (out of scope). customerId/customerName/
+//   rating/body/fitVote are still accepted for storage.
 export async function POST(
     req: Request,
     { params }: { params: Promise<{ storeId: string }> }
@@ -83,6 +86,17 @@ export async function POST(
 
         if (!isAdmin) {
             // --- Public storefront submission path. ---
+
+            // Best-effort, per-instance rate limit (see lib/rate-limit). A
+            // shared store (Redis) is needed for correct multi-instance limits.
+            const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+            if (!rateLimit(`reviews:${ip}`, 10, 60_000)) {
+                return NextResponse.json(
+                    { error: "RATE_LIMITED" },
+                    { status: 429, headers: corsHeaders }
+                );
+            }
+
             if (typeof customerId !== "string" || customerId.trim().length === 0) {
                 return new NextResponse("A valid customerId is required", {
                     status: 400,
@@ -90,23 +104,24 @@ export async function POST(
                 });
             }
 
-            // verified := true only when a DELIVERED order for this customer
-            // contains this product. customerId is a plain string match against
-            // the admin Order (cross-schema, no FK to the store's Customer table),
-            // so we trust the supplied id only to locate orders — same residual
-            // trust gap documented in checkout. A real fix needs a shared signed
-            // token. Cannot strengthen without cross-schema joins.
-            const deliveredOrder = await prismadb.order.findFirst({
-                where: {
-                    storeId,
-                    customerId,
-                    status: "delivered",
-                    orderItems: { some: { productId } },
-                },
+            // Validate the product belongs to this store before storing a review.
+            const product = await prismadb.product.findFirst({
+                where: { id: productId, storeId },
                 select: { id: true },
             });
-            const isVerified = !!deliveredOrder;
+            if (!product) {
+                return new NextResponse("Product not found", {
+                    status: 404,
+                    headers: corsHeaders,
+                });
+            }
 
+            // SECURITY: verified status is NEVER trusted from the public body.
+            // Public submissions are always created with verified:false and
+            // status:"pending". Verification is granted only by an admin during
+            // moderation (via the admin-authed PATCH). The cross-app customerId
+            // is not authenticated here; a real fix needs a store-minted signed
+            // token (out of scope).
             const review = await prismadb.review.create({
                 data: {
                     storeId,
@@ -119,7 +134,7 @@ export async function POST(
                     source: "web",
                     status: "pending",
                     fitVote: fitVote ?? null,
-                    verified: isVerified,
+                    verified: false,
                     images: imageUrls.length ? { create: imageUrls } : undefined,
                 },
                 include: { images: true },

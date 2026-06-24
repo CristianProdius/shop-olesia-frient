@@ -1,6 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { sendEmail } from "@/lib/email";
 import { orderConfirmationEmail } from "@/lib/email-templates";
+import { rateLimit } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 
 const corsHeaders = {
@@ -52,6 +53,16 @@ type CheckoutLine = {
 export async function POST(req: Request, { params }: { params: Promise<{ storeId: string }> }) {
     const body = await req.json();
     const { storeId } = await params;
+
+    // Best-effort, per-instance rate limit (see lib/rate-limit). A shared
+    // store (Redis) is needed for correct multi-instance limits.
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+    if (!rateLimit(`checkout:${ip}`, 10, 60_000)) {
+        return NextResponse.json(
+            { error: "RATE_LIMITED" },
+            { status: 429, headers: corsHeaders }
+        );
+    }
 
     const {
         items,

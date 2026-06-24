@@ -4,20 +4,42 @@ import { NextResponse } from "next/server"
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ reviewId: string }> }
+    { params }: { params: Promise<{ storeId: string, reviewId: string }> }
 ) {
     try {
-        const { reviewId } = await params;
+        const userId = await getUserId();
+        const { storeId, reviewId } = await params;
+
+        if (!userId) {
+            return new NextResponse("Unauthenticated", { status: 401 })
+        }
+
         if (!reviewId) {
             return new NextResponse("Review id is required", { status: 400 });
         }
 
-        const review = await prismadb.review.findUnique({
+        const storeByUserId = await prismadb.store.findFirst({
+            where: {
+                id: storeId,
+                userId
+            }
+        })
+
+        if (!storeByUserId) {
+            return new NextResponse("Unauthorized", { status: 403 });
+        }
+
+        const review = await prismadb.review.findFirst({
             where: {
                 id: reviewId,
+                storeId,
             },
             include: { images: true },
         })
+
+        if (!review) {
+            return new NextResponse("Review not found", { status: 404 });
+        }
 
         return NextResponse.json(review);
     } catch (err) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getUserId } from "@/lib/server-auth";
 import prismadb from "@/lib/prismadb";
+import { rateLimit } from "@/lib/rate-limit";
 
 // CORS headers so the store (a different origin) can POST a back-in-stock
 // waitlist signup. Mirrors the public subscribers/checkout routes.
@@ -32,6 +33,16 @@ export async function POST(
         const { storeId } = await params;
         const body = await req.json();
 
+        // Best-effort, per-instance rate limit (see lib/rate-limit). A shared
+        // store (Redis) is needed for correct multi-instance limits.
+        const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+        if (!rateLimit(`stock-notifications:${ip}`, 10, 60_000)) {
+            return NextResponse.json(
+                { error: "RATE_LIMITED" },
+                { status: 429, headers: corsHeaders }
+            );
+        }
+
         const parsed = notifySchema.safeParse(body);
         if (!parsed.success) {
             return NextResponse.json(
@@ -50,6 +61,19 @@ export async function POST(
         const email = parsed.data.email.trim().toLowerCase();
         const { variantId } = parsed.data;
         const locale = parsed.data.locale ?? "en";
+
+        // Validate the variant exists and its product belongs to this store
+        // before creating a waitlist row (prevents orphan/cross-store rows).
+        const variant = await prismadb.productVariant.findFirst({
+            where: { id: variantId, product: { storeId } },
+            select: { id: true },
+        });
+        if (!variant) {
+            return NextResponse.json(
+                { error: "Variant not found" },
+                { status: 404, headers: corsHeaders }
+            );
+        }
 
         // Upsert on the composite unique key so a repeated signup is a no-op
         // rather than a duplicate-key error. Don't reset `notified` on dup.

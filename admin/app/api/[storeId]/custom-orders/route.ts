@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getUserId } from "@/lib/server-auth";
 import prismadb from "@/lib/prismadb";
+import { rateLimit } from "@/lib/rate-limit";
 
 // CORS headers so the store (a different origin) can POST a made-to-measure
 // request. Mirrors the public subscribers/checkout routes.
@@ -34,6 +35,16 @@ export async function POST(
         const { storeId } = await params;
         const body = await req.json();
 
+        // Best-effort, per-instance rate limit (see lib/rate-limit). A shared
+        // store (Redis) is needed for correct multi-instance limits.
+        const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+        if (!rateLimit(`custom-orders:${ip}`, 10, 60_000)) {
+            return NextResponse.json(
+                { error: "RATE_LIMITED" },
+                { status: 429, headers: corsHeaders }
+            );
+        }
+
         if (!storeId) {
             return NextResponse.json(
                 { error: "Store Id is required" },
@@ -46,6 +57,18 @@ export async function POST(
             return NextResponse.json(
                 { error: "Invalid request" },
                 { status: 400, headers: corsHeaders }
+            );
+        }
+
+        // Verify the store exists to avoid orphan rows under bogus store ids.
+        const store = await prismadb.store.findUnique({
+            where: { id: storeId },
+            select: { id: true },
+        });
+        if (!store) {
+            return NextResponse.json(
+                { error: "Store not found" },
+                { status: 404, headers: corsHeaders }
             );
         }
 
