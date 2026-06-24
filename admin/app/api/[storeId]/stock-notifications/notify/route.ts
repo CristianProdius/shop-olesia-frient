@@ -10,13 +10,14 @@ const notifyBodySchema = z.object({
 });
 
 // POST (admin-authed): trigger a back-in-stock notification pass for a single
-// variant. Finds not-yet-notified rows, emails each via the env-gated
-// `sendEmail` (which NO-OPs gracefully without RESEND_API_KEY), and flips
-// `notified=true`. Rows are marked notified regardless of whether the email
-// actually sent — without a key the send is a deliberate no-op and we don't
-// want to retry the whole list forever; the count distinguishes the two.
+// variant. Finds not-yet-notified rows and emails each concurrently via the
+// env-gated `sendEmail` (which NO-OPs gracefully without RESEND_API_KEY).
+// Only rows whose send actually succeeded — or was a graceful skip (no key
+// configured, so nothing to retry) — are flipped to `notified=true`. Rows that
+// genuinely FAILED (sent:false with an error) are left notified=false so a
+// later "Notify now" retries them.
 //
-// Returns { notified: <emailed>, skipped: <not emailed but marked> }.
+// Returns { notified: <succeeded+skipped>, failed: <genuine failures> }.
 export async function POST(
     req: Request,
     { params }: { params: Promise<{ storeId: string }> }
@@ -58,7 +59,7 @@ export async function POST(
         });
 
         if (pending.length === 0) {
-            return NextResponse.json({ notified: 0, skipped: 0 });
+            return NextResponse.json({ notified: 0, failed: 0 });
         }
 
         // Best-effort product label for the email body/subject.
@@ -73,27 +74,40 @@ export async function POST(
         ].filter(Boolean);
         const productLabel = labelParts.length ? labelParts.join(" / ") : null;
 
-        let notified = 0;
-        let skipped = 0;
+        // Send concurrently; the per-variant notify list is bounded.
+        const results = await Promise.allSettled(
+            pending.map((row) => {
+                const { subject, html } = backInStockEmail(productLabel, row.locale);
+                return sendEmail({ to: row.email, subject, html });
+            })
+        );
 
-        for (const row of pending) {
-            const { subject, html } = backInStockEmail(productLabel, row.locale);
-            const result = await sendEmail({ to: row.email, subject, html });
-            if (result.sent) {
-                notified += 1;
+        // Mark notified only for rows that actually succeeded or were a graceful
+        // skip (no key configured — nothing to retry). Genuine failures
+        // (sent:false with an error) stay notified=false for a later retry.
+        const succeededIds: string[] = [];
+        let failed = 0;
+
+        results.forEach((result, i) => {
+            const row = pending[i];
+            const ok =
+                result.status === "fulfilled" &&
+                (result.value.sent === true || result.value.skipped === true);
+            if (ok) {
+                succeededIds.push(row.id);
             } else {
-                // Skipped (no key) or send error — still mark to avoid
-                // re-notifying forever; reflected in the skipped count.
-                skipped += 1;
+                failed += 1;
             }
-        }
-
-        await prismadb.stockNotification.updateMany({
-            where: { id: { in: pending.map((r) => r.id) } },
-            data: { notified: true },
         });
 
-        return NextResponse.json({ notified, skipped });
+        if (succeededIds.length > 0) {
+            await prismadb.stockNotification.updateMany({
+                where: { id: { in: succeededIds } },
+                data: { notified: true },
+            });
+        }
+
+        return NextResponse.json({ notified: succeededIds.length, failed });
     } catch (err) {
         console.log(`[STOCK_NOTIFICATIONS_NOTIFY_POST] ${err}`);
         return new NextResponse("Internal error", { status: 500 });

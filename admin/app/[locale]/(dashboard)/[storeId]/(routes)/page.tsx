@@ -1,9 +1,11 @@
-import { getAOV } from "@/actions/get-aov";
-import { getGraphRevenue } from "@/actions/get-graph-revenue";
-import { getSalesCount } from "@/actions/get-sales-count";
+import { getRevenueOrders } from "@/actions/get-revenue-orders";
 import { getStockCount } from "@/actions/get-stock-count";
-import { getTopProducts } from "@/actions/get-top-products";
-import { getTotalRevenue } from "@/actions/get-total-revenue";
+import {
+  computeAOV,
+  computeMonthlyRevenue,
+  computeTopProducts,
+  computeTotalRevenue,
+} from "@/lib/analytics";
 import { Overview } from "@/components/overview";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
@@ -24,12 +26,22 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
   const { storeId } = await params;
   const t = await getTranslations('Dashboard');
 
-  const totalRevenue = await getTotalRevenue(storeId);
-  const salesCount = await getSalesCount(storeId);
-  const stockCount = await getStockCount(storeId);
-  const averageOrderValue = await getAOV(storeId);
-  const graphRevenue = await getGraphRevenue(storeId);
-  const topProducts = await getTopProducts(storeId, 5);
+  // Fetch the heavy revenue-orders query once and the independent stock count in
+  // parallel, then derive every metric from the in-memory orders via the pure
+  // analytics helpers (no extra DB round trips).
+  const [orders, stockCount] = await Promise.all([
+    getRevenueOrders(storeId),
+    getStockCount(storeId),
+  ]);
+
+  const totalRevenue = computeTotalRevenue(orders);
+  const salesCount = orders.length;
+  const averageOrderValue = computeAOV(orders);
+  // computeMonthlyRevenue ignores orders outside the trailing 12-month window,
+  // so passing the full set yields the same { name, total }[] as the windowed
+  // getGraphRevenue action.
+  const graphRevenue = computeMonthlyRevenue(orders, new Date(), 12);
+  const topProducts = computeTopProducts(orders, 5);
 
   return (
     <div className="flex-col">

@@ -214,7 +214,7 @@
     "pending": "Pending",
     "createdAt": "Requested",
     "notifyNow": "Notify now",
-    "notifySuccess": "Notified {notified}, skipped {skipped}.",
+    "notifySuccess": "Notified {notified}, failed {failed}.",
     "notifyError": "Could not send notifications.",
     "empty": "No waitlist requests yet."
   },

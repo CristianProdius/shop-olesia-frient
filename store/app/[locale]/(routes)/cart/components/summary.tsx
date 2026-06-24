@@ -18,7 +18,7 @@ const Summary = () => {
     const { data: session } = useSession();
     const items = useCart(state => state.items);
     const removeAll = useCart(state => state.removeAll);
-    const totalPrice = items.reduce((total, item) => total + Number(item.price), 0)
+    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price), 0)
 
     useEffect(() => {
         if(searchParams.get('success')) {

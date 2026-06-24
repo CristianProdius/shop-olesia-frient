@@ -14,11 +14,14 @@ const Currency: React.FC<CurrencyProps> = ({ value, compareAtValue }) => {
   useEffect(() => setIsMounted(true), []);
   if (!isMounted) return null;
 
-  const { current, compareAt, onSale } = formatCompareAt(
+  const { valid, current, compareAt, onSale } = formatCompareAt(
     Number(value),
     compareAtValue !== undefined ? Number(compareAtValue) : undefined,
     locale
   );
+
+  // Don't render "NaN MDL" for undefined/blank/non-numeric values.
+  if (!valid) return null;
 
   return (
     <span className="price font-semibold">

@@ -25,7 +25,7 @@ const CheckoutPage = () => {
     const [phone, setPhone] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
-    const totalPrice = items.reduce((total, item) => total + Number(item.price), 0);
+    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price), 0);
 
     // Login required to checkout.
     useEffect(() => {

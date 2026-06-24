@@ -17,9 +17,18 @@ export function formatCurrency(value: number, locale: string): string {
 }
 
 export function formatCompareAt(value: number, compareAt: number | undefined, locale: string) {
-  const onSale = typeof compareAt === "number" && compareAt > value;
+  // Guard non-numeric inputs so callers never render "NaN MDL". When `value`
+  // isn't a finite number there's nothing to show; `valid` lets the UI bail.
+  const hasValue = typeof value === "number" && Number.isFinite(value);
+  // Only treat `compareAt` as a sale price when it's a valid, higher number.
+  const onSale =
+    hasValue &&
+    typeof compareAt === "number" &&
+    Number.isFinite(compareAt) &&
+    compareAt > value;
   return {
-    current: formatCurrency(value, locale),
+    valid: hasValue,
+    current: hasValue ? formatCurrency(value, locale) : undefined,
     compareAt: onSale ? formatCurrency(compareAt as number, locale) : undefined,
     onSale,
   };

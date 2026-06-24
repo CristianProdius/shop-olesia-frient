@@ -214,7 +214,7 @@
     "pending": "Ожидает",
     "createdAt": "Запрошено",
     "notifyNow": "Уведомить",
-    "notifySuccess": "Уведомлено: {notified}, пропущено: {skipped}.",
+    "notifySuccess": "Уведомлено: {notified}, не удалось: {failed}.",
     "notifyError": "Не удалось отправить уведомления.",
     "empty": "Пока нет запросов в листе ожидания."
   },

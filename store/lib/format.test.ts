@@ -30,4 +30,16 @@ describe("formatCompareAt", () => {
     expect(formatCompareAt(800, undefined, "en").onSale).toBe(false);
     expect(formatCompareAt(800, 800, "en").onSale).toBe(false);
   });
+  it("flags invalid (NaN) value instead of rendering 'NaN'", () => {
+    const r = formatCompareAt(Number(undefined), undefined, "en");
+    expect(r.valid).toBe(false);
+    expect(r.current).toBeUndefined();
+    expect(r.onSale).toBe(false);
+  });
+  it("ignores a NaN compareAt and stays valid for a real value", () => {
+    const r = formatCompareAt(800, Number("abc"), "en");
+    expect(r.valid).toBe(true);
+    expect(r.current).toBe(formatCurrency(800, "en"));
+    expect(r.onSale).toBe(false);
+  });
 });

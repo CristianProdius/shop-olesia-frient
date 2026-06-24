@@ -35,7 +35,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             toast.success(
                 t('notifySuccess', {
                     notified: res?.notified ?? 0,
-                    skipped: res?.skipped ?? 0,
+                    failed: res?.failed ?? 0,
                 })
             );
         } catch {

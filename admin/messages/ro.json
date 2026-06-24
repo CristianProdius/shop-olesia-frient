@@ -214,7 +214,7 @@
     "pending": "În așteptare",
     "createdAt": "Solicitat",
     "notifyNow": "Anunță acum",
-    "notifySuccess": "Anunțați {notified}, omiși {skipped}.",
+    "notifySuccess": "Anunțați {notified}, eșuați {failed}.",
     "notifyError": "Nu s-au putut trimite notificările.",
     "empty": "Încă nu există solicitări în lista de așteptare."
   },
