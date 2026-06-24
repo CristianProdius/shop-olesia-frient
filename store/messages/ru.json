@@ -26,6 +26,7 @@
     "addToCart": "В корзину",
     "selectOptions": "Выберите параметры",
     "soldOut": "Распродано",
+    "onlyNLeft": "Осталось {count}",
     "outOfStock": "Нет в наличии",
     "relatedItems": "Похожие товары",
     "imageAlt": "Изображение",

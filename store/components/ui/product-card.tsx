@@ -12,6 +12,7 @@ import { MouseEventHandler } from 'react';
 import useCart, { CartLine } from "@/hooks/use-cart";
 import { useTranslations, useLocale } from "next-intl";
 import { localizedField } from "@/lib/i18n-content";
+import { totalStock } from "@/lib/variants";
 
 interface ProductCard {
     data: Product;
@@ -19,7 +20,10 @@ interface ProductCard {
 
 const ProductCard: React.FC<ProductCard> = ({ data }) => {
     const t = useTranslations('Home');
+    const tProduct = useTranslations('Product');
     const locale = useLocale();
+    // Sold-out only when every variant is out of stock — never a fabricated cue.
+    const soldOut = (data.variants?.length ?? 0) > 0 && totalStock(data.variants ?? []) === 0;
     const cart = useCart();
     const previewModal = usePreviewModal();
     const router = useRouter();
@@ -62,6 +66,11 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
                     src={data?.images?.[0]?.url}
                     alt={t('productImageAlt')}
                     className="object-cover aspect-square" />
+                {soldOut && (
+                    <span className="absolute top-3 left-3 bg-ink px-2 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+                        {tProduct("soldOut")}
+                    </span>
+                )}
                 <div className="absolute w-full px-6 transition opacity-0 group-hover:opacity-100 bottom-5">
                     <div className="flex justify-center gap-x-6">
                         <IconButton

@@ -26,6 +26,7 @@
     "addToCart": "Adaugă în coș",
     "selectOptions": "Alege opțiunile",
     "soldOut": "Stoc epuizat",
+    "onlyNLeft": "Doar {count} rămase",
     "outOfStock": "Indisponibil",
     "relatedItems": "Produse similare",
     "imageAlt": "Imagine",

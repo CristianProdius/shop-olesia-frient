@@ -26,6 +26,7 @@
     "addToCart": "Add To Cart",
     "selectOptions": "Select options",
     "soldOut": "Sold Out",
+    "onlyNLeft": "Only {count} left",
     "outOfStock": "Out of Stock",
     "relatedItems": "Related Items",
     "imageAlt": "Image",

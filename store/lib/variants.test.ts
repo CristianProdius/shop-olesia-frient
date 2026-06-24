@@ -4,6 +4,8 @@ import {
     distinctColors,
     resolveVariant,
     isCombinationAvailable,
+    stockState,
+    totalStock,
 } from "./variants";
 import { ProductVariant, Size, Color } from "@/types";
 
@@ -59,6 +61,37 @@ describe("resolveVariant", () => {
     it("returns undefined when size or color is missing", () => {
         expect(resolveVariant(variants, undefined, "red")).toBeUndefined();
         expect(resolveVariant(variants, "s", undefined)).toBeUndefined();
+    });
+});
+
+describe("stockState", () => {
+    it("is 'out' when stock is zero or negative", () => {
+        expect(stockState(0)).toBe("out");
+        expect(stockState(-1)).toBe("out");
+    });
+    it("is 'low' from 1 up to the threshold (inclusive)", () => {
+        expect(stockState(1)).toBe("low");
+        expect(stockState(3)).toBe("low");
+    });
+    it("is 'in' above the threshold", () => {
+        expect(stockState(4)).toBe("in");
+        expect(stockState(100)).toBe("in");
+    });
+    it("respects a custom low threshold", () => {
+        expect(stockState(5, 5)).toBe("low");
+        expect(stockState(6, 5)).toBe("in");
+    });
+});
+
+describe("totalStock", () => {
+    it("sums stockQty across variants", () => {
+        expect(totalStock(variants)).toBe(7);
+    });
+    it("is zero for no variants", () => {
+        expect(totalStock([])).toBe(0);
+    });
+    it("is zero when every variant is sold out", () => {
+        expect(totalStock([v("a", sizeS, red, 0), v("b", sizeM, blue, 0)])).toBe(0);
     });
 });
 

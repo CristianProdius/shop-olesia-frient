@@ -40,6 +40,23 @@ export const resolveVariant = (
     );
 };
 
+// Classify a single variant's stock level into an honest scarcity bucket.
+// "out" when sold out (<= 0), "low" when 1..lowThreshold, otherwise "in".
+// Used to drive real (never fabricated) low-stock / sold-out cues.
+export type StockState = "out" | "low" | "in";
+export const stockState = (
+    stockQty: number,
+    lowThreshold = 3,
+): StockState => {
+    if (stockQty <= 0) return "out";
+    if (stockQty <= lowThreshold) return "low";
+    return "in";
+};
+
+// Total units in stock across all of a product's variants.
+export const totalStock = (variants: ProductVariant[]): number =>
+    variants.reduce((sum, v) => sum + v.stockQty, 0);
+
 // True when the size+color combination resolves to a variant that is in stock.
 export const isCombinationAvailable = (
     variants: ProductVariant[],

@@ -14,6 +14,7 @@ import {
     distinctSizes,
     isCombinationAvailable,
     resolveVariant,
+    stockState,
 } from "@/lib/variants";
 
 interface InfoProps {
@@ -56,6 +57,11 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
     const selectedVariant = resolveVariant(variants, sizeId, colorId);
     const inStock = !!selectedVariant && selectedVariant.stockQty > 0;
+
+    // Honest scarcity cue driven only by the selected variant's real stockQty.
+    const scarcity = selectedVariant
+        ? stockState(selectedVariant.stockQty)
+        : undefined;
 
     const description = localizedField(data.descriptionI18n, locale, data.description ?? "");
     const materials = localizedField(data.materialI18n, locale, data.material ?? "");
@@ -161,6 +167,14 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                     <ShoppingCart />
                 </Button>
             </div>
+            {scarcity === "out" && (
+                <p className="mt-3 text-sm text-muted-strong">{t("soldOut")}</p>
+            )}
+            {scarcity === "low" && selectedVariant && (
+                <p className="mt-3 text-sm text-sale">
+                    {t("onlyNLeft", { count: selectedVariant.stockQty })}
+                </p>
+            )}
             {(description || materials || care) && (
                 <div className="flex flex-col mt-10 gap-y-6">
                     {description && (
