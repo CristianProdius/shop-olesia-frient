@@ -263,6 +263,26 @@ model Subscriber {
 }
 
 // ----------------------------------------------------------------------------
+// Back-in-stock waitlist. storeId/variantId-scoped (no DB FK; relationMode=prisma).
+// A shopper on a sold-out variant leaves their email; admin triggers a notify
+// pass which emails each not-yet-notified row and flips `notified`.
+// ----------------------------------------------------------------------------
+
+model StockNotification {
+  id        String   @id @default(uuid())
+  storeId   String
+  variantId String
+  email     String
+  locale    String   @default("en")
+  notified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([variantId, email])
+  @@index([storeId])
+  @@index([variantId])
+}
+
+// ----------------------------------------------------------------------------
 // Better Auth — admin/staff account pool. Standard Better Auth schema.
 // ----------------------------------------------------------------------------
 

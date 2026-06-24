@@ -59,6 +59,10 @@ export function MainNav({ className, ...props } : React.HTMLAttributes<HTMLEleme
         label: t('subscribers'),
         active: pathname === `/${params.storeId}/subscribers`
     }, {
+        href: `/${params.storeId}/stock-notifications`,
+        label: t('stockNotifications'),
+        active: pathname === `/${params.storeId}/stock-notifications`
+    }, {
         href: `/${params.storeId}/settings`,
         label: t('settings'),
         active: pathname === `/${params.storeId}/settings`

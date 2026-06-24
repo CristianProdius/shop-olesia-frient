@@ -8,6 +8,7 @@
     "products": "Produse",
     "orders": "Comenzi",
     "subscribers": "Abonați",
+    "stockNotifications": "Listă de așteptare",
     "settings": "Setări",
     "account": "Cont",
     "signOut": "Deconectare",
@@ -200,6 +201,21 @@
     "createdAt": "Data abonării",
     "downloadCsv": "Descarcă CSV",
     "empty": "Încă nu există abonați."
+  },
+  "StockNotifications": {
+    "title": "Listă de așteptare reaprovizionare ({count})",
+    "description": "Cumpărători care așteaptă să fie anunțați când o variantă epuizată revine",
+    "email": "Email",
+    "variant": "Produs / variantă",
+    "locale": "Limbă",
+    "status": "Status",
+    "notified": "Anunțat",
+    "pending": "În așteptare",
+    "createdAt": "Solicitat",
+    "notifyNow": "Anunță acum",
+    "notifySuccess": "Anunțați {notified}, omiși {skipped}.",
+    "notifyError": "Nu s-au putut trimite notificările.",
+    "empty": "Încă nu există solicitări în lista de așteptare."
   },
   "Dashboard": {
     "title": "Panou de control",

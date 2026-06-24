@@ -8,6 +8,7 @@
     "products": "Products",
     "orders": "Orders",
     "subscribers": "Subscribers",
+    "stockNotifications": "Waitlist",
     "settings": "Settings",
     "account": "Account",
     "signOut": "Sign out",
@@ -200,6 +201,21 @@
     "createdAt": "Subscribed",
     "downloadCsv": "Download CSV",
     "empty": "No subscribers yet."
+  },
+  "StockNotifications": {
+    "title": "Back-in-stock waitlist ({count})",
+    "description": "Shoppers waiting to be notified when a sold-out variant returns",
+    "email": "Email",
+    "variant": "Product / variant",
+    "locale": "Language",
+    "status": "Status",
+    "notified": "Notified",
+    "pending": "Pending",
+    "createdAt": "Requested",
+    "notifyNow": "Notify now",
+    "notifySuccess": "Notified {notified}, skipped {skipped}.",
+    "notifyError": "Could not send notifications.",
+    "empty": "No waitlist requests yet."
   },
   "Dashboard": {
     "title": "Dashboard",

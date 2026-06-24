@@ -227,6 +227,69 @@ export function orderConfirmationEmail(
     return { subject: d.subject(order.id), html };
 }
 
+const backInStockDict: Record<
+    Locale,
+    {
+        subject: (product: string) => string;
+        greeting: string;
+        intro: (product: string) => string;
+        cta: string;
+        thanks: string;
+    }
+> = {
+    en: {
+        subject: (product) => `${product} is back in stock at LILETTI`,
+        greeting: "Hi,",
+        intro: (product) =>
+            `Good news — ${product} that you wanted is back in stock!`,
+        cta: "Hurry, limited quantities are available.",
+        thanks: "Thank you for shopping with LILETTI.",
+    },
+    ru: {
+        subject: (product) => `${product} снова в наличии в LILETTI`,
+        greeting: "Здравствуйте!",
+        intro: (product) =>
+            `Хорошие новости — ${product}, который вы хотели, снова в наличии!`,
+        cta: "Поторопитесь, количество ограничено.",
+        thanks: "Спасибо, что выбрали LILETTI.",
+    },
+    ro: {
+        subject: (product) => `${product} este din nou în stoc la LILETTI`,
+        greeting: "Bună,",
+        intro: (product) =>
+            `Vești bune — ${product} pe care îl doreați este din nou în stoc!`,
+        cta: "Grăbiți-vă, cantitățile sunt limitate.",
+        thanks: "Vă mulțumim că ați ales LILETTI.",
+    },
+};
+
+// Back-in-stock notification email. `productLabel` is a best-effort human label
+// (product name + optional size/color); falls back to a generic phrase.
+export function backInStockEmail(
+    productLabel: string | null | undefined,
+    localeInput?: string | null,
+): { subject: string; html: string } {
+    const locale = normalizeLocale(localeInput);
+    const d = backInStockDict[locale];
+
+    const fallback: Record<Locale, string> = {
+        en: "An item",
+        ru: "Товар",
+        ro: "Un produs",
+    };
+    const label = escapeHtml((productLabel ?? "").trim() || fallback[locale]);
+
+    const html = `${WRAP_OPEN}
+    <h1 style="font-size:20px;margin:0 0 16px;">LILETTI</h1>
+    <p style="margin:0 0 8px;">${d.greeting}</p>
+    <p style="margin:0 0 16px;">${d.intro(label)}</p>
+    <p style="margin:0 0 16px;color:#666;">${d.cta}</p>
+    <p style="margin:16px 0 0;">${d.thanks}</p>
+  ${WRAP_CLOSE}`;
+
+    return { subject: d.subject(label), html };
+}
+
 export function orderShippedEmail(
     order: EmailOrder,
     localeInput?: string | null,

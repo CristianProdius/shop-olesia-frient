@@ -33,7 +33,12 @@
     "imageAlt": "Изображение",
     "description": "Описание",
     "materials": "Состав",
-    "care": "Уход"
+    "care": "Уход",
+    "notifyTitle": "Сообщить, когда снова появится в наличии",
+    "notifyEmail": "Ваш email",
+    "notifyButton": "Уведомить меня",
+    "notifySuccess": "Мы напишем вам, когда товар снова появится в наличии.",
+    "notifyError": "Что-то пошло не так. Попробуйте ещё раз."
   },
   "CategoryPage": {
     "sizes": "Размеры",

@@ -8,6 +8,7 @@
     "products": "Товары",
     "orders": "Заказы",
     "subscribers": "Подписчики",
+    "stockNotifications": "Лист ожидания",
     "settings": "Настройки",
     "account": "Аккаунт",
     "signOut": "Выйти",
@@ -200,6 +201,21 @@
     "createdAt": "Дата подписки",
     "downloadCsv": "Скачать CSV",
     "empty": "Пока нет подписчиков."
+  },
+  "StockNotifications": {
+    "title": "Лист ожидания поступления ({count})",
+    "description": "Покупатели, ожидающие уведомления о возврате распроданного варианта",
+    "email": "Эл. почта",
+    "variant": "Товар / вариант",
+    "locale": "Язык",
+    "status": "Статус",
+    "notified": "Уведомлены",
+    "pending": "Ожидает",
+    "createdAt": "Запрошено",
+    "notifyNow": "Уведомить",
+    "notifySuccess": "Уведомлено: {notified}, пропущено: {skipped}.",
+    "notifyError": "Не удалось отправить уведомления.",
+    "empty": "Пока нет запросов в листе ожидания."
   },
   "Dashboard": {
     "title": "Панель управления",

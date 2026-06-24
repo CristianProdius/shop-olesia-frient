@@ -33,7 +33,12 @@
     "imageAlt": "Imagine",
     "description": "Descriere",
     "materials": "Compoziție",
-    "care": "Îngrijire"
+    "care": "Îngrijire",
+    "notifyTitle": "Anunță-mă când revine în stoc",
+    "notifyEmail": "Emailul tău",
+    "notifyButton": "Anunță-mă",
+    "notifySuccess": "Te vom anunța prin email când produsul revine în stoc.",
+    "notifyError": "A apărut o eroare. Te rugăm să încerci din nou."
   },
   "CategoryPage": {
     "sizes": "Mărimi",

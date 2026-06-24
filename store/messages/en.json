@@ -33,7 +33,12 @@
     "imageAlt": "Image",
     "description": "Description",
     "materials": "Composition",
-    "care": "Care"
+    "care": "Care",
+    "notifyTitle": "Notify me when back in stock",
+    "notifyEmail": "Your email",
+    "notifyButton": "Notify me",
+    "notifySuccess": "We'll email you when it's back in stock.",
+    "notifyError": "Something went wrong. Please try again."
   },
   "CategoryPage": {
     "sizes": "Sizes",

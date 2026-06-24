@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "@/components/ui/button";
@@ -66,6 +68,38 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     const description = localizedField(data.descriptionI18n, locale, data.description ?? "");
     const materials = localizedField(data.materialI18n, locale, data.material ?? "");
     const care = localizedField(data.careI18n, locale, data.care ?? "");
+
+    // Back-in-stock waitlist (shown only when the selected variant is sold out).
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const [notifyEmail, setNotifyEmail] = useState("");
+    const [notifySubmitting, setNotifySubmitting] = useState(false);
+
+    const onNotifySubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedVariant) return;
+
+        const trimmed = notifyEmail.trim();
+        if (!EMAIL_RE.test(trimmed)) {
+            toast.error(t("notifyError"));
+            return;
+        }
+
+        setNotifySubmitting(true);
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/stock-notifications`, {
+                variantId: selectedVariant.id,
+                email: trimmed,
+                locale,
+            });
+            toast.success(t("notifySuccess"));
+            setNotifyEmail("");
+        } catch (err) {
+            console.error(err);
+            toast.error(t("notifyError"));
+        } finally {
+            setNotifySubmitting(false);
+        }
+    };
 
     const onAddToCart = () => {
         if (!selectedVariant || !inStock) return;
@@ -167,8 +201,31 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                     <ShoppingCart />
                 </Button>
             </div>
-            {scarcity === "out" && (
-                <p className="mt-3 text-sm text-muted-strong">{t("soldOut")}</p>
+            {scarcity === "out" && selectedVariant && (
+                <div className="mt-4">
+                    <p className="text-sm text-muted-strong">{t("soldOut")}</p>
+                    <p className="mt-3 text-sm font-medium text-text">{t("notifyTitle")}</p>
+                    <form onSubmit={onNotifySubmit} className="flex w-full max-w-sm mt-2">
+                        <label htmlFor="notify-email" className="sr-only">
+                            {t("notifyEmail")}
+                        </label>
+                        <input
+                            id="notify-email"
+                            type="email"
+                            value={notifyEmail}
+                            onChange={(e) => setNotifyEmail(e.target.value)}
+                            placeholder={t("notifyEmail")}
+                            className="flex-1 px-3 py-2 text-sm border border-border bg-white text-text placeholder:text-muted-strong focus:outline-none focus:border-ink"
+                        />
+                        <Button
+                            type="submit"
+                            disabled={notifySubmitting}
+                            className="!rounded-none shrink-0"
+                        >
+                            {t("notifyButton")}
+                        </Button>
+                    </form>
+                </div>
             )}
             {scarcity === "low" && selectedVariant && (
                 <p className="mt-3 text-sm text-sale">
