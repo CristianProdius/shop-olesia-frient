@@ -16,7 +16,8 @@
     "content": "Conținut",
     "faqs": "Întrebări",
     "stats": "Statistici",
-    "reviews": "Recenzii"
+    "reviews": "Recenzii",
+    "customOrders": "Comenzi personalizate"
   },
   "StoreSwitcher": {
     "selectStore": "Selectează un magazin",
@@ -586,5 +587,34 @@
     "needsSource": "Adaugă mai întâi textul sursă",
     "notConfigured": "Setează ANTHROPIC_API_KEY pentru a activa IA",
     "failed": "Generarea textului a eșuat"
+  },
+  "CustomOrders": {
+    "title": "Comenzi personalizate ({count})",
+    "description": "Solicitări la comandă pentru magazinul dvs.",
+    "name": "Nume",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "locale": "Limbă",
+    "createdAt": "Primit",
+    "statusLabel": "Status",
+    "requestDetail": "Solicitare de comandă personalizată",
+    "customer": "Client",
+    "manage": "Gestionare",
+    "message": "Mesaj",
+    "measurements": "Măsurători",
+    "save": "Salvează",
+    "updatedToast": "Solicitare actualizată",
+    "somethingWentWrong": "Ceva nu a mers bine",
+    "actions": "Acțiuni",
+    "openMenu": "Deschide meniul",
+    "copyId": "Copiază ID",
+    "copiedToClipboard": "ID-ul solicitării a fost copiat",
+    "view": "Vizualizare",
+    "status": {
+      "new": "Nou",
+      "quoted": "Ofertat",
+      "accepted": "Acceptat",
+      "declined": "Refuzat"
+    }
   }
 }

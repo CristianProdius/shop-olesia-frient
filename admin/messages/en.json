@@ -16,7 +16,8 @@
     "content": "Content",
     "faqs": "FAQs",
     "stats": "Stats",
-    "reviews": "Reviews"
+    "reviews": "Reviews",
+    "customOrders": "Custom Orders"
   },
   "StoreSwitcher": {
     "selectStore": "Select a store",
@@ -586,5 +587,34 @@
     "needsSource": "Add source text first",
     "notConfigured": "Set ANTHROPIC_API_KEY to enable AI",
     "failed": "AI generation failed"
+  },
+  "CustomOrders": {
+    "title": "Custom Orders ({count})",
+    "description": "Made-to-measure requests for your store",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "locale": "Locale",
+    "createdAt": "Received",
+    "statusLabel": "Status",
+    "requestDetail": "Custom Order Request",
+    "customer": "Customer",
+    "manage": "Manage",
+    "message": "Message",
+    "measurements": "Measurements",
+    "save": "Save",
+    "updatedToast": "Request updated",
+    "somethingWentWrong": "Something went wrong",
+    "actions": "Actions",
+    "openMenu": "Open menu",
+    "copyId": "Copy ID",
+    "copiedToClipboard": "Request ID copied to clipboard",
+    "view": "View",
+    "status": {
+      "new": "New",
+      "quoted": "Quoted",
+      "accepted": "Accepted",
+      "declined": "Declined"
+    }
   }
 }

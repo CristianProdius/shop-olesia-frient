@@ -29,6 +29,12 @@ const Footer = async () => {
                     >
                         {tLinks("faq")}
                     </Link>
+                    <Link
+                        href="/custom-order"
+                        className="text-xs tracking-wide uppercase text-muted-strong hover:text-ink"
+                    >
+                        {tLinks("customOrder")}
+                    </Link>
                 </nav>
                 <p className="text-xs text-center text-text">
                     {t("copyright")}

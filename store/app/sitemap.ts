@@ -5,7 +5,7 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
 
 async function fetchPaths(): Promise<string[]> {
   // Static paths now; product/category paths added once a server fetch helper exists.
-  return ["/", "/about", "/atelier", "/faq"];
+  return ["/", "/about", "/atelier", "/faq", "/custom-order"];
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

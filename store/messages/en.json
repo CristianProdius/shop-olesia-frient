@@ -98,7 +98,8 @@
   "FooterLinks": {
     "about": "Our Story",
     "atelier": "Atelier",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "customOrder": "Made to Measure"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -171,5 +172,27 @@
     "reviewSubmitted": "Thank you! Your review is pending moderation.",
     "reviewPending": "Your review is pending moderation.",
     "reviewError": "Could not submit your review. Please try again."
+  },
+  "CustomOrder": {
+    "title": "Made to Measure",
+    "intro": "Have something specific in mind? Tell us about your dream piece and share your measurements — our atelier will craft a personalised quote just for you.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "message": "Tell us about your piece",
+    "measurements": "Your measurements (optional)",
+    "measurementGuide": "How to measure",
+    "measurementGuideLines": [
+      "Bust: measure around the fullest part of your chest, keeping the tape level.",
+      "Waist: measure around the narrowest part of your natural waistline.",
+      "Hips: measure around the fullest part of your hips and seat.",
+      "Height: measure from the top of your head to the floor, without shoes.",
+      "Shoulders: measure across the back from one shoulder seam to the other.",
+      "Use a soft tape measure and keep it snug but not tight."
+    ],
+    "submit": "Send request",
+    "submitting": "Sending...",
+    "success": "Thank you — we've received your request and will be in touch soon.",
+    "error": "Please check your details and try again."
   }
 }

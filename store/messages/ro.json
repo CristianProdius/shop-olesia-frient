@@ -98,7 +98,8 @@
   "FooterLinks": {
     "about": "Povestea noastră",
     "atelier": "Atelier",
-    "faq": "Întrebări"
+    "faq": "Întrebări",
+    "customOrder": "La comandă"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -171,5 +172,27 @@
     "reviewSubmitted": "Mulțumim! Recenzia ta așteaptă moderarea.",
     "reviewPending": "Recenzia ta așteaptă moderarea.",
     "reviewError": "Nu am putut trimite recenzia. Încearcă din nou."
+  },
+  "CustomOrder": {
+    "title": "La comandă",
+    "intro": "Aveți ceva anume în minte? Spuneți-ne despre piesa visurilor dvs. și împărtășiți măsurătorile — atelierul nostru va pregăti o ofertă personalizată special pentru dvs.",
+    "name": "Nume",
+    "email": "E-mail",
+    "phone": "Telefon (opțional)",
+    "message": "Descrieți piesa dorită",
+    "measurements": "Măsurătorile dvs. (opțional)",
+    "measurementGuide": "Cum se măsoară",
+    "measurementGuideLines": [
+      "Bust: măsurați în jurul celei mai pline părți a pieptului, ținând banda orizontal.",
+      "Talie: măsurați în jurul celei mai înguste părți a taliei naturale.",
+      "Șolduri: măsurați în jurul celei mai pline părți a șoldurilor.",
+      "Înălțime: măsurați de la creștet până la podea, fără încălțăminte.",
+      "Umeri: măsurați pe spate de la o cusătură a umărului la cealaltă.",
+      "Folosiți o bandă moale, lipită de corp, dar nu strânsă."
+    ],
+    "submit": "Trimite solicitarea",
+    "submitting": "Se trimite...",
+    "success": "Mulțumim — am primit solicitarea dvs. și vă vom contacta în curând.",
+    "error": "Vă rugăm verificați datele și încercați din nou."
   }
 }

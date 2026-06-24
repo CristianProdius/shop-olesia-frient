@@ -16,7 +16,8 @@
     "content": "Контент",
     "faqs": "Вопросы",
     "stats": "Статистика",
-    "reviews": "Отзывы"
+    "reviews": "Отзывы",
+    "customOrders": "Индивидуальные заказы"
   },
   "StoreSwitcher": {
     "selectStore": "Выберите магазин",
@@ -586,5 +587,34 @@
     "needsSource": "Сначала добавьте исходный текст",
     "notConfigured": "Задайте ANTHROPIC_API_KEY, чтобы включить ИИ",
     "failed": "Не удалось сгенерировать текст"
+  },
+  "CustomOrders": {
+    "title": "Индивидуальные заказы ({count})",
+    "description": "Запросы на пошив по меркам для вашего магазина",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "phone": "Телефон",
+    "locale": "Язык",
+    "createdAt": "Получено",
+    "statusLabel": "Статус",
+    "requestDetail": "Запрос на индивидуальный заказ",
+    "customer": "Клиент",
+    "manage": "Управление",
+    "message": "Сообщение",
+    "measurements": "Мерки",
+    "save": "Сохранить",
+    "updatedToast": "Запрос обновлён",
+    "somethingWentWrong": "Что-то пошло не так",
+    "actions": "Действия",
+    "openMenu": "Открыть меню",
+    "copyId": "Копировать ID",
+    "copiedToClipboard": "ID запроса скопирован в буфер обмена",
+    "view": "Просмотр",
+    "status": {
+      "new": "Новый",
+      "quoted": "Предложена цена",
+      "accepted": "Принят",
+      "declined": "Отклонён"
+    }
   }
 }

@@ -283,6 +283,29 @@ model StockNotification {
 }
 
 // ----------------------------------------------------------------------------
+// Made-to-measure / custom order requests. A shopper submits a brief plus
+// optional measurements; the atelier reviews and moves it through a simple
+// status flow (new → quoted → accepted | declined). Payment-agnostic.
+// ----------------------------------------------------------------------------
+
+model CustomOrderRequest {
+  id           String   @id @default(uuid())
+  storeId      String
+  name         String
+  email        String
+  phone        String   @default("")
+  message      String
+  measurements String?
+  status       String   @default("new") // new | quoted | accepted | declined
+  locale       String   @default("en")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([status])
+}
+
+// ----------------------------------------------------------------------------
 // Better Auth — admin/staff account pool. Standard Better Auth schema.
 // ----------------------------------------------------------------------------
 
