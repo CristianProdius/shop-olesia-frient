@@ -561,5 +561,14 @@
     "english": "English",
     "russian": "Russian",
     "romanian": "Romanian"
+  },
+  "Ai": {
+    "generate": "✨ Generate",
+    "translate": "✨ Translate",
+    "generating": "Generating…",
+    "filled": "AI copy ready — review, then Save",
+    "needsSource": "Add source text first",
+    "notConfigured": "Set ANTHROPIC_API_KEY to enable AI",
+    "failed": "AI generation failed"
   }
 }

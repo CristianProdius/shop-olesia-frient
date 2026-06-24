@@ -561,5 +561,14 @@
     "english": "Engleză",
     "russian": "Rusă",
     "romanian": "Română"
+  },
+  "Ai": {
+    "generate": "✨ Generează",
+    "translate": "✨ Traduce",
+    "generating": "Se generează…",
+    "filled": "Text gata — verifică, apoi salvează",
+    "needsSource": "Adaugă mai întâi textul sursă",
+    "notConfigured": "Setează ANTHROPIC_API_KEY pentru a activa IA",
+    "failed": "Generarea textului a eșuat"
   }
 }

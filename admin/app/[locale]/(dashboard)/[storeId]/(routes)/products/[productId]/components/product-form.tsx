@@ -21,6 +21,7 @@ import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { AiGenerateButton } from '@/components/ai-generate-button';
 
 interface ProductFromProps {
     initialData: Product & {
@@ -457,7 +458,20 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('descriptionLabel')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('descriptionLabel')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='product description'
+                                disabled={loading}
+                                sourceText={form.watch('descriptionI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('descriptionI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('descriptionI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}
@@ -501,7 +515,20 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('materialLabel')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('materialLabel')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='product material'
+                                disabled={loading}
+                                sourceText={form.watch('materialI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('materialI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('materialI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}
@@ -545,7 +572,20 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('careLabel')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('careLabel')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='product care instructions'
+                                disabled={loading}
+                                sourceText={form.watch('careI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('careI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('careI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}

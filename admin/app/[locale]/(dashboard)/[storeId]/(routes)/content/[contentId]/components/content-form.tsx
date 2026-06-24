@@ -21,6 +21,7 @@ import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { AiGenerateButton } from '@/components/ai-generate-button';
 
 interface ContentFormProps {
     initialData: ContentBlock | null;
@@ -240,7 +241,20 @@ export const ContentForm: React.FC<ContentFormProps> = ({ initialData }) => {
                         />
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('headingTranslations')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('headingTranslations')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='content block heading'
+                                disabled={loading}
+                                sourceText={form.watch('headingI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('headingI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('headingI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}
@@ -284,7 +298,20 @@ export const ContentForm: React.FC<ContentFormProps> = ({ initialData }) => {
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('bodyTranslations')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('bodyTranslations')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='content block body'
+                                disabled={loading}
+                                sourceText={form.watch('bodyI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('bodyI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('bodyI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}

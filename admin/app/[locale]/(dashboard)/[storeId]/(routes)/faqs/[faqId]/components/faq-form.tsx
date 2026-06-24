@@ -19,6 +19,7 @@ import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Checkbox } from '@/components/ui/checkbox';
+import { AiGenerateButton } from '@/components/ai-generate-button';
 
 interface FaqFormProps {
     initialData: Faq | null;
@@ -262,7 +263,20 @@ export const FaqForm: React.FC<FaqFormProps> = ({ initialData }) => {
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('questionTranslations')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('questionTranslations')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='FAQ question'
+                                disabled={loading}
+                                sourceText={form.watch('questionI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('questionI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('questionI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}
@@ -306,7 +320,20 @@ export const FaqForm: React.FC<FaqFormProps> = ({ initialData }) => {
                         </div>
                     </div>
                     <div className='space-y-4'>
-                        <FormLabel>{t('answerTranslations')}</FormLabel>
+                        <div className='flex items-center justify-between'>
+                            <FormLabel>{t('answerTranslations')}</FormLabel>
+                            <AiGenerateButton
+                                kind='translate'
+                                field='FAQ answer'
+                                disabled={loading}
+                                sourceText={form.watch('answerI18n.en') ?? ''}
+                                targetLocales={['ru', 'ro']}
+                                onResult={(values) => {
+                                    if (values.ru !== undefined) form.setValue('answerI18n.ru', values.ru, { shouldDirty: true });
+                                    if (values.ro !== undefined) form.setValue('answerI18n.ro', values.ro, { shouldDirty: true });
+                                }}
+                            />
+                        </div>
                         <div className='grid grid-cols-3 gap-8'>
                             <FormField
                                 control={form.control}
