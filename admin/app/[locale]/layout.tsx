@@ -1,5 +1,5 @@
 import '../globals.css'
-import { Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -9,7 +9,15 @@ import { ToasterProvider } from '@/providers/toast-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 import { routing } from '@/i18n/routing'
 
-const inter = Inter({ subsets: ['latin'] })
+const montserrat = Montserrat({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+// The admin dashboard is authenticated + data-driven; render on demand.
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({
   params,
@@ -40,9 +48,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${montserrat.variable} font-sans`}>
         <NextIntlClientProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <ToasterProvider />
             <ModalProvider />
               {children}

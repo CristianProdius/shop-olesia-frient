@@ -34,7 +34,17 @@ export const ProductClient: React.FC<ProductClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey="name" />
+            <DataTable
+                columns={columns}
+                data={data}
+                searchKey="name"
+                emptyAction={
+                    <Button size="sm" onClick={() => router.push(`/${params.storeId}/products/new`)}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t('addNew')}
+                    </Button>
+                }
+            />
             <Heading title={t('apiTitle')} description={t('apiDescription')} />
             <Separator />
             <ApiList entityName="products" entityIdName="productId" />

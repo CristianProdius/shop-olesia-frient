@@ -1,37 +1,27 @@
 import React from 'react'
-import { getUserId } from '@/lib/server-auth'
+import { Store } from '@prisma/client';
 import AccountMenu from '@/components/account-menu';
-import { MainNav } from '@/components/main-nav';
-import StoreSwitcher from '@/components/store-switcher';
-import { redirect } from 'next/navigation'
-import prismadb from '@/lib/prismadb';
+import MobileNav from '@/components/mobile-nav';
+import { Wordmark } from '@/components/main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
 import LanguageSwitcher from '@/components/language-switcher';
 
-const Navbar = async () => {
-  const userId = await getUserId();
+interface NavbarProps {
+  stores: Store[];
+}
 
-  if(!userId) {
-    redirect("/sign-in")
-  }
-
-  const stores = await prismadb?.store.findMany({
-    where: {
-      userId,
-    }
-  })
-
+const Navbar = ({ stores }: NavbarProps) => {
   return (
-    <div className='border-b'>
-        <div className='flex items-center h-16 px-4'>
-            <StoreSwitcher items={stores} />
-            <MainNav className='mx-6' />
-            <div className='flex items-center ml-auto space-x-4'>
-              <LanguageSwitcher />
-              <ThemeToggle />
-                <AccountMenu />
-            </div>
-        </div>
+    <div className='flex h-14 items-center gap-4 border-b px-4'>
+      <MobileNav stores={stores} />
+      <div className='md:hidden'>
+        <Wordmark />
+      </div>
+      <div className='ml-auto flex items-center space-x-4'>
+        <LanguageSwitcher />
+        <ThemeToggle />
+        <AccountMenu />
+      </div>
     </div>
   )
 }

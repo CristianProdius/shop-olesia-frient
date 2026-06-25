@@ -43,9 +43,9 @@ export default function StoreSwitcher({
         <Popover onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="outline" size="sm" role="combobox" aria-expanded={open} aria-label={t('selectStore')} className={cn("w-[200px] justify-between", className)}>
-                    <StoreIcon className="w-4 h-4 mr-2" />
+                    <StoreIcon className="size-4 mr-2" />
                         {currentStore?.label}
-                    <ChevronsUpDown className="w-4 h-4 ml-auto opacity-50 shrink-0" />
+                    <ChevronsUpDown className="size-4 ml-auto opacity-50 shrink-0" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
@@ -56,9 +56,9 @@ export default function StoreSwitcher({
                         <CommandGroup heading={t('stores')}>
                             {formattedItems.map((store, index) =>(
                                 <CommandItem key={index} onSelect={() => onStoreSelect(store)} className="text-sm">
-                                    <StoreIcon className="w-4 h-4 mr-2" />
+                                    <StoreIcon className="size-4 mr-2" />
                                     {store.label}
-                                    <Check className={cn("ml-auto h-4 w-4", currentStore?.value === store.value ? "opacity-100" : "opacity-0")} />
+                                    <Check className={cn("ml-auto size-4", currentStore?.value === store.value ? "opacity-100" : "opacity-0")} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -69,7 +69,7 @@ export default function StoreSwitcher({
                             <CommandItem onSelect={() => {
                                 setOpen(false); storeModal.onOpen();
                             }}>
-                                <PlusCircle className="w-5 h-5 mr-2" />
+                                <PlusCircle className="size-5 mr-2" />
                                 {t('createStore')}
                             </CommandItem>
                         </CommandGroup>

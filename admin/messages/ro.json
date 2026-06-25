@@ -10,7 +10,78 @@
     "settings": "Setări",
     "account": "Cont",
     "signOut": "Deconectare",
-    "language": "Limbă"
+    "language": "Limbă",
+    "groupStore": "Magazin",
+    "groupCatalog": "Catalog",
+    "groupContent": "Conținut",
+    "groupSales": "Vânzări",
+    "menu": "Meniu",
+    "openMenu": "Deschide meniul",
+    "closeMenu": "Închide meniul",
+    "subscribers": "Abonați",
+    "groupMarketing": "Marketing",
+    "blog": "Jurnal"
+  },
+  "Subscribers": {
+    "title": "Abonați ({count})",
+    "description": "Înscrieri la newsletter din magazinul tău",
+    "columnEmail": "Email",
+    "columnDate": "Dată"
+  },
+  "Blog": {
+    "title": "Jurnal ({count})",
+    "description": "Scrie și gestionează articolele de blog",
+    "addNew": "Adaugă",
+    "apiTitle": "API",
+    "apiDescription": "Apeluri API pentru Jurnal",
+    "colTitle": "Titlu",
+    "colStatus": "Status",
+    "colDate": "Dată",
+    "published": "Publicat",
+    "draft": "Ciornă",
+    "idCopied": "ID-ul articolului a fost copiat.",
+    "deleted": "Articol șters.",
+    "deleteError": "Eroare la ștergere.",
+    "openMenu": "Deschide meniul",
+    "actions": "Acțiuni",
+    "copyId": "Copiază ID",
+    "update": "Editează",
+    "delete": "Șterge",
+    "editTitle": "Editează articolul",
+    "createTitle": "Creează articol",
+    "editDescription": "Editează un articol",
+    "createDescription": "Adaugă un articol nou",
+    "updated": "Articol actualizat.",
+    "created": "Articol creat.",
+    "saveChanges": "Salvează",
+    "create": "Creează",
+    "somethingWrong": "Ceva nu a mers.",
+    "slugConflict": "Acest slug este deja folosit.",
+    "slug": "Slug",
+    "slugPlaceholder": "titlul-articolului",
+    "titleField": "Titlu",
+    "titlePlaceholder": "Titlul articolului",
+    "excerpt": "Rezumat",
+    "excerptPlaceholder": "Scurt rezumat afișat în listă",
+    "content": "Conținut",
+    "coverImage": "Imagine de copertă",
+    "isPublished": "Publicat",
+    "isPublishedDescription": "Articolul va fi vizibil în magazin.",
+    "translations": "Traduceri",
+    "english": "Engleză",
+    "russian": "Rusă",
+    "romanian": "Română"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Caută...",
+    "columns": "Coloane",
+    "noResults": "Niciun rezultat.",
+    "previous": "Anterior",
+    "next": "Următor",
+    "page": "Pagina {page} din {total}",
+    "rowsCount": "{count} rând(uri)",
+    "emptyTitle": "Încă nimic aici",
+    "emptyDescription": "Elementele create vor apărea aici."
   },
   "StoreSwitcher": {
     "selectStore": "Selectează un magazin",
@@ -153,7 +224,8 @@
     "address": "Adresă",
     "totalPrice": "Preț total",
     "paid": "Achitat",
-    "date": "Dată"
+    "date": "Dată",
+    "email": "Email"
   },
   "Dashboard": {
     "title": "Panou de control",
@@ -213,7 +285,7 @@
   },
   "Products": {
     "title": "Produse ({count})",
-    "description": "Gestionează produsele magazinului tău",
+    "description": "Descriere",
     "addNew": "Adaugă nou",
     "apiTitle": "API",
     "apiDescription": "Apeluri API pentru Produse",
@@ -260,7 +332,14 @@
     "featured": "Recomandat",
     "featuredDescription": "Produsul va apărea pe pagina principală.",
     "archived": "Arhivat",
-    "archivedDescription": "Produsul va apărea oriunde în magazin."
+    "archivedDescription": "Produsul va apărea oriunde în magazin.",
+    "descriptionPlaceholder": "Descrierea produsului",
+    "material": "Material",
+    "materialPlaceholder": "ex. 100% in",
+    "care": "Instrucțiuni de îngrijire",
+    "carePlaceholder": "ex. Spălare la rece",
+    "sku": "SKU / Cod",
+    "skuPlaceholder": "ex. LIL-0001"
   },
   "AuthAdmin": {
     "signInTitle": "Autentificare",
@@ -289,7 +368,8 @@
   "ImageUpload": {
     "uploadImage": "Încarcă o imagine",
     "uploading": "Se încarcă...",
-    "uploadFailed": "Încărcarea imaginii a eșuat."
+    "uploadFailed": "Încărcarea imaginii a eșuat.",
+    "remove": "Elimină imaginea"
   },
   "Metadata": {
     "title": "Panou de administrare",

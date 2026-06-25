@@ -18,8 +18,45 @@ model Store {
   sizes           Size[]     @relation("StoreToSize")
   colors          Color[]     @relation("StoreToColor")
   orders          Order[]     @relation("StoreToOrder")
+  subscribers     Subscriber[] @relation("StoreToSubscriber")
+  blogPosts       BlogPost[]  @relation("StoreToBlog")
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+}
+
+// Blog / journal posts, authored in the admin, shown on the storefront.
+// Multilingual fields mirror the name/nameI18n pattern; content is markdown.
+model BlogPost {
+  id          String    @id @default(uuid())
+  storeId     String    // Foreign Key to Store
+  store       Store     @relation("StoreToBlog", fields: [storeId], references: [id])
+  slug        String    // URL slug, unique per store
+  title       String    // English fallback for titleI18n
+  titleI18n   Json?     // { en, ru, ro }
+  excerpt     String?   // English fallback for excerptI18n
+  excerptI18n Json?     // { en, ru, ro }
+  content     String    // markdown, English fallback for contentI18n
+  contentI18n Json?     // { en, ru, ro } markdown
+  coverImage  String?   // public image URL
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([storeId, slug])
+  @@index([storeId])
+}
+
+// Newsletter signups captured from the storefront footer.
+model Subscriber {
+  id        String   @id @default(uuid())
+  storeId   String   // Foreign Key to Store
+  store     Store    @relation("StoreToSubscriber", fields: [storeId], references: [id])
+  email     String
+  createdAt DateTime @default(now())
+
+  @@unique([storeId, email])
+  @@index([storeId])
 }
 
 model Billboard {
@@ -60,6 +97,13 @@ model Product {
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
   nameI18n    Json?     // { en, ru, ro } translations; falls back to `name`
+  description     String?   // English fallback for descriptionI18n
+  descriptionI18n Json?     // { en, ru, ro } long description
+  material        String?   // English fallback for materialI18n
+  materialI18n    Json?     // { en, ru, ro } material / composition
+  care            String?   // English fallback for careI18n
+  careI18n        Json?     // { en, ru, ro } care instructions
+  sku             String?   // Reference / stock code (not translated)
   price       Decimal
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
@@ -84,6 +128,7 @@ model Order {
   store       Store     @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems OrderItem[] // Relation to OrderItem model
   isPaid     Boolean   @default(false)
+  email      String    @default("")
   phone      String    @default("")
   address    String    @default("")
   // Store customer who placed the order. Plain string (no FK): customer tables

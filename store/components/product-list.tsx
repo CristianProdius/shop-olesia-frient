@@ -1,18 +1,29 @@
 import { Product } from "@/types";
+import { cn } from "@/lib/utils";
 import NoResults from "@/components/ui/no-results";
 import ProductCard from "@/components/ui/product-card";
 
 interface ProductListProps {
     title: string;
     items: Product[];
+    // "wide" packs more columns for the full-width homepage; "default" keeps 3-up.
+    cols?: "default" | "wide";
 }
 
-const ProductList: React.FC<ProductListProps> = ({ title, items }) => {
-    return ( 
-        <div className="space-y-4">
-            <h3 className="text-3xl font-bold">{title}</h3>
+const ProductList: React.FC<ProductListProps> = ({ title, items, cols = "default" }) => {
+    return (
+        <div>
+            <h2 className="heading-luxe text-text text-2xl">{title}</h2>
+            <div className="rule mt-4 mb-10" aria-hidden="true" />
             {items?.length === 0 && <NoResults />}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div
+                className={cn(
+                    "grid gap-x-4 gap-y-10",
+                    cols === "wide"
+                        ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-x-8"
+                        : "grid-cols-2 md:grid-cols-3 md:gap-x-14 md:gap-y-16",
+                )}
+            >
                 {items.map(item => (
                     <div key={item.id}>
                         <ProductCard key={item.id} data={item} />
@@ -20,7 +31,7 @@ const ProductList: React.FC<ProductListProps> = ({ title, items }) => {
                 ))}
             </div>
         </div>
-     );
+    );
 }
- 
+
 export default ProductList;

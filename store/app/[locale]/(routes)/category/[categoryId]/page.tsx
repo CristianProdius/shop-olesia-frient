@@ -1,19 +1,45 @@
+import getCategories from "@/actions/get-categories";
 import getCategory from "@/actions/get-category";
 import getColors from "@/actions/get-colors";
 import getProducts from "@/actions/get-products";
 import getSizes from "@/actions/get-sizes";
-import Billboard from "@/components/billboard";
 import Container from "@/components/ui/container";
 import Filter from "./components/filter";
+import JsonLd from "@/components/json-ld";
 import NoResults from "@/components/ui/no-results";
-import ProductCard from "@/components/ui/product-card";
+import ProductGrid from "./components/product-grid";
+import CategorySidebar from "./components/category-sidebar";
 import MobileFilters from "./components/mobile-filters";
 import { getTranslations, getLocale } from "next-intl/server";
+import { localizedField } from "@/lib/i18n-content";
+import { SITE_URL, alternates } from "@/lib/seo";
+import type { Metadata } from "next";
 
 export const revalidate = 0;
 
 type Params = Promise<{ categoryId: string }>
 type SearchParams = Promise<{ colorId: string, sizeId: string }>
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const locale = await getLocale();
+    const { categoryId } = await params;
+    const category = await getCategory(categoryId);
+    const categoryName = localizedField(category?.nameI18n, locale, category?.name);
+    const description = `Shop ${categoryName} at LILETTI.`;
+    const meta = alternates(locale, `/category/${categoryId}`);
+
+    return {
+        title: categoryName,
+        description,
+        alternates: meta,
+        openGraph: {
+            type: "website",
+            title: categoryName,
+            description,
+            url: meta.canonical,
+        },
+    };
+}
 
 const CategoryPage = async ({ params, searchParams }: { params: Params, searchParams: SearchParams }) => {
     const { categoryId } = await params;
@@ -22,24 +48,46 @@ const CategoryPage = async ({ params, searchParams }: { params: Params, searchPa
     const sizes = await getSizes();
     const colors = await getColors();
     const category = await getCategory(categoryId)
+    const categories = await getCategories();
     const t = await getTranslations("CategoryPage");
+    const tNav = await getTranslations("Navbar");
     const locale = await getLocale();
+
+    const categoryName = localizedField(category?.nameI18n, locale, category?.name);
+
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: tNav("home"),
+                item: `${SITE_URL}/${locale}`,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: categoryName,
+                item: alternates(locale, `/category/${categoryId}`).canonical,
+            },
+        ],
+    };
+
     return (
         <div className="bg-white">
-            <Container>
-                <Billboard data={category?.billboard} />
-                <div className="px-4 pb-24 sm:px-6 lg:px-8">
-                    <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
-                        {/*Add Mobile Filters*/}
-                        <MobileFilters
-                            sizes={sizes}
-                            colors={colors}
-                            sizesLabel={t("sizes")}
-                            colorsLabel={t("colors")}
+            <JsonLd data={breadcrumbLd} />
+            <Container className="py-20 md:py-24">
+                <div className="lg:grid lg:grid-cols-[200px_1fr] lg:gap-x-10 lg:items-start">
+                    {/* Sidebar (desktop) — sticks below the navbar while the grid scrolls */}
+                    <aside className="hidden lg:block lg:sticky lg:top-36 lg:self-start lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto">
+                        <CategorySidebar
+                            categories={categories}
+                            activeCategoryId={categoryId}
+                            heading={t("categories")}
                             locale={locale}
                         />
-                        {/*Add Computer Filters*/}
-                        <div className="hidden lg:block">
+                        <div className="mt-12">
                             <Filter
                                 valueKey="sizeId"
                                 name={t("sizes")}
@@ -53,15 +101,37 @@ const CategoryPage = async ({ params, searchParams }: { params: Params, searchPa
                                 locale={locale}
                             />
                         </div>
-                        <div className="mt-6 lg:col-span-4 lg:mt-0">
-                            {products?.length === 0 && <NoResults /> }
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-                                {products?.map(item => (
-                                    <ProductCard key={item.id} data={item} />
-                                ))}
-                            </div>
+                    </aside>
+
+                    {/* Main content */}
+                    <main>
+                        {/* Mobile filters trigger */}
+                        <div className="mb-6 lg:hidden">
+                            <MobileFilters
+                                sizes={sizes}
+                                colors={colors}
+                                categories={categories}
+                                activeCategoryId={categoryId}
+                                sizesLabel={t("sizes")}
+                                colorsLabel={t("colors")}
+                                locale={locale}
+                            />
                         </div>
-                    </div>
+
+                        {/* Page title + rule */}
+                        <div className="mt-[18px]">
+                            <h1 className="heading-luxe text-2xl text-ink">
+                                {categoryName}
+                            </h1>
+                        </div>
+                        <hr className="rule mb-7 mt-[18px]" />
+
+                        {products?.length === 0 ? (
+                            <NoResults />
+                        ) : (
+                            <ProductGrid products={products} locale={locale} />
+                        )}
+                    </main>
                 </div>
             </Container>
         </div>

@@ -38,6 +38,7 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     {
         accessorKey: 'createdAt',
         header: () => <HeaderDate />,
+        cell: ({ row }) => <span className="tabular-nums">{row.original.createdAt}</span>,
     },
     {
         id: 'actions',

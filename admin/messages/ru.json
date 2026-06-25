@@ -10,7 +10,78 @@
     "settings": "Настройки",
     "account": "Аккаунт",
     "signOut": "Выйти",
-    "language": "Язык"
+    "language": "Язык",
+    "groupStore": "Магазин",
+    "groupCatalog": "Каталог",
+    "groupContent": "Контент",
+    "groupSales": "Продажи",
+    "menu": "Меню",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
+    "subscribers": "Подписчики",
+    "groupMarketing": "Маркетинг",
+    "blog": "Журнал"
+  },
+  "Subscribers": {
+    "title": "Подписчики ({count})",
+    "description": "Подписки на рассылку из вашего магазина",
+    "columnEmail": "Эл. почта",
+    "columnDate": "Дата"
+  },
+  "Blog": {
+    "title": "Журнал ({count})",
+    "description": "Создавайте и управляйте статьями блога",
+    "addNew": "Добавить",
+    "apiTitle": "API",
+    "apiDescription": "API-запросы для Журнала",
+    "colTitle": "Заголовок",
+    "colStatus": "Статус",
+    "colDate": "Дата",
+    "published": "Опубликовано",
+    "draft": "Черновик",
+    "idCopied": "ID статьи скопирован.",
+    "deleted": "Статья удалена.",
+    "deleteError": "Ошибка удаления.",
+    "openMenu": "Открыть меню",
+    "actions": "Действия",
+    "copyId": "Копировать ID",
+    "update": "Изменить",
+    "delete": "Удалить",
+    "editTitle": "Редактировать статью",
+    "createTitle": "Создать статью",
+    "editDescription": "Редактировать статью",
+    "createDescription": "Добавить новую статью",
+    "updated": "Статья обновлена.",
+    "created": "Статья создана.",
+    "saveChanges": "Сохранить",
+    "create": "Создать",
+    "somethingWrong": "Что-то пошло не так.",
+    "slugConflict": "Этот slug уже используется.",
+    "slug": "Slug",
+    "slugPlaceholder": "zagolovok-stati",
+    "titleField": "Заголовок",
+    "titlePlaceholder": "Заголовок статьи",
+    "excerpt": "Краткое описание",
+    "excerptPlaceholder": "Краткое описание для списка",
+    "content": "Содержание",
+    "coverImage": "Обложка",
+    "isPublished": "Опубликовано",
+    "isPublishedDescription": "Статья будет видна в магазине.",
+    "translations": "Переводы",
+    "english": "Английский",
+    "russian": "Русский",
+    "romanian": "Румынский"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Поиск...",
+    "columns": "Столбцы",
+    "noResults": "Ничего не найдено.",
+    "previous": "Назад",
+    "next": "Вперёд",
+    "page": "Страница {page} из {total}",
+    "rowsCount": "{count} строк(и)",
+    "emptyTitle": "Здесь пока пусто",
+    "emptyDescription": "Созданные элементы появятся здесь."
   },
   "StoreSwitcher": {
     "selectStore": "Выберите магазин",
@@ -153,7 +224,8 @@
     "address": "Адрес",
     "totalPrice": "Итого",
     "paid": "Оплачено",
-    "date": "Дата"
+    "date": "Дата",
+    "email": "Эл. почта"
   },
   "Dashboard": {
     "title": "Панель управления",
@@ -213,7 +285,7 @@
   },
   "Products": {
     "title": "Товары ({count})",
-    "description": "Управление товарами вашего магазина",
+    "description": "Описание",
     "addNew": "Добавить",
     "apiTitle": "API",
     "apiDescription": "Запросы API для товаров",
@@ -260,7 +332,14 @@
     "featured": "Рекомендуемый",
     "featuredDescription": "Товар будет отображаться на главной странице.",
     "archived": "В архиве",
-    "archivedDescription": "Товар будет отображаться в магазине."
+    "archivedDescription": "Товар будет отображаться в магазине.",
+    "descriptionPlaceholder": "Описание товара",
+    "material": "Состав",
+    "materialPlaceholder": "напр. 100% лён",
+    "care": "Уход",
+    "carePlaceholder": "напр. Стирка в холодной воде",
+    "sku": "Артикул",
+    "skuPlaceholder": "напр. LIL-0001"
   },
   "AuthAdmin": {
     "signInTitle": "Вход",
@@ -289,7 +368,8 @@
   "ImageUpload": {
     "uploadImage": "Загрузить изображение",
     "uploading": "Загрузка...",
-    "uploadFailed": "Не удалось загрузить изображение."
+    "uploadFailed": "Не удалось загрузить изображение.",
+    "remove": "Удалить изображение"
   },
   "Metadata": {
     "title": "Панель администратора",

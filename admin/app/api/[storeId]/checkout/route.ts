@@ -20,7 +20,7 @@ export async function OPTIONS() {
 // simulation. When integrating a real provider, verify a signed token / shared
 // secret between the store and admin before trusting customer/payment data.
 export async function POST(req: Request, { params }: { params: Promise<{ storeId: string }> }) {
-    const { productIds, customerId, name, address, phone } = await req.json();
+    const { productIds, customerId, name, email, address, phone } = await req.json();
     const { storeId } = await params;
 
     // `name` is collected by the simulated checkout form for display; the Order
@@ -36,6 +36,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
             storeId: storeId,
             isPaid: true,
             customerId: customerId ?? null,
+            email: email ?? "",
             address: fullAddress,
             phone: phone ?? "",
             orderItems: {

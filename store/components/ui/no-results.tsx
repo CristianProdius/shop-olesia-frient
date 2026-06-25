@@ -4,8 +4,10 @@ const NoResults = async () => {
     const t = await getTranslations("Navbar");
 
     return (
-        <div className="flex items-center justify-center w-full h-full text-neutral-500">
-            {t("noResults")}
+        <div className="flex items-center justify-center w-full py-24 text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted-strong">
+                {t("noResults")}
+            </p>
         </div>
      );
 }

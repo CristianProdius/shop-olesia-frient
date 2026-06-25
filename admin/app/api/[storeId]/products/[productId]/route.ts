@@ -44,6 +44,13 @@ export async function PATCH (
         const {
             name,
             nameI18n,
+            description,
+            descriptionI18n,
+            material,
+            materialI18n,
+            care,
+            careI18n,
+            sku,
             price,
             categoryId,
             colorId,
@@ -99,6 +106,13 @@ export async function PATCH (
             data : {
                 name,
                 nameI18n: nameI18n ?? undefined,
+                description: description ?? undefined,
+                descriptionI18n: descriptionI18n ?? undefined,
+                material: material ?? undefined,
+                materialI18n: materialI18n ?? undefined,
+                care: care ?? undefined,
+                careI18n: careI18n ?? undefined,
+                sku: sku ?? undefined,
                 images: {
                     deleteMany: {}
                 },

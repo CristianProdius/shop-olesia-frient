@@ -20,6 +20,7 @@ import { AlertModal } from '@/components/modals/alert-modal';
 import ImageUpload from '@/components/ui/image-upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ProductFromProps {
     initialData: Product & {
@@ -37,6 +38,25 @@ const formSchema = z.object({
         ru: z.string().optional(),
         ro: z.string().optional(),
     }).optional(),
+    description: z.string().optional(),
+    descriptionI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    material: z.string().optional(),
+    materialI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    care: z.string().optional(),
+    careI18n: z.object({
+        en: z.string().optional(),
+        ru: z.string().optional(),
+        ro: z.string().optional(),
+    }).optional(),
+    sku: z.string().optional(),
     images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
     categoryId: z.string().min(1),
@@ -59,6 +79,7 @@ export const ProductForm: React.FC<ProductFromProps> = ({
     const params = useParams();
     const router = useRouter();
     const t = useTranslations('Products');
+    const tModals = useTranslations('Modals');
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -73,10 +94,24 @@ export const ProductForm: React.FC<ProductFromProps> = ({
         defaultValues: initialData ? {
             ...initialData,
             nameI18n: (initialData?.nameI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            description: initialData?.description ?? '',
+            descriptionI18n: (initialData?.descriptionI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            material: initialData?.material ?? '',
+            materialI18n: (initialData?.materialI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            care: initialData?.care ?? '',
+            careI18n: (initialData?.careI18n as { en?: string; ru?: string; ro?: string } | null) ?? { en: '', ru: '', ro: '' },
+            sku: initialData?.sku ?? '',
             price: parseFloat(String(initialData?.price))
         } : {
             name: '',
             nameI18n: { en: '', ru: '', ro: '' },
+            description: '',
+            descriptionI18n: { en: '', ru: '', ro: '' },
+            material: '',
+            materialI18n: { en: '', ru: '', ro: '' },
+            care: '',
+            careI18n: { en: '', ru: '', ro: '' },
+            sku: '',
             images: [],
             price: 0,
             categoryId: '',
@@ -131,33 +166,44 @@ export const ProductForm: React.FC<ProductFromProps> = ({
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
                 {initialData && (
-                    <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading}>
-                        <Trash className="w-4 h-4" />
+                    <Button variant="destructive" size="sm" onClick={() => setOpen(true)} disabled={loading} aria-label={t('delete')}>
+                        <Trash className="size-4" />
                     </Button>
                 )}
             </div>
             <Separator />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-                    <FormField
-                        control={form.control} 
-                        name="images"
-                        render={({field}) => (
-                            <FormItem>
-                                <FormLabel>{t('backgroundImage')}</FormLabel>
-                                <FormControl>
-                                    <ImageUpload
-                                        value={field.value.map((image) => image.url)}
-                                        disabled={loading}
-                                        onChange={(url) => field.onChange([...field.value, { url }])}
-                                        onRemove={(url) => field.onChange([...field.value.filter((image) => image.url !== url)])}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <div className='grid grid-cols-3 gap-8'>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className='text-sm uppercase tracking-wide'>{t('backgroundImage')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <FormField
+                                control={form.control}
+                                name="images"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value.map((image) => image.url)}
+                                                disabled={loading}
+                                                onChange={(url) => field.onChange([...field.value, { url }])}
+                                                onRemove={(url) => field.onChange([...field.value.filter((image) => image.url !== url)])}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className='text-sm uppercase tracking-wide'>{t('name')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                         <FormField
                             control={form.control} 
                             name="name"
@@ -280,8 +326,17 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                                 </FormItem>
                             )}
                         />
+                    </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className='text-sm uppercase tracking-wide'>{t('featured')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                         <FormField
-                            control={form.control} 
+                            control={form.control}
                             name="isFeatured"
                             render={({field}) => (
                                 <FormItem className='flex flex-row items-start p-4 space-x-3 space-y-0 border rounded-md'>
@@ -327,9 +382,14 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                             )}
                         />
                     </div>
-                    <div className='space-y-4'>
-                        <FormLabel>{t('translations')}</FormLabel>
-                        <div className='grid grid-cols-3 gap-8'>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className='text-sm uppercase tracking-wide'>{t('translations')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                             <FormField
                                 control={form.control}
                                 name="nameI18n.en"
@@ -370,8 +430,230 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                                 )}
                             />
                         </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className='text-sm uppercase tracking-wide'>{t('description')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                        <div className='space-y-6'>
+                            <FormField
+                                control={form.control}
+                                name="sku"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('sku')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('skuPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('description')}</FormLabel>
+                                        <FormControl>
+                                            <textarea
+                                                disabled={loading}
+                                                placeholder={t('descriptionPlaceholder')}
+                                                className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                {...field}
+                                                value={field.value ?? ''}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <p className='text-xs uppercase tracking-wide text-muted-foreground'>{t('translations')}</p>
+                            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                                <FormField
+                                    control={form.control}
+                                    name="descriptionI18n.en"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('english')}</FormLabel>
+                                            <FormControl>
+                                                <textarea
+                                                    disabled={loading}
+                                                    placeholder={t('descriptionPlaceholder')}
+                                                    className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="descriptionI18n.ru"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('russian')}</FormLabel>
+                                            <FormControl>
+                                                <textarea
+                                                    disabled={loading}
+                                                    placeholder={t('descriptionPlaceholder')}
+                                                    className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="descriptionI18n.ro"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('romanian')}</FormLabel>
+                                            <FormControl>
+                                                <textarea
+                                                    disabled={loading}
+                                                    placeholder={t('descriptionPlaceholder')}
+                                                    className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name="material"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('material')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <p className='text-xs uppercase tracking-wide text-muted-foreground'>{t('translations')}</p>
+                            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                                <FormField
+                                    control={form.control}
+                                    name="materialI18n.en"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('english')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="materialI18n.ru"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('russian')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="materialI18n.ro"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('romanian')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('materialPlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name="care"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>{t('care')}</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <p className='text-xs uppercase tracking-wide text-muted-foreground'>{t('translations')}</p>
+                            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                                <FormField
+                                    control={form.control}
+                                    name="careI18n.en"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('english')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="careI18n.ru"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('russian')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="careI18n.ro"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>{t('romanian')}</FormLabel>
+                                            <FormControl>
+                                                <Input disabled={loading} placeholder={t('carePlaceholder')} {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        </CardContent>
+                    </Card>
+                    <div className="sticky bottom-0 z-10 -mx-4 flex justify-end gap-2 border-t bg-background/95 px-4 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+                        <Button
+                            type='button'
+                            variant='outline'
+                            disabled={loading}
+                            onClick={() => router.push(`/${params.storeId}/products`)}
+                        >
+                            {tModals('cancel')}
+                        </Button>
+                        <Button disabled={loading} type='submit'>{action}</Button>
                     </div>
-                    <Button disabled={loading} className='ml-auto' type='submit'>{action}</Button>
                 </form>
             </Form>
             {/* <Separator /> */}

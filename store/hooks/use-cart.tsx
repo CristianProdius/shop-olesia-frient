@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Product } from "@/types";
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { toast } from "react-hot-toast";
+import useCartDrawer from "@/hooks/use-cart-drawer";
 
 interface CartStore {
     items: Product[];
@@ -16,12 +16,11 @@ const useCart = create(persist<CartStore>((set, get) =>({
         const currentItems = get().items;
         const existingItem = currentItems.find(item => item.id === data.id);
 
-        if(existingItem) {
-            return toast("Item already in cart.");
+        // Add only if new; either way, surface the slide-out cart as feedback.
+        if (!existingItem) {
+            set({ items: [...currentItems, data] });
         }
-
-        set({ items: [...get().items, data] })
-        toast.success("Item added to cart.")
+        useCartDrawer.getState().onOpen();
     },
     removeItem: (id: string) => {
         set({ items: [...get().items.filter(item => item.id !== id)] });

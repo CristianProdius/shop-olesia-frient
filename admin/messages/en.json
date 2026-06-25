@@ -10,7 +10,78 @@
     "settings": "Settings",
     "account": "Account",
     "signOut": "Sign out",
-    "language": "Language"
+    "language": "Language",
+    "groupStore": "Store",
+    "groupCatalog": "Catalog",
+    "groupContent": "Content",
+    "groupSales": "Sales",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "subscribers": "Subscribers",
+    "groupMarketing": "Marketing",
+    "blog": "Journal"
+  },
+  "Subscribers": {
+    "title": "Subscribers ({count})",
+    "description": "Newsletter signups from your storefront",
+    "columnEmail": "Email",
+    "columnDate": "Date"
+  },
+  "Blog": {
+    "title": "Journal ({count})",
+    "description": "Write and manage your blog posts",
+    "addNew": "Add New",
+    "apiTitle": "API",
+    "apiDescription": "API calls for Blog",
+    "colTitle": "Title",
+    "colStatus": "Status",
+    "colDate": "Date",
+    "published": "Published",
+    "draft": "Draft",
+    "idCopied": "Post id copied to the clipboard.",
+    "deleted": "Post deleted.",
+    "deleteError": "Error deleting.",
+    "openMenu": "Open menu",
+    "actions": "Actions",
+    "copyId": "Copy Id",
+    "update": "Update",
+    "delete": "Delete",
+    "editTitle": "Edit post",
+    "createTitle": "Create post",
+    "editDescription": "Edit a blog post",
+    "createDescription": "Add a new blog post",
+    "updated": "Post updated.",
+    "created": "Post created.",
+    "saveChanges": "Save changes",
+    "create": "Create",
+    "somethingWrong": "Something went wrong.",
+    "slugConflict": "That slug is already in use.",
+    "slug": "Slug",
+    "slugPlaceholder": "my-post-title",
+    "titleField": "Title",
+    "titlePlaceholder": "Post title",
+    "excerpt": "Excerpt",
+    "excerptPlaceholder": "Short summary shown in the list",
+    "content": "Content",
+    "coverImage": "Cover image",
+    "isPublished": "Published",
+    "isPublishedDescription": "The post will be visible on the storefront.",
+    "translations": "Translations",
+    "english": "English",
+    "russian": "Russian",
+    "romanian": "Romanian"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Search...",
+    "columns": "Columns",
+    "noResults": "No results.",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {total}",
+    "rowsCount": "{count} row(s)",
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "Items you create will appear here."
   },
   "StoreSwitcher": {
     "selectStore": "Select a store",
@@ -153,7 +224,8 @@
     "address": "Address",
     "totalPrice": "Total Price",
     "paid": "Paid",
-    "date": "Date"
+    "date": "Date",
+    "email": "Email"
   },
   "Dashboard": {
     "title": "Dashboard",
@@ -213,7 +285,7 @@
   },
   "Products": {
     "title": "Products ({count})",
-    "description": "Manage products for your store",
+    "description": "Description",
     "addNew": "Add New",
     "apiTitle": "API",
     "apiDescription": "API calls for Products",
@@ -260,7 +332,14 @@
     "featured": "Featured",
     "featuredDescription": "The product will appear on the home page.",
     "archived": "Archived",
-    "archivedDescription": "The product will appear anywhere in the store."
+    "archivedDescription": "The product will appear anywhere in the store.",
+    "descriptionPlaceholder": "Product description",
+    "material": "Material",
+    "materialPlaceholder": "e.g. 100% linen",
+    "care": "Care instructions",
+    "carePlaceholder": "e.g. Machine wash cold",
+    "sku": "SKU / Code",
+    "skuPlaceholder": "e.g. LIL-0001"
   },
   "AuthAdmin": {
     "signInTitle": "Sign in",
@@ -289,7 +368,8 @@
   "ImageUpload": {
     "uploadImage": "Upload an Image",
     "uploading": "Uploading...",
-    "uploadFailed": "Image upload failed."
+    "uploadFailed": "Image upload failed.",
+    "remove": "Remove image"
   },
   "Metadata": {
     "title": "Admin Dashboard",

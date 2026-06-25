@@ -1,16 +1,27 @@
 import { Footer, Navbar } from '@/components'
+import CartDrawer from '@/components/cart-drawer'
 import '../globals.css'
 import type { Metadata } from 'next'
-import { Urbanist } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import ModalProvider from '@/providers/modal-provider'
 import ToastProvider from '@/providers/toast-provider'
 import { routing } from '@/i18n/routing'
+import { SITE_URL, alternates } from '@/lib/seo'
+import JsonLd from '@/components/json-ld'
 
-// Urbanist has no Cyrillic subset; Russian falls back to the system sans-serif.
-const urban = Urbanist({ subsets: ['latin', 'latin-ext'] })
+// Cyrillic subset is required so Russian product content renders in Montserrat.
+const montserrat = Montserrat({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+// The store renders live data from the admin API on every request.
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({
   params,
@@ -18,8 +29,29 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'Metadata' })
-  return { title: t('title'), description: t('description') }
+  const description =
+    'LILETTI is a minimal-luxury womenswear label. Discover elevated essentials, refined silhouettes, and timeless pieces designed to be worn season after season.'
+  const canonical = `${SITE_URL}/${locale}`
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: 'LILETTI — Minimal-luxury womenswear',
+      template: '%s | LILETTI',
+    },
+    description,
+    alternates: alternates(locale, ''),
+    openGraph: {
+      type: 'website',
+      siteName: 'LILETTI',
+      locale,
+      url: canonical,
+      title: 'LILETTI — Minimal-luxury womenswear',
+      description,
+      images: [{ url: '/og-default.jpg' }],
+    },
+    twitter: { card: 'summary_large_image' },
+    robots: { index: true, follow: true },
+  }
 }
 
 export function generateStaticParams() {
@@ -39,14 +71,42 @@ export default async function LocaleLayout({
   }
   setRequestLocale(locale)
 
+  const organizationLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: 'LILETTI',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/logo.png`,
+    },
+    sameAs: [
+      'https://www.instagram.com/liletti',
+      'https://www.tiktok.com/@liletti',
+    ],
+  }
+
+  const webSiteLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    name: 'LILETTI',
+    url: SITE_URL,
+    inLanguage: ['en', 'ru', 'ro'],
+    publisher: { '@id': `${SITE_URL}/#organization` },
+  }
+
   return (
     <html lang={locale}>
-      <body className={urban.className}>
+      <body className={`${montserrat.variable} font-sans flex min-h-dvh flex-col`}>
+        <JsonLd data={[organizationLd, webSiteLd]} />
         <NextIntlClientProvider>
           <ModalProvider />
           <ToastProvider />
+          <CartDrawer />
           <Navbar />
-          {children}
+          <main className="flex-1">{children}</main>
           <Footer />
         </NextIntlClientProvider>
       </body>

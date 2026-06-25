@@ -33,29 +33,29 @@ const SignUpPage = () => {
 
     return (
         <Container>
-            <form onSubmit={onSubmit} className="w-full max-w-sm mx-auto mt-16 space-y-4">
-                <h1 className="text-2xl font-bold">{t("createAccountTitle")}</h1>
-                <div className="space-y-1">
-                    <label htmlFor="name" className="text-sm font-medium">{t("name")}</label>
+            <form onSubmit={onSubmit} className="w-full max-w-[400px] mx-auto py-24 space-y-6">
+                <h1 className="uppercase font-bold tracking-[0.05em] text-2xl text-ink">{t("createAccountTitle")}</h1>
+                <div className="space-y-2">
+                    <label htmlFor="name" className="block uppercase text-xs font-bold tracking-[0.1em] text-muted-strong">{t("name")}</label>
                     <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full border border-border rounded-none h-12 px-3 bg-background text-text focus:border-border-strong focus:outline-none" />
                 </div>
-                <div className="space-y-1">
-                    <label htmlFor="email" className="text-sm font-medium">{t("email")}</label>
+                <div className="space-y-2">
+                    <label htmlFor="email" className="block uppercase text-xs font-bold tracking-[0.1em] text-muted-strong">{t("email")}</label>
                     <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full border border-border rounded-none h-12 px-3 bg-background text-text focus:border-border-strong focus:outline-none" />
                 </div>
-                <div className="space-y-1">
-                    <label htmlFor="password" className="text-sm font-medium">{t("password")}</label>
+                <div className="space-y-2">
+                    <label htmlFor="password" className="block uppercase text-xs font-bold tracking-[0.1em] text-muted-strong">{t("password")}</label>
                     <input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 border rounded-md" />
+                        className="w-full border border-border rounded-none h-12 px-3 bg-background text-text focus:border-border-strong focus:outline-none" />
                 </div>
-                <Button type="submit" disabled={loading} className="w-full">
+                <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
                     {loading ? t("creating") : t("createAccount")}
                 </Button>
-                <p className="text-sm text-center text-gray-500">
+                <p className="text-xs text-center text-muted-strong">
                     {t("alreadyHaveAccount")}{" "}
-                    <Link href="/sign-in" className="underline">{t("signIn")}</Link>
+                    <Link href="/sign-in" className="text-ink underline">{t("signIn")}</Link>
                 </p>
             </form>
         </Container>

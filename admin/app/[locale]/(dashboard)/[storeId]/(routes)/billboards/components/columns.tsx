@@ -27,6 +27,7 @@ export const columns: ColumnDef<BillboardColumn>[] = [
     {
         accessorKey: 'createdAt',
         header: () => <DateHeader />,
+        cell: ({ row }) => <span className="tabular-nums">{row.original.createdAt}</span>,
     },
     {
         id: 'actions',

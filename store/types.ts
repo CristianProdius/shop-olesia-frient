@@ -13,6 +13,8 @@ export interface Category {
     id: string;
     name: string;
     nameI18n?: I18nField | null;
+    // The list endpoint returns billboardId; getCategory(id) also nests billboard.
+    billboardId?: string;
     billboard: Billboard;
 }
 
@@ -21,11 +23,34 @@ export interface Product {
     category: Category;
     name: string;
     nameI18n?: I18nField | null;
+    description?: string | null;
+    descriptionI18n?: I18nField | null;
+    material?: string | null;
+    materialI18n?: I18nField | null;
+    care?: string | null;
+    careI18n?: I18nField | null;
+    sku?: string | null;
     price: string;
     isFeatured: boolean;
     size: Size;
     color: Color;
     images: Image[]
+}
+
+export interface BlogPost {
+    id: string;
+    slug: string;
+    title: string;
+    titleI18n?: I18nField | null;
+    excerpt?: string | null;
+    excerptI18n?: I18nField | null;
+    content: string;
+    contentI18n?: I18nField | null;
+    coverImage?: string | null;
+    isPublished: boolean;
+    publishedAt?: string | null;
+    createdAt?: string;
+    updatedAt?: string | null;
 }
 
 export interface Image {

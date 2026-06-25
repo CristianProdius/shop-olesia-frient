@@ -2,6 +2,7 @@ import { getUserId } from '@/lib/server-auth'
 import { redirect } from "next/navigation"
 import prismadb from "@/lib/prismadb";
 import Navbar from "@/components/navbar";
+import Sidebar from "@/components/sidebar";
 
 interface DashboardType {
     children: React.ReactNode;
@@ -27,10 +28,19 @@ export default async function Dashboard({children, params}: DashboardType) {
         redirect('/');
     }
 
+    const stores = await prismadb?.store.findMany({
+        where: {
+            userId,
+        }
+    })
+
     return (
-        <>
-            <Navbar/>
-            {children}
-        </>
+        <div className="flex min-h-dvh">
+            <Sidebar stores={stores} />
+            <div className="flex min-w-0 flex-1 flex-col">
+                <Navbar stores={stores} />
+                <main className="flex-1">{children}</main>
+            </div>
+        </div>
     )
 }

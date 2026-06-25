@@ -25,51 +25,51 @@ const DashboardPage = async ({ params }: { params: Promise<{ storeId: string }> 
 
   return (
     <div className="flex-col">
-      <div className="flex-1 p-8 pt-6 space-y-4">
+      <div className="flex-1 p-6 pt-6 space-y-6">
         <Heading title={t('title')} description={t('description')} />
         <Separator />
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
                 {t('totalRevenue')}
               </CardTitle>
-              <DollarSign className="w-4 h-4 text-muted-foreground" />
+              <DollarSign className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tabular-nums">
                 {formatter.format(totalRevenue)}
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
                 {t('sales')}
               </CardTitle>
-              <CreditCard className="w-4 h-4 text-muted-foreground" />
+              <CreditCard className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tabular-nums">
                 +{salesCount}
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm uppercase tracking-wide text-muted-foreground">
                 {t('productsInStock')}
               </CardTitle>
-              <Package className="w-4 h-4 text-muted-foreground" />
+              <Package className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tabular-nums">
                 {stockCount}
               </div>
             </CardContent>
           </Card>
         </div>
-        <Card className="col-span-4">
+        <Card>
           <CardHeader>
             <CardTitle>{t('overview')}</CardTitle>
           </CardHeader>
