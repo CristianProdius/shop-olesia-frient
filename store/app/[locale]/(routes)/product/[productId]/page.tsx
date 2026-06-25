@@ -18,8 +18,9 @@ import {
 } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.delice.my";
 
 type Params = Promise<{ productId: string; locale: string }>
 
@@ -27,6 +28,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const locale = await getLocale();
     const { productId } = await params;
     const product = await getProduct(productId);
+    if (!product) return {};
 
     const name = localizedField(product.nameI18n, locale, product.name);
     const description =
@@ -55,6 +57,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
     const locale = await getLocale();
     const { productId } = await params;
     const product = await getProduct(productId);
+    if (!product) notFound();
     const reviews = await getReviews(productId);
     const aggregateRating = aggregateRatingJsonLd(reviews) ?? undefined;
 
