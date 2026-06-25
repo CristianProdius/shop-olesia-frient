@@ -5,10 +5,27 @@
     "noResults": "Ничего не найдено.",
     "language": "Язык",
     "account": "Мой аккаунт",
+    "search": "Поиск",
+    "searchPlaceholder": "Поиск товаров",
+    "closeSearch": "Закрыть поиск",
+    "cart": "Корзина",
+    "menu": "Меню",
+    "closeMenu": "Закрыть меню",
+    "home": "Главная",
     "journal": "Журнал"
   },
   "Footer": {
-    "copyright": "© 2026 LILETTI. Все права защищены."
+    "copyright": "© {year} LILETTI. Все права защищены.",
+    "followInstagram": "Мы в Instagram",
+    "tagline": "Минимализм и роскошь в каждой детали — одежда на каждый день.",
+    "shop": "Магазин",
+    "account": "Аккаунт",
+    "signIn": "Войти",
+    "cart": "Корзина",
+    "information": "Информация",
+    "contact": "Контакты",
+    "instagramImageAlt": "Публикация в Instagram",
+    "journal": "Журнал"
   },
   "Newsletter": {
     "heading": "Подпишитесь на рассылку LILETTI",
@@ -20,7 +37,40 @@
   },
   "Home": {
     "featuredProducts": "Рекомендуемые товары",
-    "productImageAlt": "Изображение товара"
+    "productImageAlt": "Изображение товара",
+    "getInspired": "Вдохновляйтесь",
+    "shopNow": "Купить",
+    "shopByCategory": "Покупки по категориям",
+    "newIn": "Новинки",
+    "shopAll": "Смотреть все",
+    "ethosTitle": "Создано, чтобы носить каждый день",
+    "ethosBody": "Продуманные модели из премиальных тканей, скроенные для повседневной элегантности. Меньше вещей, но лучше — и на годы.",
+    "quickView": "Быстрый просмотр",
+    "valueFabricsTitle": "Премиальные ткани",
+    "valueFabricsDesc": "Тщательно выбранные материалы — на годы.",
+    "valueMadeTitle": "Сделано на годы",
+    "valueMadeDesc": "Качественный пошив, а не одноразовые тренды.",
+    "valueSecureTitle": "Безопасная оплата",
+    "valueSecureDesc": "Надёжный зашифрованный платёж.",
+    "valueDesignTitle": "Продуманный дизайн",
+    "valueDesignDesc": "Меньше вещей, но лучше — с заботой о деталях.",
+    "newsletterTitle": "Подпишитесь",
+    "newsletterDesc": "Узнавайте первыми о новинках и закрытых предложениях.",
+    "newsletterPlaceholder": "Адрес эл. почты",
+    "newsletterCta": "Подписаться",
+    "newsletterSuccess": "Спасибо за подписку!",
+    "newsletterInvalid": "Введите корректный адрес эл. почты.",
+    "newsletterDuplicate": "Вы уже подписаны.",
+    "newsletterError": "Что-то пошло не так. Попробуйте ещё раз."
+  },
+  "Blog": {
+    "title": "Журнал",
+    "subtitle": "Истории, заметки о стиле и закулисье.",
+    "readMore": "Читать далее",
+    "backToJournal": "Назад в Журнал",
+    "noPosts": "Пока нет статей.",
+    "imageAlt": "Изображение статьи",
+    "publishedOn": "Опубликовано {date}"
   },
   "Product": {
     "size": "Размер:",
@@ -34,7 +84,10 @@
     "imageAlt": "Изображение",
     "description": "Описание",
     "materials": "Состав",
+    "material": "Состав",
     "care": "Уход",
+    "sku": "Артикул",
+    "detailsHeading": "Детали",
     "notifyTitle": "Сообщить, когда снова появится в наличии",
     "notifyEmail": "Ваш email",
     "notifyButton": "Уведомить меня",
@@ -44,7 +97,16 @@
   "CategoryPage": {
     "sizes": "Размеры",
     "colors": "Цвета",
-    "filters": "Фильтры"
+    "filters": "Фильтры",
+    "categories": "Категории",
+    "allProducts": "Все товары",
+    "viewAs": "Вид",
+    "sortBy": "Сортировать",
+    "sortNewest": "Дата: от новых к старым",
+    "sortOldest": "Дата: от старых к новым",
+    "sortPriceLow": "Цена: по возрастанию",
+    "sortPriceHigh": "Цена: по убыванию",
+    "sortNameAsc": "Название: А–Я"
   },
   "Cart": {
     "title": "Корзина",
@@ -64,7 +126,21 @@
     "processing": "Обработка...",
     "paySimulated": "Оплатить (демо)",
     "email": "Электронная почта",
-    "outOfStockError": "К сожалению, один или несколько товаров только что закончились. Проверьте корзину."
+    "outOfStockError": "К сожалению, один или несколько товаров только что закончились. Проверьте корзину.",
+    "remove": "Удалить",
+    "code": "Артикул",
+    "subtotal": "Подытог",
+    "viewCart": "Открыть корзину",
+    "close": "Закрыть",
+    "yourBag": "Корзина",
+    "continueShopping": "Продолжить покупки",
+    "haveAccount": "Уже есть аккаунт?",
+    "signIn": "Войти",
+    "optional": "необязательно",
+    "orderConfirmedTitle": "Спасибо за заказ",
+    "orderConfirmedBody": "Мы получили ваш заказ и скоро свяжемся с вами. Подтверждение зафиксировано для вашей эл. почты.",
+    "orderReference": "Номер заказа",
+    "backToShop": "Продолжить покупки"
   },
   "Auth": {
     "signInTitle": "Войти",
@@ -196,14 +272,5 @@
     "submitting": "Отправка...",
     "success": "Спасибо — мы получили ваш запрос и скоро свяжемся с вами.",
     "error": "Проверьте данные и попробуйте ещё раз."
-  },
-  "Blog": {
-    "title": "Журнал",
-    "subtitle": "Истории, заметки о стиле и закулисье.",
-    "readMore": "Читать далее",
-    "backToJournal": "Назад в Журнал",
-    "noPosts": "Пока нет статей.",
-    "imageAlt": "Изображение статьи",
-    "publishedOn": "Опубликовано {date}"
   }
 }

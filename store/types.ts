@@ -13,6 +13,8 @@ export interface Category {
     id: string;
     name: string;
     nameI18n?: I18nField | null;
+    // The list endpoint returns billboardId; getCategory(id) also nests billboard.
+    billboardId?: string;
     billboard: Billboard;
 }
 

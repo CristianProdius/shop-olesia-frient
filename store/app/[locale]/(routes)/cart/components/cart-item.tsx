@@ -1,10 +1,10 @@
 "use client"
+import { cn } from '@/lib/utils';
 import Currency from '@/components/ui/currency';
-import IconButton from '@/components/ui/icon-button';
 import useCart, { CartLine } from '@/hooks/use-cart';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { localizedField } from '@/lib/i18n-content';
 
 interface CartItemProps {
@@ -15,6 +15,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
 
     const cart = useCart();
     const locale = useLocale();
+    const t = useTranslations('Cart');
 
     // Back-compat: lines from an older persisted cart may lack variantId.
     const lineId = data.variantId ?? data.id;
@@ -27,8 +28,8 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
     }
 
     return (
-        <li className='flex py-6 border-b'>
-            <div className='relative w-24 h-24 overflow-hidden sm:h-48 sm:w-48'>
+        <li className='flex py-6 border-b border-border'>
+            <div className='relative w-24 aspect-[3/4] shrink-0 overflow-hidden rounded-none bg-placeholder'>
                 <Image
                     fill
                     src={data.images[0].url}
@@ -37,23 +38,32 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                 />
             </div>
             <div className='relative flex flex-col justify-between flex-1 ml-4 sm:ml-6'>
-                <div className='absolute top-0 right-0 z-10'>
-                    <IconButton onClick={onRemove} icon={<X size={15} />} />
-                </div>
+                <button
+                    type='button'
+                    onClick={onRemove}
+                    aria-label={t('remove')}
+                    className={cn('absolute top-0 right-0 z-10 flex items-center justify-center w-10 h-10 rounded-none bg-transparent border-0 shadow-none text-text hover:text-muted transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2')}>
+                    <X size={15} />
+                </button>
                 <div className='relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0'>
                     <div className='flex justify-between'>
-                        <p className='text-lg font-semibold text-black'>
+                        <p className='product-name text-left text-text'>
                             {localizedField(data.nameI18n, locale, data.name)}
                         </p>
                     </div>
-                    <div className='flex mt-1 text-sm'>
+                    <div className='flex mt-1 text-xs text-muted-strong'>
                         {color && (
-                            <p className='text-gray-500'>{localizedField(color.nameI18n, locale, color.name)}</p>
+                            <p>{localizedField(color.nameI18n, locale, color.name)}</p>
                         )}
                         {size && (
-                            <p className='pl-4 ml-4 text-gray-500 border-l border-gray-200'>{localizedField(size.nameI18n, locale, size.name)}</p>
+                            <p className='pl-4 ml-4 border-l border-border'>{localizedField(size.nameI18n, locale, size.name)}</p>
                         )}
                     </div>
+                    {data.sku && (
+                        <p className='mt-1 text-xs text-muted-strong'>
+                            {t('code')}: {data.sku}
+                        </p>
+                    )}
                     <Currency value={data.unitPrice ?? data.price} />
                 </div>
             </div>

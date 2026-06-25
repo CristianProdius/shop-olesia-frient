@@ -18,7 +18,15 @@
     "stats": "Статистика",
     "reviews": "Отзывы",
     "customOrders": "Индивидуальные заказы",
-    "blog": "Журнал"
+    "blog": "Журнал",
+    "groupStore": "Магазин",
+    "groupCatalog": "Каталог",
+    "groupContent": "Контент",
+    "groupSales": "Продажи",
+    "menu": "Меню",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
+    "groupMarketing": "Маркетинг"
   },
   "StoreSwitcher": {
     "selectStore": "Выберите магазин",
@@ -202,7 +210,9 @@
     "email": "Эл. почта",
     "createdAt": "Дата подписки",
     "downloadCsv": "Скачать CSV",
-    "empty": "Пока нет подписчиков."
+    "empty": "Пока нет подписчиков.",
+    "columnEmail": "Эл. почта",
+    "columnDate": "Дата"
   },
   "StockNotifications": {
     "title": "Лист ожидания поступления ({count})",
@@ -344,7 +354,9 @@
     "addVariant": "Добавить вариант",
     "stock": "Остаток",
     "removeVariant": "Удалить",
-    "duplicateVariant": "Дублирующая комбинация размера и цвета."
+    "duplicateVariant": "Дублирующая комбинация размера и цвета.",
+    "material": "Состав",
+    "care": "Уход"
   },
   "AuthAdmin": {
     "signInTitle": "Вход",
@@ -373,7 +385,8 @@
   "ImageUpload": {
     "uploadImage": "Загрузить изображение",
     "uploading": "Загрузка...",
-    "uploadFailed": "Не удалось загрузить изображение."
+    "uploadFailed": "Не удалось загрузить изображение.",
+    "remove": "Удалить изображение"
   },
   "Metadata": {
     "title": "Панель администратора",
@@ -661,5 +674,16 @@
     "english": "Английский",
     "russian": "Русский",
     "romanian": "Румынский"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Поиск...",
+    "columns": "Столбцы",
+    "noResults": "Ничего не найдено.",
+    "previous": "Назад",
+    "next": "Вперёд",
+    "page": "Страница {page} из {total}",
+    "rowsCount": "{count} строк(и)",
+    "emptyTitle": "Здесь пока пусто",
+    "emptyDescription": "Созданные элементы появятся здесь."
   }
 }

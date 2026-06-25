@@ -31,7 +31,7 @@ const LanguageSwitcher = () => {
             value={locale}
             onChange={onChange}
             disabled={isPending}
-            className="h-9 px-2 text-sm bg-transparent border rounded-md cursor-pointer border-input"
+            className="h-9 appearance-none rounded-md border border-input bg-background px-2 text-sm text-foreground cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
             {routing.locales.map((loc) => (
                 <option key={loc} value={loc}>

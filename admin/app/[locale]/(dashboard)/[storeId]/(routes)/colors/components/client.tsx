@@ -35,7 +35,17 @@ export const ColorClient: React.FC<ColorClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey="name" />
+            <DataTable
+                columns={columns}
+                data={data}
+                searchKey="name"
+                emptyAction={
+                    <Button size="sm" onClick={() => router.push(`/${params.storeId}/colors/new`)}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t('addNew')}
+                    </Button>
+                }
+            />
             <Heading title={t('apiTitle')} description={t('apiDescription')} />
             <Separator />
             <ApiList entityName="colors" entityIdName="colorId" />

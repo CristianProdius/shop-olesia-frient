@@ -33,7 +33,17 @@ export const BlogClient: React.FC<BlogClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey="title" />
+            <DataTable
+                columns={columns}
+                data={data}
+                searchKey="title"
+                emptyAction={
+                    <Button size="sm" onClick={() => router.push(`/${params.storeId}/blog/new`)}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t('addNew')}
+                    </Button>
+                }
+            />
             <Heading title={t('apiTitle')} description={t('apiDescription')} />
             <Separator />
             <ApiList entityName="blog" entityIdName="blogId" />

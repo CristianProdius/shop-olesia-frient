@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Color, Product, Size } from "@/types";
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { toast } from "react-hot-toast";
+import useCartDrawer from "@/hooks/use-cart-drawer";
 
 // A cart line carries the underlying product plus the selected variant.
 // Lines are keyed by `variantId` so the same product in two sizes/colors
@@ -34,12 +34,11 @@ const useCart = create(persist<CartStore>((set, get) =>({
             (item) => lineKey(item) === lineKey(data),
         );
 
-        if(existingItem) {
-            return toast("Item already in cart.");
+        // Add only if new; either way, surface the slide-out cart as feedback.
+        if (!existingItem) {
+            set({ items: [...currentItems, data] });
         }
-
-        set({ items: [...get().items, data] })
-        toast.success("Item added to cart.")
+        useCartDrawer.getState().onOpen();
     },
     removeItem: (variantId: string) => {
         set({ items: [...get().items.filter(item => lineKey(item) !== variantId)] });

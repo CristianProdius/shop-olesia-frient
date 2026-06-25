@@ -1,71 +1,95 @@
-"use client"
+'use client';
 
-import { useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
-import Button from "@/components/ui/button";
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { cn } from '@/lib/utils';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Newsletter = () => {
-    const t = useTranslations("Newsletter");
-    const [email, setEmail] = useState("");
+    const t = useTranslations('Home');
+    const [email, setEmail] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
-    const onSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        const trimmed = email.trim();
-        if (!EMAIL_RE.test(trimmed)) {
-            toast.error(t("invalid"));
+        // Validate client-side, then POST the address to the admin API,
+        // which persists it as a Subscriber for this store.
+        const value = email.trim();
+
+        if (!EMAIL_REGEX.test(value)) {
+            toast.error(t('newsletterInvalid'));
             return;
         }
 
         setSubmitting(true);
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/subscribers`, {
-                email: trimmed,
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscribe`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: value }),
             });
-            toast.success(t("success"));
-            setEmail("");
-        } catch (err) {
-            console.error(err);
-            toast.error(t("error"));
+
+            if (res.ok) {
+                toast.success(t('newsletterSuccess'));
+                setEmail('');
+            } else if (res.status === 409) {
+                toast(t('newsletterDuplicate'));
+                setEmail('');
+            } else {
+                toast.error(t('newsletterError'));
+            }
+        } catch {
+            toast.error(t('newsletterError'));
         } finally {
             setSubmitting(false);
         }
     };
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="flex flex-col items-center w-full max-w-md gap-y-3"
-        >
-            <p className="text-xs tracking-wide uppercase text-muted-strong">
-                {t("heading")}
-            </p>
-            <div className="flex w-full">
-                <label htmlFor="newsletter-email" className="sr-only">
-                    {t("placeholder")}
-                </label>
-                <input
-                    id="newsletter-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t("placeholder")}
-                    className="flex-1 px-3 py-2 text-sm border border-border bg-white text-text placeholder:text-muted-strong focus:outline-none focus:border-ink"
-                />
-                <Button
-                    type="submit"
-                    disabled={submitting}
-                    className="!rounded-none shrink-0"
+        <section className="w-full bg-surface-2 py-16 md:py-20">
+            <div className="mx-auto max-w-[640px] px-4 text-center">
+                <h2 className="heading-luxe text-2xl text-ink text-balance">
+                    {t('newsletterTitle')}
+                </h2>
+                <p className="mt-3 text-sm text-muted-strong text-pretty">
+                    {t('newsletterDesc')}
+                </p>
+
+                <form
+                    onSubmit={onSubmit}
+                    className="mx-auto mt-8 flex max-w-[460px] flex-wrap justify-center gap-3"
                 >
-                    {t("subscribe")}
-                </Button>
+                    <input
+                        type="email"
+                        required
+                        disabled={submitting}
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder={t('newsletterPlaceholder')}
+                        aria-label={t('newsletterTitle')}
+                        className={cn(
+                            'h-12 flex-1 rounded-none border border-border bg-background px-4 text-sm text-text',
+                            'placeholder:text-muted focus:border-border-strong focus:outline-none',
+                        )}
+                    />
+                    <button
+                        type="submit"
+                        disabled={submitting}
+                        className={cn(
+                            'h-12 rounded-none border border-ink bg-ink px-8 text-xs font-bold uppercase tracking-[0.1em] text-white',
+                            'transition-colors duration-200 ease-out hover:bg-transparent hover:text-ink',
+                            'disabled:opacity-60 disabled:cursor-not-allowed',
+                        )}
+                    >
+                        {t('newsletterCta')}
+                    </button>
+                </form>
             </div>
-        </form>
+        </section>
     );
 };
 

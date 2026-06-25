@@ -11,10 +11,10 @@ const HeaderCell = ({ id }: { id: string }) => {
 
 const StatusCell = ({ status }: { status: boolean }) => {
     const t = useTranslations('Blog');
-    return (
-        <Badge variant={status ? 'default' : 'secondary'}>
-            {status ? t('published') : t('draft')}
-        </Badge>
+    return status ? (
+        <Badge variant="success">{t('published')}</Badge>
+    ) : (
+        <Badge variant="secondary">{t('draft')}</Badge>
     );
 };
 
@@ -33,11 +33,12 @@ export const columns: ColumnDef<BlogColumn>[] = [
     {
         accessorKey: 'status',
         header: () => <HeaderCell id="colStatus" />,
-        cell: ({ row }) => <StatusCell status={row.original.status} />
+        cell: ({ row }) => <StatusCell status={row.original.status} />,
     },
     {
         accessorKey: 'createdAt',
         header: () => <HeaderCell id="colDate" />,
+        cell: ({ row }) => <span className="tabular-nums">{row.original.createdAt}</span>,
     },
     {
         id: 'actions',

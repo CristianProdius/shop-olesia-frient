@@ -1,14 +1,13 @@
 import getBlogPost from "@/actions/get-blog-post";
 import Container from "@/components/ui/container";
+import JsonLd from "@/components/json-ld";
 import { Link } from "@/i18n/navigation";
 import { localizedField } from "@/lib/i18n-content";
-import { buildAlternates, breadcrumbJsonLd } from "@/lib/seo";
+import { SITE_URL, alternates } from "@/lib/seo";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -23,7 +22,7 @@ export async function generateMetadata({
 
     const title = localizedField(post.titleI18n, locale, post.title);
     const description = localizedField(post.excerptI18n, locale, post.excerpt ?? "");
-    const alts = buildAlternates(BASE, locale, `/blog/${slug}`);
+    const alts = alternates(locale, `/blog/${slug}`);
 
     return {
         title,
@@ -45,6 +44,7 @@ export async function generateMetadata({
 
 const BlogPostPage = async ({ params }: { params: Params }) => {
     const t = await getTranslations("Blog");
+    const tNav = await getTranslations("Navbar");
     const locale = await getLocale();
     const { slug } = await params;
     const post = await getBlogPost(slug);
@@ -56,7 +56,8 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
     const title = localizedField(post.titleI18n, locale, post.title);
     const excerpt = localizedField(post.excerptI18n, locale, post.excerpt ?? "");
     const content = localizedField(post.contentI18n, locale, post.content);
-    const canonical = buildAlternates(BASE, locale, `/blog/${slug}`).canonical;
+    const { slug: postSlug } = await params;
+    const canonical = alternates(locale, `/blog/${postSlug}`).canonical;
 
     const blogPostingLd = {
         "@context": "https://schema.org",
@@ -65,18 +66,37 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
         headline: title,
         description: excerpt || undefined,
         image: post.coverImage ? [post.coverImage] : undefined,
-        datePublished: post.publishedAt ?? undefined,
-        dateModified: post.updatedAt ?? post.publishedAt ?? undefined,
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
         inLanguage: locale,
-        author: { "@type": "Organization", name: "LILETTI", url: BASE },
-        publisher: { "@type": "Organization", name: "LILETTI", url: BASE },
+        author: { "@type": "Organization", name: "LILETTI", url: SITE_URL },
+        publisher: { "@id": `${SITE_URL}/#organization` },
     };
 
-    const breadcrumbLd = breadcrumbJsonLd([
-        { name: "LILETTI", url: `${BASE}/${locale}` },
-        { name: t("title"), url: `${BASE}/${locale}/blog` },
-        { name: title, url: canonical },
-    ]);
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: tNav("home"),
+                item: `${SITE_URL}/${locale}`,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: t("title"),
+                item: `${SITE_URL}/${locale}/blog`,
+            },
+            {
+                "@type": "ListItem",
+                position: 3,
+                name: title,
+                item: canonical,
+            },
+        ],
+    };
 
     const date = post.publishedAt
         ? new Date(post.publishedAt).toLocaleDateString(locale, {
@@ -87,38 +107,31 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
         : null;
 
     return (
-        <div className="bg-white">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+        <div className="bg-background">
+            <JsonLd data={[blogPostingLd, breadcrumbLd]} />
             <Container>
                 <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6 md:py-24 lg:px-8">
                     {/* Breadcrumb */}
-                    <nav className="mb-10 text-xs text-muted-strong" aria-label="Breadcrumb">
+                    <nav className="mb-10 text-xs text-muted-strong">
                         <ol className="flex flex-wrap items-center gap-x-2">
                             <li>
-                                <Link href="/" className="hover:text-ink">
-                                    LILETTI
+                                <Link href="/" className="hover:text-text">
+                                    {tNav("home")}
                                 </Link>
                             </li>
                             <li aria-hidden="true">/</li>
                             <li>
-                                <Link href="/blog" className="hover:text-ink">
+                                <Link href="/blog" className="hover:text-text">
                                     {t("title")}
                                 </Link>
                             </li>
                             <li aria-hidden="true">/</li>
-                            <li className="text-ink">{title}</li>
+                            <li className="text-text">{title}</li>
                         </ol>
                     </nav>
 
                     {post.coverImage && (
-                        <div className="relative w-full overflow-hidden aspect-[16/9] bg-neutral-100 rounded-none">
+                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-placeholder rounded-none">
                             <Image
                                 fill
                                 src={post.coverImage}
@@ -130,7 +143,7 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
                         </div>
                     )}
 
-                    <h1 className="mt-8 text-2xl font-light tracking-[0.02em] text-ink md:text-3xl text-balance">
+                    <h1 className="heading-luxe mt-8 text-2xl uppercase tracking-[0.08em] text-ink md:text-3xl text-balance">
                         {title}
                     </h1>
                     {date && (

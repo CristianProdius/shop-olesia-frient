@@ -23,13 +23,14 @@ export const useColumns = (): ColumnDef<ColorColumn>[] => {
             cell: ({ row }) => (
                 <div className='flex items-center gap-x-2'>
                     {row.original.value}
-                    <div className='w-6 h-6 border rounded-full' style={{ backgroundColor: row.original.value }} />
+                    <div className='size-6 border rounded-full' style={{ backgroundColor: row.original.value }} />
                 </div>
             )
         },
         {
             accessorKey: 'createdAt',
             header: t('columnDate'),
+            cell: ({ row }) => <span className="tabular-nums">{row.original.createdAt}</span>,
         },
         {
             id: 'actions',

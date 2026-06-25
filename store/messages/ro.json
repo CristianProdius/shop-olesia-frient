@@ -5,10 +5,27 @@
     "noResults": "Niciun rezultat găsit.",
     "language": "Limbă",
     "account": "Contul meu",
+    "search": "Caută",
+    "searchPlaceholder": "Caută produse",
+    "closeSearch": "Închide căutarea",
+    "cart": "Coș",
+    "menu": "Meniu",
+    "closeMenu": "Închide meniul",
+    "home": "Acasă",
     "journal": "Jurnal"
   },
   "Footer": {
-    "copyright": "© 2026 LILETTI. Toate drepturile rezervate."
+    "copyright": "© {year} LILETTI. Toate drepturile rezervate.",
+    "followInstagram": "Urmărește-ne pe Instagram",
+    "tagline": "Esențiale minimal-luxury, create pentru a fi purtate zi de zi.",
+    "shop": "Magazin",
+    "account": "Cont",
+    "signIn": "Autentificare",
+    "cart": "Coș",
+    "information": "Informații",
+    "contact": "Contact",
+    "instagramImageAlt": "Postare Instagram",
+    "journal": "Jurnal"
   },
   "Newsletter": {
     "heading": "Abonează-te la newsletterul LILETTI",
@@ -20,7 +37,40 @@
   },
   "Home": {
     "featuredProducts": "Produse recomandate",
-    "productImageAlt": "Imagine produs"
+    "productImageAlt": "Imagine produs",
+    "getInspired": "Inspiră-te",
+    "shopNow": "Cumpără acum",
+    "shopByCategory": "Cumpără pe categorii",
+    "newIn": "Noutăți",
+    "shopAll": "Vezi toate",
+    "ethosTitle": "Create pentru a fi purtate",
+    "ethosBody": "Piese gândite cu grijă, din materiale premium, croite pentru eleganță de zi cu zi. Mai puține, dar mai bune — făcute să dureze.",
+    "quickView": "Vizualizare rapidă",
+    "valueFabricsTitle": "Materiale premium",
+    "valueFabricsDesc": "Materiale alese, făcute să dureze.",
+    "valueMadeTitle": "Făcute să dureze",
+    "valueMadeDesc": "Construcție de calitate, nu tendințe de unică folosință.",
+    "valueSecureTitle": "Plată securizată",
+    "valueSecureDesc": "Plată sigură și criptată.",
+    "valueDesignTitle": "Design atent",
+    "valueDesignDesc": "Mai puține piese, dar mai bune — create cu grijă.",
+    "newsletterTitle": "Abonează-te",
+    "newsletterDesc": "Află primul despre noutăți și oferte exclusive.",
+    "newsletterPlaceholder": "Adresă de email",
+    "newsletterCta": "Abonează-te",
+    "newsletterSuccess": "Îți mulțumim pentru abonare.",
+    "newsletterInvalid": "Introdu o adresă de email validă.",
+    "newsletterDuplicate": "Ești deja abonat.",
+    "newsletterError": "Ceva nu a mers. Încearcă din nou."
+  },
+  "Blog": {
+    "title": "Jurnal",
+    "subtitle": "Povești, note de stil și din culise.",
+    "readMore": "Citește mai mult",
+    "backToJournal": "Înapoi la Jurnal",
+    "noPosts": "Niciun articol încă.",
+    "imageAlt": "Imagine articol",
+    "publishedOn": "Publicat {date}"
   },
   "Product": {
     "size": "Mărime:",
@@ -34,7 +84,10 @@
     "imageAlt": "Imagine",
     "description": "Descriere",
     "materials": "Compoziție",
+    "material": "Material",
     "care": "Îngrijire",
+    "sku": "Cod",
+    "detailsHeading": "Detalii",
     "notifyTitle": "Anunță-mă când revine în stoc",
     "notifyEmail": "Emailul tău",
     "notifyButton": "Anunță-mă",
@@ -44,7 +97,16 @@
   "CategoryPage": {
     "sizes": "Mărimi",
     "colors": "Culori",
-    "filters": "Filtre"
+    "filters": "Filtre",
+    "categories": "Categorii",
+    "allProducts": "Toate produsele",
+    "viewAs": "Afișează ca",
+    "sortBy": "Sortează după",
+    "sortNewest": "Dată: de la nou la vechi",
+    "sortOldest": "Dată: de la vechi la nou",
+    "sortPriceLow": "Preț: de la mic la mare",
+    "sortPriceHigh": "Preț: de la mare la mic",
+    "sortNameAsc": "Nume: A–Z"
   },
   "Cart": {
     "title": "Coș de cumpărături",
@@ -64,7 +126,21 @@
     "processing": "Se procesează...",
     "paySimulated": "Plătește (simulat)",
     "email": "E-mail",
-    "outOfStockError": "Ne pare rău, unul sau mai multe produse tocmai s-au epuizat. Te rugăm să verifici coșul."
+    "outOfStockError": "Ne pare rău, unul sau mai multe produse tocmai s-au epuizat. Te rugăm să verifici coșul.",
+    "remove": "Elimină",
+    "code": "Cod",
+    "subtotal": "Subtotal",
+    "viewCart": "Vezi coșul",
+    "close": "Închide",
+    "yourBag": "Coșul tău",
+    "continueShopping": "Continuă cumpărăturile",
+    "haveAccount": "Ai deja un cont?",
+    "signIn": "Autentificare",
+    "optional": "opțional",
+    "orderConfirmedTitle": "Îți mulțumim pentru comandă",
+    "orderConfirmedBody": "Am primit comanda ta și te vom contacta în curând. O confirmare a fost înregistrată pentru adresa ta de email.",
+    "orderReference": "Referință comandă",
+    "backToShop": "Continuă cumpărăturile"
   },
   "Auth": {
     "signInTitle": "Autentificare",
@@ -196,14 +272,5 @@
     "submitting": "Se trimite...",
     "success": "Mulțumim — am primit solicitarea dvs. și vă vom contacta în curând.",
     "error": "Vă rugăm verificați datele și încercați din nou."
-  },
-  "Blog": {
-    "title": "Jurnal",
-    "subtitle": "Povești, note de stil și din culise.",
-    "readMore": "Citește mai mult",
-    "backToJournal": "Înapoi la Jurnal",
-    "noPosts": "Niciun articol încă.",
-    "imageAlt": "Imagine articol",
-    "publishedOn": "Publicat {date}"
   }
 }

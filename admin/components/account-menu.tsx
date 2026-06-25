@@ -28,8 +28,8 @@ const AccountMenu = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <UserIcon className="w-4 h-4" />
+                <Button variant="outline" size="icon" aria-label={t('account')} className="rounded-full">
+                    <UserIcon className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -38,7 +38,7 @@ const AccountMenu = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onSignOut}>
-                    <LogOut className="w-4 h-4 mr-2" />
+                    <LogOut className="size-4 mr-2" />
                     {t('signOut')}
                 </DropdownMenuItem>
             </DropdownMenuContent>

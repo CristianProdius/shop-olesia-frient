@@ -1,12 +1,31 @@
-const LOCALES = ["en", "ru", "ro"] as const;
-const DEFAULT_LOCALE = "en";
+// Shared SEO helpers used across all store pages.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.delice.my";
 
+export const LOCALES = ["en", "ru", "ro"] as const;
+export const DEFAULT_LOCALE = "en";
+
+export const ORG_NAME = "LILETTI";
+
+/**
+ * Build canonical + hreflang alternates for an explicit base URL, locale and
+ * locale-agnostic path (e.g. "/product/ID"). Used by pages that pass their own
+ * base URL.
+ */
 export function buildAlternates(baseUrl: string, locale: string, path: string) {
   const clean = path.startsWith("/") ? path : `/${path}`;
   const languages: Record<string, string> = {};
   for (const l of LOCALES) languages[l] = `${baseUrl}/${l}${clean}`;
   languages["x-default"] = `${baseUrl}/${DEFAULT_LOCALE}${clean}`;
   return { canonical: `${baseUrl}/${locale}${clean}`, languages };
+}
+
+/**
+ * Build canonical + hreflang alternates for a given locale and locale-agnostic
+ * path (e.g. "" for home, "/blog", "/product/ID"), using the shared SITE_URL.
+ */
+export function alternates(locale: string, path: string) {
+  return buildAlternates(SITE_URL, locale, path);
 }
 
 export function productJsonLd(p: {
@@ -51,8 +70,6 @@ export function faqPageJsonLd(items: { question: string; answer: string }[]) {
   };
 }
 
-export function organizationJsonLd(baseUrl: string) {
-  return { "@context": "https://schema.org", "@type": "Organization", name: "LILETTI", url: baseUrl };
+export function organizationJsonLd(baseUrl: string = SITE_URL) {
+  return { "@context": "https://schema.org", "@type": "Organization", name: ORG_NAME, url: baseUrl };
 }
-
-export { LOCALES, DEFAULT_LOCALE };

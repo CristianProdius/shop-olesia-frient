@@ -34,7 +34,17 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey="label" />
+            <DataTable
+                columns={columns}
+                data={data}
+                searchKey="label"
+                emptyAction={
+                    <Button size="sm" onClick={() => router.push(`/${params.storeId}/billboards/new`)}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t('addNew')}
+                    </Button>
+                }
+            />
             <Heading title={t('apiTitle')} description={t('apiDescription')} />
             <Separator />
             <ApiList entityName="billboards" entityIdName="billboardId" />

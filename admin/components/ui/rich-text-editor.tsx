@@ -18,10 +18,10 @@ import {
 import { cn } from '@/lib/utils'
 
 interface RichTextEditorProps {
-    value: string
-    onChange: (html: string) => void
-    placeholder?: string
-    disabled?: boolean
+    value: string;
+    onChange: (html: string) => void;
+    placeholder?: string;
+    disabled?: boolean;
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -35,125 +35,133 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         extensions: [
             StarterKit,
             Link.configure({ openOnClick: false }),
-            Placeholder.configure({ placeholder: placeholder ?? '' }),
+            Placeholder.configure({ placeholder }),
         ],
         content: value,
         editable: !disabled,
         onUpdate: ({ editor }) => onChange(editor.getHTML()),
-        editorProps: {
-            attributes: {
-                class: 'prose prose-sm max-w-none focus:outline-none min-h-[200px]',
-            },
-        },
-    })
+    });
 
-    if (!editor) return null
-
-    const setLink = () => {
-        const previousUrl = editor.getAttributes('link').href as string | undefined
-        const url = window.prompt('URL', previousUrl ?? '')
-        if (url === null) return
-        if (url === '') {
-            editor.chain().focus().extendMarkRange('link').unsetLink().run()
-            return
-        }
-        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    if (!editor) {
+        return (
+            <div className="rounded-md border border-input bg-background">
+                <div className="min-h-40 p-3" />
+            </div>
+        );
     }
 
-    const toolbarButtonClass = (active?: boolean) =>
-        cn(
-            'inline-flex items-center justify-center w-8 h-8 rounded-md text-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none',
-            active && 'bg-accent text-accent-foreground'
-        )
+    const setLink = () => {
+        const previousUrl = editor.getAttributes('link').href;
+        const url = window.prompt('URL', previousUrl);
+        if (url === null) return;
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    };
+
+    const toolbarButton = "inline-flex h-8 w-8 items-center justify-center rounded-md text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50";
+    const activeButton = "bg-accent text-accent-foreground";
 
     return (
         <div className="rounded-md border border-input bg-background">
-            <div className="flex flex-wrap items-center gap-1 border-b border-input p-2">
+            <div className="flex flex-wrap items-center gap-1 border-b p-1">
                 <button
                     type="button"
                     aria-label="Bold"
+                    aria-pressed={editor.isActive('bold')}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('bold'))}
                     onClick={() => editor.chain().focus().toggleBold().run()}
+                    className={cn(toolbarButton, editor.isActive('bold') && activeButton)}
                 >
-                    <Bold className="w-4 h-4" />
+                    <Bold className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Italic"
+                    aria-pressed={editor.isActive('italic')}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('italic'))}
                     onClick={() => editor.chain().focus().toggleItalic().run()}
+                    className={cn(toolbarButton, editor.isActive('italic') && activeButton)}
                 >
-                    <Italic className="w-4 h-4" />
+                    <Italic className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Heading 2"
+                    aria-pressed={editor.isActive('heading', { level: 2 })}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('heading', { level: 2 }))}
                     onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    className={cn(toolbarButton, editor.isActive('heading', { level: 2 }) && activeButton)}
                 >
-                    <Heading2 className="w-4 h-4" />
+                    <Heading2 className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Heading 3"
+                    aria-pressed={editor.isActive('heading', { level: 3 })}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('heading', { level: 3 }))}
                     onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    className={cn(toolbarButton, editor.isActive('heading', { level: 3 }) && activeButton)}
                 >
-                    <Heading3 className="w-4 h-4" />
+                    <Heading3 className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Bullet list"
+                    aria-pressed={editor.isActive('bulletList')}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('bulletList'))}
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    className={cn(toolbarButton, editor.isActive('bulletList') && activeButton)}
                 >
-                    <List className="w-4 h-4" />
+                    <List className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Ordered list"
+                    aria-pressed={editor.isActive('orderedList')}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('orderedList'))}
                     onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    className={cn(toolbarButton, editor.isActive('orderedList') && activeButton)}
                 >
-                    <ListOrdered className="w-4 h-4" />
+                    <ListOrdered className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Link"
+                    aria-pressed={editor.isActive('link')}
                     disabled={disabled}
-                    className={toolbarButtonClass(editor.isActive('link'))}
                     onClick={setLink}
+                    className={cn(toolbarButton, editor.isActive('link') && activeButton)}
                 >
-                    <LinkIcon className="w-4 h-4" />
+                    <LinkIcon className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Undo"
-                    disabled={disabled || !editor.can().undo()}
-                    className={toolbarButtonClass()}
+                    disabled={disabled}
                     onClick={() => editor.chain().focus().undo().run()}
+                    className={toolbarButton}
                 >
-                    <Undo2 className="w-4 h-4" />
+                    <Undo2 className="size-4" />
                 </button>
                 <button
                     type="button"
                     aria-label="Redo"
-                    disabled={disabled || !editor.can().redo()}
-                    className={toolbarButtonClass()}
+                    disabled={disabled}
                     onClick={() => editor.chain().focus().redo().run()}
+                    className={toolbarButton}
                 >
-                    <Redo2 className="w-4 h-4" />
+                    <Redo2 className="size-4" />
                 </button>
             </div>
-            <EditorContent editor={editor} className="px-3 py-2" />
+            <EditorContent
+                editor={editor}
+                className="prose prose-sm max-w-none min-h-40 p-3 focus:outline-none"
+            />
         </div>
-    )
-}
+    );
+};
 
-export default RichTextEditor
+export default RichTextEditor;

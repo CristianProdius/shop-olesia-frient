@@ -3,20 +3,57 @@ import getProducts from "@/actions/get-products";
 import getReviews from "@/actions/get-reviews";
 import Gallery from "@/components/gallery";
 import Info from "@/components/info";
+import JsonLd from "@/components/json-ld";
 import ProductList from "@/components/product-list";
 import ProductReviews from "@/components/product-reviews";
 import Container from "@/components/ui/container";
-import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { localizedField } from "@/lib/i18n-content";
-import { buildAlternates, productJsonLd, breadcrumbJsonLd, aggregateRatingJsonLd } from "@/lib/seo";
+import {
+    buildAlternates,
+    productJsonLd,
+    breadcrumbJsonLd,
+    aggregateRatingJsonLd,
+    ORG_NAME,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
 
 type Params = Promise<{ productId: string; locale: string }>
 
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const locale = await getLocale();
+    const { productId } = await params;
+    const product = await getProduct(productId);
+
+    const name = localizedField(product.nameI18n, locale, product.name);
+    const description =
+        localizedField(product.descriptionI18n, locale, product.description ?? "") ||
+        `${name} — ${ORG_NAME}`;
+    const meta = buildAlternates(BASE, locale, `/product/${productId}`);
+
+    return {
+        title: name,
+        description,
+        alternates: meta,
+        openGraph: {
+            type: "website",
+            title: name,
+            description,
+            images: product.images ? product.images.map((i) => i.url) : [],
+            url: meta.canonical,
+        },
+        twitter: { card: "summary_large_image" },
+    };
+}
+
 const ProductPage = async ({ params }: { params: Params }) => {
     const t = await getTranslations("Product");
-    const { productId, locale } = await params;
+    const tNav = await getTranslations("Navbar");
+    const locale = await getLocale();
+    const { productId } = await params;
     const product = await getProduct(productId);
     const reviews = await getReviews(productId);
     const aggregateRating = aggregateRatingJsonLd(reviews) ?? undefined;
@@ -55,34 +92,50 @@ const ProductPage = async ({ params }: { params: Params }) => {
     const seed = productId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
     const start = related.length ? seed % related.length : 0;
     const suggestProducts = [...related.slice(start), ...related.slice(0, start)].slice(0, 8);
+
     return (
-        <div className="bg-white">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+        <div className="bg-background">
+            <JsonLd data={[productLd, breadcrumbLd]} />
             <Container>
-                <div className="px-4 py-10 sm:px-6 lg:px-8">
-                    <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+                <div className="mx-auto max-w-[1100px] px-4 py-20 sm:px-6 md:py-24 lg:px-8">
+                    {/* Breadcrumb */}
+                    <nav className="mb-10 text-xs text-muted-strong">
+                        <ol className="flex flex-wrap items-center gap-x-2">
+                            <li>
+                                <Link href="/" className="hover:text-text">
+                                    {tNav("home")}
+                                </Link>
+                            </li>
+                            <li aria-hidden="true">/</li>
+                            <li>
+                                <Link
+                                    href={`/category/${product.category?.id}`}
+                                    className="hover:text-text"
+                                >
+                                    {categoryName}
+                                </Link>
+                            </li>
+                            <li aria-hidden="true">/</li>
+                            <li className="text-text">{productName}</li>
+                        </ol>
+                    </nav>
+
+                    <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
                         {/* Gallery */}
-                        <Gallery images={product.images} />
-                        <div className="px-4 mt-0 sm:mt-16 sm:px-0 lg:mt-0">
+                        <Gallery images={product.images} alt={productName} />
+                        <div className="mt-10 lg:mt-0">
                             {/* Info */}
                             <Info data={product} />
                         </div>
                     </div>
-                    <hr className="my-10"/>
+                    <hr className="my-16 border-border" />
                     <ProductReviews reviews={reviews} locale={locale} />
-                    <hr className="my-10"/>
-                    <ProductList title={t("relatedItems")} items={suggestProducts} />
+                    <hr className="my-16 border-border" />
+                    <ProductList title={t("relatedItems")} items={suggestProducts} cols="wide" />
                 </div>
             </Container>
         </div>
-     );
+    );
 }
- 
+
 export default ProductPage;

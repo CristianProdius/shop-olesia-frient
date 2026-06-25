@@ -14,9 +14,18 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
     return (
         <Transition show={open} appear as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={onClose}>
-                <div className="fixed inset-0 bg-black bg-opacity-50" />
-                <div className="fixed inset-0 overflow-y-auto">
+            <Dialog as="div" className="relative z-[80]" onClose={onClose}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0">
+                        <div className="fixed inset-0 z-[80] bg-black/50" />
+                </Transition.Child>
+                <div className="fixed inset-0 z-[80] overflow-y-auto">
                     <div className="flex items-center justify-center min-h-full p-4 text-center">
                         <Transition.Child
                             as={Fragment}
@@ -26,8 +35,8 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
                             leave="ease-in duration-200"
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95">
-                                <Dialog.Panel className="w-full max-w-3xl overflow-hidden text-left align-middle">
-                                    <div className="relative flex items-center w-full px-4 pb-8 overflow-hidden bg-white shadow-[var(--shadow-overlay)] pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+                                <Dialog.Panel className="w-full max-w-3xl overflow-hidden text-left align-middle rounded-none">
+                                    <div className="relative flex items-center w-full px-4 pb-8 overflow-hidden bg-background shadow-[var(--shadow-overlay)] pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8">
                                         <div className="absolute right-4 top-4">
                                             <IconButton onClick={onClose} icon={<X size={15} />} />
                                         </div>

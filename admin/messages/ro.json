@@ -18,7 +18,15 @@
     "stats": "Statistici",
     "reviews": "Recenzii",
     "customOrders": "Comenzi personalizate",
-    "blog": "Jurnal"
+    "blog": "Jurnal",
+    "groupStore": "Magazin",
+    "groupCatalog": "Catalog",
+    "groupContent": "Conținut",
+    "groupSales": "Vânzări",
+    "menu": "Meniu",
+    "openMenu": "Deschide meniul",
+    "closeMenu": "Închide meniul",
+    "groupMarketing": "Marketing"
   },
   "StoreSwitcher": {
     "selectStore": "Selectează un magazin",
@@ -202,7 +210,9 @@
     "email": "Email",
     "createdAt": "Data abonării",
     "downloadCsv": "Descarcă CSV",
-    "empty": "Încă nu există abonați."
+    "empty": "Încă nu există abonați.",
+    "columnEmail": "Email",
+    "columnDate": "Dată"
   },
   "StockNotifications": {
     "title": "Listă de așteptare reaprovizionare ({count})",
@@ -344,7 +354,9 @@
     "addVariant": "Adaugă variantă",
     "stock": "Stoc",
     "removeVariant": "Elimină",
-    "duplicateVariant": "Combinație duplicată de mărime și culoare."
+    "duplicateVariant": "Combinație duplicată de mărime și culoare.",
+    "material": "Material",
+    "care": "Instrucțiuni de îngrijire"
   },
   "AuthAdmin": {
     "signInTitle": "Autentificare",
@@ -373,7 +385,8 @@
   "ImageUpload": {
     "uploadImage": "Încarcă o imagine",
     "uploading": "Se încarcă...",
-    "uploadFailed": "Încărcarea imaginii a eșuat."
+    "uploadFailed": "Încărcarea imaginii a eșuat.",
+    "remove": "Elimină imaginea"
   },
   "Metadata": {
     "title": "Panou de administrare",
@@ -661,5 +674,16 @@
     "english": "Engleză",
     "russian": "Rusă",
     "romanian": "Română"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Caută...",
+    "columns": "Coloane",
+    "noResults": "Niciun rezultat.",
+    "previous": "Anterior",
+    "next": "Următor",
+    "page": "Pagina {page} din {total}",
+    "rowsCount": "{count} rând(uri)",
+    "emptyTitle": "Încă nimic aici",
+    "emptyDescription": "Elementele create vor apărea aici."
   }
 }

@@ -1,10 +1,16 @@
-import type { MetadataRoute } from "next";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
+import { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/cart", "/checkout", "/sign-in", "/sign-up"] },
-    sitemap: `${BASE}/sitemap.xml`,
-  };
+    return {
+        rules: [
+            {
+                userAgent: "*",
+                allow: "/",
+                disallow: ["/*/cart", "/*/checkout", "/*/sign-in", "/*/sign-up"],
+            },
+        ],
+        sitemap: `${SITE_URL}/sitemap.xml`,
+        host: SITE_URL,
+    };
 }

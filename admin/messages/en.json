@@ -18,7 +18,15 @@
     "stats": "Stats",
     "reviews": "Reviews",
     "customOrders": "Custom Orders",
-    "blog": "Journal"
+    "blog": "Journal",
+    "groupStore": "Store",
+    "groupCatalog": "Catalog",
+    "groupContent": "Content",
+    "groupSales": "Sales",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "groupMarketing": "Marketing"
   },
   "StoreSwitcher": {
     "selectStore": "Select a store",
@@ -202,7 +210,9 @@
     "email": "Email",
     "createdAt": "Subscribed",
     "downloadCsv": "Download CSV",
-    "empty": "No subscribers yet."
+    "empty": "No subscribers yet.",
+    "columnEmail": "Email",
+    "columnDate": "Date"
   },
   "StockNotifications": {
     "title": "Back-in-stock waitlist ({count})",
@@ -344,7 +354,9 @@
     "addVariant": "Add variant",
     "stock": "Stock",
     "removeVariant": "Remove",
-    "duplicateVariant": "Duplicate size and color combination."
+    "duplicateVariant": "Duplicate size and color combination.",
+    "material": "Material",
+    "care": "Care instructions"
   },
   "AuthAdmin": {
     "signInTitle": "Sign in",
@@ -373,7 +385,8 @@
   "ImageUpload": {
     "uploadImage": "Upload an Image",
     "uploading": "Uploading...",
-    "uploadFailed": "Image upload failed."
+    "uploadFailed": "Image upload failed.",
+    "remove": "Remove image"
   },
   "Metadata": {
     "title": "Admin Dashboard",
@@ -661,5 +674,16 @@
     "english": "English",
     "russian": "Russian",
     "romanian": "Romanian"
+  },
+  "DataTable": {
+    "searchPlaceholder": "Search...",
+    "columns": "Columns",
+    "noResults": "No results.",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {total}",
+    "rowsCount": "{count} row(s)",
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "Items you create will appear here."
   }
 }

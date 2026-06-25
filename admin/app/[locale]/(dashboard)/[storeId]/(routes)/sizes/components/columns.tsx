@@ -24,6 +24,7 @@ export const useColumns = (): ColumnDef<SizeColumn>[] => {
         {
             accessorKey: 'createdAt',
             header: t('columnDate'),
+            cell: ({ row }) => <span className="tabular-nums">{row.original.createdAt}</span>,
         },
         {
             id: 'actions',

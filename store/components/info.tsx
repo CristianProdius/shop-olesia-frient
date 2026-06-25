@@ -124,16 +124,30 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-900">{localizedField(data.nameI18n, locale, data.name)}</h1>
-            <div className="flex items-end justify-between mt-3">
-                <p className="text-2xl text-gray-900">
+            <h1 className="product-name text-2xl text-ink">
+                {localizedField(data.nameI18n, locale, data.name)}
+            </h1>
+            {data.sku && (
+                <p className="mt-2 text-xs uppercase tracking-[0.1em] text-muted-strong">
+                    {t("sku")}: {data.sku}
+                </p>
+            )}
+            <div className="flex items-end justify-between mt-4">
+                <p className="price text-xl text-text">
                     <Currency value={data?.price} />
                 </p>
             </div>
-            <hr className="my-4" />
+            <hr className="my-6 border-border" />
+            {description && (
+                <p className="mb-6 text-sm leading-relaxed text-text text-pretty">
+                    {description}
+                </p>
+            )}
             <div className="flex flex-col gap-y-6">
                 <div className="flex items-start gap-x-4">
-                    <h3 className="font-semibold text-black pt-1">{t("size")}</h3>
+                    <h3 className="pt-1 text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                        {t("size")}
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                         {sizes.map((size) => {
                             // A size is selectable if any in-stock variant exists for it,
@@ -151,10 +165,10 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                                     disabled={!available}
                                     onClick={() => setSizeId(size.id)}
                                     className={cn(
-                                        "border px-3 py-1 text-sm transition disabled:cursor-not-allowed disabled:opacity-40 disabled:line-through",
+                                        "border rounded-none px-3 py-1 text-sm transition disabled:cursor-not-allowed disabled:opacity-40 disabled:line-through",
                                         active
-                                            ? "border-black bg-black text-white"
-                                            : "border-gray-300 text-black hover:border-black",
+                                            ? "border-ink bg-ink text-white"
+                                            : "border-border text-text hover:border-ink",
                                     )}
                                 >
                                     {size.value}
@@ -164,7 +178,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                     </div>
                 </div>
                 <div className="flex items-start gap-x-4">
-                    <h3 className="font-semibold text-black pt-1">{t("color")}</h3>
+                    <h3 className="pt-1 text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                        {t("color")}
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                         {colors.map((color) => {
                             const available = sizeId
@@ -182,10 +198,10 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                                     aria-label={localizedField(color.nameI18n, locale, color.name)}
                                     title={localizedField(color.nameI18n, locale, color.name)}
                                     className={cn(
-                                        "w-7 h-7 border transition disabled:cursor-not-allowed disabled:opacity-40",
+                                        "w-7 h-7 border rounded-none transition disabled:cursor-not-allowed disabled:opacity-40",
                                         active
-                                            ? "ring-2 ring-black ring-offset-1"
-                                            : "border-gray-400 hover:ring-1 hover:ring-black",
+                                            ? "ring-2 ring-ink ring-offset-1"
+                                            : "border-border hover:ring-1 hover:ring-ink",
                                     )}
                                     style={{ backgroundColor: color.value }}
                                 />
@@ -193,12 +209,30 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                         })}
                     </div>
                 </div>
+                {materials && (
+                    <div className="flex items-center gap-x-4">
+                        <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                            {t("material")}
+                        </h3>
+                        <div className="text-sm text-text">{materials}</div>
+                    </div>
+                )}
+                {care && (
+                    <div className="flex items-center gap-x-4">
+                        <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                            {t("care")}
+                        </h3>
+                        <div className="text-sm text-text">{care}</div>
+                    </div>
+                )}
             </div>
             <div className="flex items-center mt-10 gap-x-4">
                 <Button
+                    variant="primary"
+                    size="lg"
                     onClick={onAddToCart}
                     disabled={!inStock}
-                    className="flex items-center gap-x-2"
+                    className="gap-x-2"
                 >
                     {selectedVariant && !inStock
                         ? t("soldOut")
@@ -207,7 +241,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                           : !selectedVariant
                             ? t("selectOptions")
                             : t("addToCart")}
-                    <ShoppingCart />
+                    <ShoppingCart className="w-4 h-4" />
                 </Button>
             </div>
             {scarcity === "out" && selectedVariant && (
@@ -228,7 +262,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                             value={notifyEmail}
                             onChange={(e) => setNotifyEmail(e.target.value)}
                             placeholder={t("notifyEmail")}
-                            className="flex-1 px-3 py-2 text-sm border border-border bg-white text-text placeholder:text-muted-strong focus:outline-none focus:border-ink"
+                            className="flex-1 px-3 py-2 text-sm border border-border rounded-none bg-white text-text placeholder:text-muted-strong focus:outline-none focus:border-ink"
                         />
                         <Button
                             type="submit"
@@ -251,26 +285,32 @@ const Info: React.FC<InfoProps> = ({ data }) => {
                 <div className="flex flex-col mt-10 gap-y-6">
                     {description && (
                         <div>
-                            <h3 className="font-semibold text-black">{t("description")}</h3>
-                            <p className="mt-2 whitespace-pre-line text-gray-700">{description}</p>
+                            <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                                {t("description")}
+                            </h3>
+                            <p className="mt-2 whitespace-pre-line text-sm text-text">{description}</p>
                         </div>
                     )}
                     {materials && (
                         <div>
-                            <h3 className="font-semibold text-black">{t("materials")}</h3>
-                            <p className="mt-2 whitespace-pre-line text-gray-700">{materials}</p>
+                            <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                                {t("materials")}
+                            </h3>
+                            <p className="mt-2 whitespace-pre-line text-sm text-text">{materials}</p>
                         </div>
                     )}
                     {care && (
                         <div>
-                            <h3 className="font-semibold text-black">{t("care")}</h3>
-                            <p className="mt-2 whitespace-pre-line text-gray-700">{care}</p>
+                            <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-muted-strong">
+                                {t("care")}
+                            </h3>
+                            <p className="mt-2 whitespace-pre-line text-sm text-text">{care}</p>
                         </div>
                     )}
                 </div>
             )}
         </div>
-     );
+    );
 }
 
 export default Info;

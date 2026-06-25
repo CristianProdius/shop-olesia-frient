@@ -5,10 +5,27 @@
     "noResults": "No results found.",
     "language": "Language",
     "account": "My account",
+    "search": "Search",
+    "searchPlaceholder": "Search products",
+    "closeSearch": "Close search",
+    "cart": "Cart",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "home": "Home",
     "journal": "Journal"
   },
   "Footer": {
-    "copyright": "© 2026 LILETTI. All rights reserved."
+    "copyright": "© {year} LILETTI. All rights reserved.",
+    "followInstagram": "Follow us on Instagram",
+    "tagline": "Minimal-luxury essentials, designed to be lived in.",
+    "shop": "Shop",
+    "account": "Account",
+    "signIn": "Sign in",
+    "cart": "Cart",
+    "information": "Information",
+    "contact": "Contact",
+    "instagramImageAlt": "Instagram post",
+    "journal": "Journal"
   },
   "Newsletter": {
     "heading": "Join the LILETTI newsletter",
@@ -20,7 +37,40 @@
   },
   "Home": {
     "featuredProducts": "Featured Products",
-    "productImageAlt": "Product image"
+    "productImageAlt": "Product image",
+    "getInspired": "Get Inspired",
+    "shopNow": "Shop Now",
+    "shopByCategory": "Shop by Category",
+    "newIn": "New In",
+    "shopAll": "Shop All",
+    "ethosTitle": "Designed to be lived in",
+    "ethosBody": "Considered pieces in premium fabrics, cut for everyday elegance. Fewer, better things — made to last.",
+    "quickView": "Quick view",
+    "valueFabricsTitle": "Premium fabrics",
+    "valueFabricsDesc": "Considered materials, chosen to last.",
+    "valueMadeTitle": "Made to last",
+    "valueMadeDesc": "Quality construction, not throwaway trends.",
+    "valueSecureTitle": "Secure checkout",
+    "valueSecureDesc": "Safe, encrypted payment.",
+    "valueDesignTitle": "Considered design",
+    "valueDesignDesc": "Fewer, better pieces — designed with care.",
+    "newsletterTitle": "Join the list",
+    "newsletterDesc": "Be first to new arrivals and private offers.",
+    "newsletterPlaceholder": "Email address",
+    "newsletterCta": "Subscribe",
+    "newsletterSuccess": "Thanks for subscribing.",
+    "newsletterInvalid": "Please enter a valid email address.",
+    "newsletterDuplicate": "You're already subscribed.",
+    "newsletterError": "Something went wrong. Please try again."
+  },
+  "Blog": {
+    "title": "Journal",
+    "subtitle": "Stories, style notes and behind the scenes.",
+    "readMore": "Read more",
+    "backToJournal": "Back to Journal",
+    "noPosts": "No posts yet.",
+    "imageAlt": "Post image",
+    "publishedOn": "Published {date}"
   },
   "Product": {
     "size": "Size:",
@@ -34,7 +84,10 @@
     "imageAlt": "Image",
     "description": "Description",
     "materials": "Composition",
+    "material": "Material",
     "care": "Care",
+    "sku": "Code",
+    "detailsHeading": "Details",
     "notifyTitle": "Notify me when back in stock",
     "notifyEmail": "Your email",
     "notifyButton": "Notify me",
@@ -44,7 +97,16 @@
   "CategoryPage": {
     "sizes": "Sizes",
     "colors": "Colors",
-    "filters": "Filters"
+    "filters": "Filters",
+    "categories": "Categories",
+    "allProducts": "All Products",
+    "viewAs": "View as",
+    "sortBy": "Sort by",
+    "sortNewest": "Date: New to Old",
+    "sortOldest": "Date: Old to New",
+    "sortPriceLow": "Price: Low to High",
+    "sortPriceHigh": "Price: High to Low",
+    "sortNameAsc": "Name: A–Z"
   },
   "Cart": {
     "title": "Shopping Cart",
@@ -64,7 +126,21 @@
     "processing": "Processing...",
     "paySimulated": "Pay (simulated)",
     "email": "Email",
-    "outOfStockError": "Sorry, one or more items just sold out. Please review your cart."
+    "outOfStockError": "Sorry, one or more items just sold out. Please review your cart.",
+    "remove": "Remove",
+    "code": "Code",
+    "subtotal": "Subtotal",
+    "viewCart": "View Bag",
+    "close": "Close",
+    "yourBag": "Your Bag",
+    "continueShopping": "Continue shopping",
+    "haveAccount": "Have an account?",
+    "signIn": "Sign in",
+    "optional": "optional",
+    "orderConfirmedTitle": "Thank you for your order",
+    "orderConfirmedBody": "We've received your order and will be in touch shortly. A confirmation has been noted for your email.",
+    "orderReference": "Order reference",
+    "backToShop": "Continue shopping"
   },
   "Auth": {
     "signInTitle": "Sign in",
@@ -196,14 +272,5 @@
     "submitting": "Sending...",
     "success": "Thank you — we've received your request and will be in touch soon.",
     "error": "Please check your details and try again."
-  },
-  "Blog": {
-    "title": "Journal",
-    "subtitle": "Stories, style notes and behind the scenes.",
-    "readMore": "Read more",
-    "backToJournal": "Back to Journal",
-    "noPosts": "No posts yet.",
-    "imageAlt": "Post image",
-    "publishedOn": "Published {date}"
   }
 }
