@@ -145,3 +145,19 @@ export interface Color {
     nameI18n?: I18nField | null;
     value: string;
 }
+
+export interface BlogPost {
+    id: string;
+    slug: string;
+    title: string;
+    titleI18n?: I18nField | null;
+    excerpt?: string | null;
+    excerptI18n?: I18nField | null;
+    content: string;
+    contentI18n?: I18nField | null;
+    coverImage?: string | null;
+    isPublished: boolean;
+    publishedAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+}

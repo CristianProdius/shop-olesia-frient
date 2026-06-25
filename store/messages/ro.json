@@ -4,7 +4,8 @@
     "signOutWithEmail": "Deconectare ({email})",
     "noResults": "Niciun rezultat găsit.",
     "language": "Limbă",
-    "account": "Contul meu"
+    "account": "Contul meu",
+    "journal": "Jurnal"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. Toate drepturile rezervate."
@@ -99,7 +100,8 @@
     "about": "Povestea noastră",
     "atelier": "Atelier",
     "faq": "Întrebări",
-    "customOrder": "La comandă"
+    "customOrder": "La comandă",
+    "journal": "Jurnal"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -194,5 +196,14 @@
     "submitting": "Se trimite...",
     "success": "Mulțumim — am primit solicitarea dvs. și vă vom contacta în curând.",
     "error": "Vă rugăm verificați datele și încercați din nou."
+  },
+  "Blog": {
+    "title": "Jurnal",
+    "subtitle": "Povești, note de stil și din culise.",
+    "readMore": "Citește mai mult",
+    "backToJournal": "Înapoi la Jurnal",
+    "noPosts": "Niciun articol încă.",
+    "imageAlt": "Imagine articol",
+    "publishedOn": "Publicat {date}"
   }
 }

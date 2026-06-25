@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Category } from '@/types';
 import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation'
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { localizedField } from '@/lib/i18n-content';
 
 interface MainNavProps {
@@ -13,12 +13,19 @@ interface MainNavProps {
 const MainNav: React.FC<MainNavProps> = ({ data }) => {
     const pathname = usePathname();
     const locale = useLocale();
+    const t = useTranslations('Navbar');
 
     const routes = data.map(route => ({
         href: `/category/${route.id}`,
         label: localizedField(route.nameI18n, locale, route.name),
         active: pathname === `/category/${route.id}`
     }))
+
+    routes.push({
+        href: '/blog',
+        label: t('journal'),
+        active: pathname === '/blog' || pathname.startsWith('/blog/'),
+    })
 
     return (
         <nav className='flex items-center mx-6 space-x-4 lg:space-x-6'>

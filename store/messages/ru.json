@@ -4,7 +4,8 @@
     "signOutWithEmail": "Выйти ({email})",
     "noResults": "Ничего не найдено.",
     "language": "Язык",
-    "account": "Мой аккаунт"
+    "account": "Мой аккаунт",
+    "journal": "Журнал"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. Все права защищены."
@@ -99,7 +100,8 @@
     "about": "Наша история",
     "atelier": "Ателье",
     "faq": "Вопросы и ответы",
-    "customOrder": "Пошив по меркам"
+    "customOrder": "Пошив по меркам",
+    "journal": "Журнал"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -194,5 +196,14 @@
     "submitting": "Отправка...",
     "success": "Спасибо — мы получили ваш запрос и скоро свяжемся с вами.",
     "error": "Проверьте данные и попробуйте ещё раз."
+  },
+  "Blog": {
+    "title": "Журнал",
+    "subtitle": "Истории, заметки о стиле и закулисье.",
+    "readMore": "Читать далее",
+    "backToJournal": "Назад в Журнал",
+    "noPosts": "Пока нет статей.",
+    "imageAlt": "Изображение статьи",
+    "publishedOn": "Опубликовано {date}"
   }
 }

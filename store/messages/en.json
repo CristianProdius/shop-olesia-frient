@@ -4,7 +4,8 @@
     "signOutWithEmail": "Sign out ({email})",
     "noResults": "No results found.",
     "language": "Language",
-    "account": "My account"
+    "account": "My account",
+    "journal": "Journal"
   },
   "Footer": {
     "copyright": "© 2026 LILETTI. All rights reserved."
@@ -99,7 +100,8 @@
     "about": "Our Story",
     "atelier": "Atelier",
     "faq": "FAQ",
-    "customOrder": "Made to Measure"
+    "customOrder": "Made to Measure",
+    "journal": "Journal"
   },
   "WhyChooseUs": {
     "ownProduction": {
@@ -194,5 +196,14 @@
     "submitting": "Sending...",
     "success": "Thank you — we've received your request and will be in touch soon.",
     "error": "Please check your details and try again."
+  },
+  "Blog": {
+    "title": "Journal",
+    "subtitle": "Stories, style notes and behind the scenes.",
+    "readMore": "Read more",
+    "backToJournal": "Back to Journal",
+    "noPosts": "No posts yet.",
+    "imageAlt": "Post image",
+    "publishedOn": "Published {date}"
   }
 }
