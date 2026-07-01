@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { s3, S3_BUCKET, S3_PUBLIC_URL } from "@/lib/s3";
+import { s3, S3_BUCKET, S3_PUBLIC_URL, assertS3Config } from "@/lib/s3";
 import { getUserId } from "@/lib/server-auth";
 
 // Returns a short-lived presigned PUT URL the browser uses to upload a file
@@ -12,6 +12,9 @@ export async function POST(req: Request) {
     if (!userId) {
         return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    // Fail fast with a clear error if S3/MinIO env vars are missing.
+    assertS3Config();
 
     const { fileName, contentType } = await req.json();
     if (!fileName || !contentType) {
