@@ -1,14 +1,14 @@
-import type { Product, ProductVariant } from "@/types";
+import type { ContentBlock, Faq, Order, Product, ProductVariant } from "@/types";
 
 export type AssistantRole = "user" | "assistant";
 export type AssistantLocale = "en" | "ro" | "ru";
 export type AssistantStatus = "ok" | "offline" | "invalid" | "rate_limited" | "error";
 
 export interface AssistantMessage {
-  id: string;
+  id?: string;
   role: AssistantRole;
   content: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface AssistantCartLine {
@@ -148,9 +148,21 @@ export interface AssistantToolContext {
 }
 
 export interface AssistantResponse {
+  status: AssistantStatus;
   message: string;
-  products?: AssistantProductSummary[];
-  knowledge?: AssistantKnowledgeEntry[];
-  orders?: AssistantOrderSummary[];
-  suggestedQuestions?: string[];
+  products: AssistantProductRecommendation[];
+  sources: AssistantKnowledgeSource[];
+  orders: AssistantOrderSummary[];
+  followups: string[];
+}
+
+export interface AssistantContext {
+  locale: AssistantLocale;
+  latestUserMessage: string;
+  messages: AssistantMessage[];
+  products: Product[];
+  faqs: Faq[];
+  contentBlocks: ContentBlock[];
+  signedInOrders: Order[];
+  guestOrder?: Order | null;
 }
