@@ -276,5 +276,28 @@
     "submitting": "Se trimite...",
     "success": "Mulțumim — am primit solicitarea dvs. și vă vom contacta în curând.",
     "error": "Vă rugăm verificați datele și încercați din nou."
+  },
+  "Assistant": {
+    "open": "Deschide asistentul",
+    "close": "Închide asistentul",
+    "title": "Asistent LILETTI",
+    "intro": "Întreabă despre produse, mărimi, îngrijire, livrare sau comanda ta.",
+    "placeholder": "Întreabă asistentul",
+    "send": "Trimite",
+    "thinking": "Pregătim răspunsul...",
+    "error": "A apărut o eroare. Încearcă din nou.",
+    "offline": "Asistentul este indisponibil momentan.",
+    "viewProduct": "Vezi produsul",
+    "addToCart": "Adaugă în coș",
+    "inStock": "În stoc",
+    "lowStock": "Stoc redus",
+    "soldOut": "Stoc epuizat",
+    "sources": "Surse",
+    "orders": "Comenzi",
+    "suggestDress": "Ajută-mă să aleg o rochie pentru un eveniment de seară",
+    "suggestSizes": "Ce mărimi sunt disponibile?",
+    "suggestCare": "Cum îngrijesc piesele din mătase?",
+    "suggestOrder": "Unde este comanda mea?",
+    "suggestCustom": "Pot solicita o piesă pe măsură?"
   }
 }

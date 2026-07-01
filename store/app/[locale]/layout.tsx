@@ -1,4 +1,5 @@
 import { Footer, Navbar } from '@/components'
+import { AssistantLauncher } from '@/components/assistant'
 import CartDrawer from '@/components/cart-drawer'
 import '../globals.css'
 import type { Metadata } from 'next'
@@ -109,6 +110,7 @@ export default async function LocaleLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <AssistantLauncher />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -276,5 +276,28 @@
     "submitting": "Sending...",
     "success": "Thank you — we've received your request and will be in touch soon.",
     "error": "Please check your details and try again."
+  },
+  "Assistant": {
+    "open": "Open assistant",
+    "close": "Close assistant",
+    "title": "LILETTI Assistant",
+    "intro": "Ask about products, sizing, care, delivery, or your order.",
+    "placeholder": "Ask the assistant",
+    "send": "Send",
+    "thinking": "Preparing your answer...",
+    "error": "Something went wrong. Please try again.",
+    "offline": "The assistant is unavailable right now.",
+    "viewProduct": "View product",
+    "addToCart": "Add to bag",
+    "inStock": "In stock",
+    "lowStock": "Low stock",
+    "soldOut": "Sold out",
+    "sources": "Sources",
+    "orders": "Orders",
+    "suggestDress": "Help me choose a dress for an evening event",
+    "suggestSizes": "What sizes are available?",
+    "suggestCare": "How do I care for silk pieces?",
+    "suggestOrder": "Where is my order?",
+    "suggestCustom": "Can I request made-to-measure?"
   }
 }
