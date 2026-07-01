@@ -128,11 +128,13 @@ const ProductPage = async ({ params }: { params: Params }) => {
                         <Gallery images={product.images} alt={productName} />
                         <div className="mt-10 lg:mt-0">
                             {/* Info */}
-                            <Info data={product} />
+                            <Info data={product} rating={aggregateRating} />
                         </div>
                     </div>
                     <hr className="my-16 border-border" />
-                    <ProductReviews reviews={reviews} locale={locale} />
+                    <div id="reviews" className="scroll-mt-24">
+                        <ProductReviews reviews={reviews} locale={locale} />
+                    </div>
                     <hr className="my-16 border-border" />
                     <ProductList title={t("relatedItems")} items={suggestProducts} cols="wide" />
                     <RecentlyViewed product={product} />

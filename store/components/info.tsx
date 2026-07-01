@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
+import Stars from "@/components/ui/stars";
 import Button from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
@@ -22,9 +23,11 @@ import {
 
 interface InfoProps {
     data: Product;
+    rating?: { ratingValue: number; reviewCount: number } | null;
 }
-const Info: React.FC<InfoProps> = ({ data }) => {
+const Info: React.FC<InfoProps> = ({ data, rating }) => {
     const t = useTranslations("Product");
+    const tReviews = useTranslations("Reviews");
     const locale = useLocale();
     const cart = useCart();
 
@@ -127,6 +130,19 @@ const Info: React.FC<InfoProps> = ({ data }) => {
             <h1 className="product-name text-2xl text-ink">
                 {localizedField(data.nameI18n, locale, data.name)}
             </h1>
+            {rating && rating.reviewCount > 0 && (
+                <a
+                    href="#reviews"
+                    className="mt-3 inline-flex items-center gap-2 text-ink transition-colors duration-200 ease-out hover:text-muted focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-border-strong motion-reduce:transition-none"
+                    aria-label={`${rating.ratingValue} / 5 — ${tReviews("reviewsCount", { count: rating.reviewCount })}`}
+                >
+                    <Stars value={rating.ratingValue} />
+                    <span className="text-sm text-muted-strong tabular-nums">
+                        {rating.ratingValue.toFixed(1)} ·{" "}
+                        {tReviews("reviewsCount", { count: rating.reviewCount })}
+                    </span>
+                </a>
+            )}
             {data.sku && (
                 <p className="mt-2 text-xs uppercase tracking-[0.1em] text-muted-strong">
                     {t("sku")}: {data.sku}
