@@ -1,6 +1,8 @@
 // Shared SEO helpers used across all store pages.
+const DEFAULT_SITE_URL = "https://liletti.delice.my";
+
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL;
 
 export const LOCALES = ["en", "ru", "ro"] as const;
 export const DEFAULT_LOCALE = "en";
