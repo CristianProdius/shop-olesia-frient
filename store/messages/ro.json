@@ -344,5 +344,17 @@
     "resultPrefix": "Recomandăm mărimea",
     "rationale": "Pe baza mărimii tale obișnuite {usual} și a unei croieli {fit}, îți sugerăm {size}.",
     "outOfStockNote": "{size} este epuizată — afișăm cea mai apropiată mărime disponibilă."
+  },
+  "TryOn": {
+    "title": "Probă virtuală",
+    "presetNote": "Vezi această piesă pe unul dintre modelele noastre. Alege un model ca să vezi croiala — fără nicio fotografie a ta.",
+    "chooseModel": "Alege un model",
+    "modelA": "Model A",
+    "modelB": "Model B",
+    "modelC": "Model C",
+    "generate": "Probează",
+    "generating": "Generăm previzualizarea...",
+    "resultAlt": "Previzualizare probă virtuală",
+    "error": "Previzualizarea nu a putut fi generată. Încearcă din nou."
   }
 }

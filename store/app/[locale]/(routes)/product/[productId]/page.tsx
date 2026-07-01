@@ -9,6 +9,7 @@ import ProductReviews from "@/components/product-reviews";
 import RecentlyViewed from "@/components/recently-viewed";
 import SizeGuideTable from "@/components/size-guide";
 import FitFinder from "@/components/fit-finder";
+import TryOn from "@/components/try-on";
 import getSizeGuides from "@/actions/get-size-guides";
 import Container from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
@@ -136,6 +137,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
                             <div className="mt-8 space-y-3">
                                 <SizeGuideTable guides={sizeGuides} />
                                 <FitFinder product={product} sizeGuides={sizeGuides} />
+                                <TryOn product={product} />
                             </div>
                         </div>
                     </div>

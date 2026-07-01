@@ -32,7 +32,7 @@ const FitFinder = ({ product, sizeGuides }: Props) => {
   const t = useTranslations("FitFinder");
   const locale = useLocale();
 
-  const variants = product.variants ?? [];
+  const variants = useMemo(() => product.variants ?? [], [product.variants]);
   const [usualId, setUsualId] = useState("");
   const [fit, setFit] = useState<Fit>("regular");
 
