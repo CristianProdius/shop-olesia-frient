@@ -134,23 +134,30 @@ async function main() {
 
   // 4) Blog posts — natural key (storeId, slug). SKIP any slug that already
   //    exists so the 8 real production posts are never touched or duplicated.
+  //    Set SEED_SKIP_BLOG=1 to skip blog seeding entirely (e.g. on a store that
+  //    already has real editorial content and shouldn't get seed filler posts).
   let blogAdded = 0, blogSkipped = 0;
-  for (let i = 0; i < BLOG_POSTS.length; i++) {
-    const post = BLOG_POSTS[i];
-    const existing = await prisma.blogPost.findFirst({
-      where: { storeId: store.id, slug: post.slug },
-      select: { id: true },
-    });
-    if (existing) { blogSkipped++; continue; }
-    await prisma.blogPost.create({
-      data: {
-        storeId: store.id,
-        isPublished: true,
-        coverImage: mediaFor(i),
-        ...post,
-      },
-    });
-    blogAdded++;
+  if (process.env.SEED_SKIP_BLOG) {
+    blogSkipped = BLOG_POSTS.length;
+    console.log("Blog: SEED_SKIP_BLOG set — skipping blog seeding (existing posts untouched).");
+  } else {
+    for (let i = 0; i < BLOG_POSTS.length; i++) {
+      const post = BLOG_POSTS[i];
+      const existing = await prisma.blogPost.findFirst({
+        where: { storeId: store.id, slug: post.slug },
+        select: { id: true },
+      });
+      if (existing) { blogSkipped++; continue; }
+      await prisma.blogPost.create({
+        data: {
+          storeId: store.id,
+          isPublished: true,
+          coverImage: mediaFor(i),
+          ...post,
+        },
+      });
+      blogAdded++;
+    }
   }
   summary.blogPosts = { added: blogAdded, skipped: blogSkipped };
 
