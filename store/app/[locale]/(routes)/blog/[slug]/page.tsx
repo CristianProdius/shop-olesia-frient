@@ -107,12 +107,12 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
         : null;
 
     return (
-        <div className="bg-background">
+        <article className="bg-background">
             <JsonLd data={[blogPostingLd, breadcrumbLd]} />
             <Container>
-                <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+                <div className="px-4 pt-12 pb-20 sm:px-6 md:pt-16 md:pb-28 lg:px-8">
                     {/* Breadcrumb */}
-                    <nav className="mb-10 text-xs text-muted-strong">
+                    <nav className="mx-auto max-w-[720px] text-xs text-muted-strong">
                         <ol className="flex flex-wrap items-center gap-x-2">
                             <li>
                                 <Link href="/" className="hover:text-text">
@@ -130,44 +130,56 @@ const BlogPostPage = async ({ params }: { params: Params }) => {
                         </ol>
                     </nav>
 
+                    {/* Centered editorial header */}
+                    <header className="mx-auto mt-10 max-w-[720px] text-center md:mt-12">
+                        {date && (
+                            <p className="text-xs uppercase tracking-[0.16em] text-muted-strong">
+                                {t("publishedOn", { date })}
+                            </p>
+                        )}
+                        <h1 className="heading-luxe mt-4 text-2xl uppercase tracking-[0.08em] text-ink md:text-4xl text-balance">
+                            {title}
+                        </h1>
+                        {excerpt && (
+                            <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-muted-strong text-pretty">
+                                {excerpt}
+                            </p>
+                        )}
+                    </header>
+
+                    {/* Wide cover — breaks past the text column for drama */}
                     {post.coverImage && (
-                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-placeholder rounded-none">
-                            <Image
-                                fill
-                                src={post.coverImage}
-                                alt={title}
-                                sizes="(min-width: 768px) 760px, 100vw"
-                                className="object-cover"
-                                priority
-                            />
+                        <div className="mx-auto mt-10 max-w-[960px] md:mt-12">
+                            <div className="relative aspect-[16/9] w-full overflow-hidden bg-placeholder">
+                                <Image
+                                    fill
+                                    src={post.coverImage}
+                                    alt={title}
+                                    sizes="(min-width: 1024px) 960px, 100vw"
+                                    className="object-cover"
+                                    priority
+                                />
+                            </div>
                         </div>
                     )}
 
-                    <h1 className="heading-luxe mt-8 text-2xl uppercase tracking-[0.08em] text-ink md:text-3xl text-balance">
-                        {title}
-                    </h1>
-                    {date && (
-                        <p className="mt-4 text-xs uppercase tracking-[0.1em] text-muted-strong">
-                            {t("publishedOn", { date })}
-                        </p>
-                    )}
-
+                    {/* Body — readable column, drop-cap lead, editorial type */}
                     <div
-                        className="mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:uppercase [&_h2]:tracking-[0.04em] [&_h2]:mt-8 [&_h3]:font-bold [&_h3]:mt-6 [&_p]:my-4 [&_p]:text-[15px] [&_p]:leading-relaxed [&_p]:text-text [&_a]:underline [&_a]:text-text [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-1 text-pretty"
+                        className="mx-auto mt-12 max-w-[680px] text-pretty md:mt-14 [&_h2]:mt-12 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:uppercase [&_h2]:tracking-[0.08em] [&_h2]:text-ink [&_h3]:mt-8 [&_h3]:font-bold [&_h3]:text-ink [&_p]:my-5 [&_p]:text-[16px] [&_p]:leading-[1.85] [&_p]:text-text [&_a]:underline [&_a]:underline-offset-2 [&_a]:text-text [&_ul]:my-5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-1.5 [&_li]:leading-relaxed [&_li]:text-text [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:mr-3 [&>p:first-of-type]:first-letter:mt-1 [&>p:first-of-type]:first-letter:text-6xl [&>p:first-of-type]:first-letter:font-light [&>p:first-of-type]:first-letter:leading-[0.7] [&>p:first-of-type]:first-letter:text-ink"
                         dangerouslySetInnerHTML={{ __html: content }}
                     />
 
-                    <div className="mt-14 border-t border-border pt-8">
+                    <div className="mx-auto mt-16 max-w-[680px] border-t border-border pt-8 text-center">
                         <Link
                             href="/blog"
-                            className="text-xs font-bold uppercase tracking-[0.1em] text-ink transition-colors duration-200 ease-out hover:text-muted-strong"
+                            className="text-xs font-bold uppercase tracking-[0.14em] text-ink transition-colors duration-200 ease-out hover:text-muted-strong"
                         >
                             {t("backToJournal")}
                         </Link>
                     </div>
                 </div>
             </Container>
-        </div>
+        </article>
     );
 };
 
