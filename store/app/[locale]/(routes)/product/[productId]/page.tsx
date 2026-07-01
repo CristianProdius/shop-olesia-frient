@@ -6,6 +6,7 @@ import Info from "@/components/info";
 import JsonLd from "@/components/json-ld";
 import ProductList from "@/components/product-list";
 import ProductReviews from "@/components/product-reviews";
+import RecentlyViewed from "@/components/recently-viewed";
 import Container from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
 import { localizedField } from "@/lib/i18n-content";
@@ -134,6 +135,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
                     <ProductReviews reviews={reviews} locale={locale} />
                     <hr className="my-16 border-border" />
                     <ProductList title={t("relatedItems")} items={suggestProducts} cols="wide" />
+                    <RecentlyViewed product={product} />
                 </div>
             </Container>
         </div>
