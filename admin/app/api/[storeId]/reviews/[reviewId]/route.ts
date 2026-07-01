@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import { getUserId } from '@/lib/server-auth'
+import { recomputeProductRating } from "@/lib/ratings";
 import { NextResponse } from "next/server"
 
 export async function GET(
@@ -86,6 +87,11 @@ export async function PATCH(
 
         const ratingNum = rating !== undefined ? Number(rating) : undefined;
 
+        const existing = await prismadb.review.findFirst({
+            where: { id: reviewId, storeId },
+            select: { productId: true },
+        });
+
         const review = await prismadb.review.updateMany({
             where: {
                 id: reviewId,
@@ -100,6 +106,16 @@ export async function PATCH(
                 ...(verified !== undefined ? { verified } : {}),
             }
         })
+
+        // Moderation or a rating edit changes the product's approved-review
+        // rollup; recompute (best-effort — never fail the moderation action).
+        if (existing?.productId && (status !== undefined || ratingNum !== undefined)) {
+            try {
+                await recomputeProductRating(storeId, existing.productId);
+            } catch (ratingErr) {
+                console.log('[REVIEW_PATCH_RATING]', ratingErr);
+            }
+        }
 
         return NextResponse.json(review);
     } catch (err) {
@@ -135,12 +151,26 @@ export async function DELETE(
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
+        const existing = await prismadb.review.findFirst({
+            where: { id: reviewId, storeId },
+            select: { productId: true },
+        });
+
         const review = await prismadb.review.deleteMany({
             where: {
                 id: reviewId,
                 storeId,
             }
         })
+
+        // Removing a review changes the product's approved-review rollup.
+        if (existing?.productId) {
+            try {
+                await recomputeProductRating(storeId, existing.productId);
+            } catch (ratingErr) {
+                console.log('[REVIEW_DELETE_RATING]', ratingErr);
+            }
+        }
 
         return NextResponse.json(review);
     } catch (err) {

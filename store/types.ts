@@ -33,6 +33,8 @@ export interface Product {
     careI18n?: I18nField | null;
     price: string;
     isFeatured: boolean;
+    ratingAvg?: number | null;
+    ratingCount?: number | null;
     size: Size;
     color: Color;
     variants: ProductVariant[];

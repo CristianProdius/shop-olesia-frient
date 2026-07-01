@@ -70,6 +70,9 @@ model Product {
   price           Decimal
   isFeatured      Boolean          @default(false)
   isArchived      Boolean          @default(false)
+  // Denormalized rating rollup (additive), recomputed from approved reviews.
+  ratingAvg       Float? // 0–5, one decimal; null when no approved reviews
+  ratingCount     Int? // number of approved reviews
   sizeId          String // Foreign Key to Size
   size            Size             @relation(fields: [sizeId], references: [id])
   colorId         String // Foreign Key to Color

@@ -3,6 +3,7 @@
 import { Product } from "@/types";
 import Image from "next/image";
 import Currency from "@/components/ui/currency";
+import Stars from "@/components/ui/stars";
 import { useRouter } from "@/i18n/navigation";
 import usePreviewModal from "@/hooks/use-preview-modal";
 import { MouseEventHandler, KeyboardEventHandler } from 'react';
@@ -105,6 +106,17 @@ const ProductCard: React.FC<ProductCard> = ({ data }) => {
                 <div className="mt-[6px] flex justify-center">
                     <Currency value={data?.price} />
                 </div>
+                {data?.ratingCount ? (
+                    <div
+                        className="mt-2 flex items-center justify-center gap-1.5"
+                        aria-label={`${(data.ratingAvg ?? 0).toFixed(1)} / 5 (${data.ratingCount})`}
+                    >
+                        <Stars value={data.ratingAvg ?? 0} className="text-[13px]" />
+                        <span className="text-xs text-muted-strong tabular-nums">
+                            ({data.ratingCount})
+                        </span>
+                    </div>
+                ) : null}
             </div>
         </div>
     );
