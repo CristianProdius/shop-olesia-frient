@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   ASSISTANT_DEFAULT_MAX_HISTORY,
@@ -19,6 +19,7 @@ describe("getAssistantRuntimeConfig", () => {
 
   afterEach(() => {
     process.env = originalEnv;
+    vi.resetModules();
   });
 
   it("returns safe defaults when assistant env vars are absent", () => {
@@ -73,5 +74,34 @@ describe("getAssistantRuntimeConfig", () => {
       rateLimitWindowMs: ASSISTANT_DEFAULT_RATE_LIMIT_WINDOW_MS,
       rateLimitMax: ASSISTANT_DEFAULT_RATE_LIMIT_MAX,
     });
+  });
+});
+
+describe("assistant model config", () => {
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+    vi.resetModules();
+  });
+
+  it("uses the current dated Haiku model by default", async () => {
+    delete process.env.ANTHROPIC_MODEL;
+    vi.resetModules();
+
+    const config = await import("./config");
+
+    expect(config.ASSISTANT_MODEL).toBe("claude-haiku-4-5-20251001");
+  });
+
+  it("uses an explicit Anthropic model override", async () => {
+    process.env.ANTHROPIC_MODEL = "claude-sonnet-5";
+    vi.resetModules();
+
+    const config = await import("./config");
+
+    expect(config.ASSISTANT_MODEL).toBe("claude-sonnet-5");
   });
 });

@@ -6,12 +6,15 @@ import type { AssistantResponse } from "@/lib/assistant/types";
 import { cn } from "@/lib/utils";
 
 import AssistantOrderCard from "./assistant-order-card";
-import AssistantProductCard from "./assistant-product-card";
+import AssistantProductCarousel from "./assistant-product-carousel";
+import AssistantTyping from "./assistant-typing";
 
 type Props = {
   role: "user" | "assistant";
   content: string;
-  response?: AssistantResponse;
+  response?: Pick<AssistantResponse, "products" | "sources" | "orders">;
+  followups?: string[];
+  streaming?: boolean;
   onAddToCart?: () => void;
   onFollowup?: (value: string) => void;
 };
@@ -20,35 +23,50 @@ const AssistantMessage = ({
   role,
   content,
   response,
+  followups,
+  streaming = false,
   onAddToCart,
   onFollowup,
 }: Props) => {
   const t = useTranslations("Assistant");
   const isUser = role === "user";
+  const showTyping = streaming && content.length === 0;
 
   return (
-    <div className={cn(isUser ? "ml-auto max-w-[85%]" : "mr-auto max-w-[92%]")}>
+    <div
+      className={cn(
+        "animate-message-in motion-reduce:animate-none",
+        isUser ? "ml-auto max-w-[85%]" : "mr-auto max-w-[92%]",
+      )}
+    >
       <div
         className={cn(
           "px-4 py-3 text-sm",
           isUser
             ? "bg-ink text-white"
-            : "border border-border bg-background text-text",
+            : "border border-border bg-surface text-text",
         )}
       >
-        <p className="whitespace-pre-line text-pretty">{content}</p>
+        {showTyping ? (
+          <AssistantTyping />
+        ) : (
+          <p className="whitespace-pre-line text-pretty">
+            {content}
+            {streaming && (
+              <span
+                className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] bg-current align-baseline animate-typing-dot motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+            )}
+          </p>
+        )}
       </div>
 
       {response && response.products.length > 0 && (
-        <div className="mt-3 space-y-3">
-          {response.products.map((product) => (
-            <AssistantProductCard
-              key={product.productId}
-              item={product}
-              onAddToCart={onAddToCart}
-            />
-          ))}
-        </div>
+        <AssistantProductCarousel
+          products={response.products}
+          onAddToCart={onAddToCart}
+        />
       )}
 
       {response && response.orders.length > 0 && (
@@ -63,26 +81,27 @@ const AssistantMessage = ({
       )}
 
       {response && response.sources.length > 0 && (
-        <div className="mt-3 border-l border-border pl-3">
+        <div className="mt-3">
           <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted-strong">
             {t("sources")}
           </p>
-          <ul className="mt-2 space-y-1">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {response.sources.map((source) => (
-              <li
+              <span
                 key={`${source.type}-${source.id}`}
-                className="text-xs text-muted-strong"
+                title={source.excerpt}
+                className="max-w-full truncate border border-border px-2 py-1 text-xs text-muted-strong"
               >
-                {source.label}: {source.excerpt}
-              </li>
+                {source.label}
+              </span>
             ))}
-          </ul>
+          </div>
         </div>
       )}
 
-      {response && response.followups.length > 0 && onFollowup && (
+      {followups && followups.length > 0 && onFollowup && (
         <div className="mt-3 flex flex-wrap gap-2">
-          {response.followups.map((followup) => (
+          {followups.map((followup) => (
             <button
               key={followup}
               type="button"

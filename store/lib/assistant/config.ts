@@ -9,7 +9,7 @@ export const ASSISTANT_DEFAULT_RATE_LIMIT_MAX = 12;
 export const ASSISTANT_MAX_MESSAGE_LENGTH = 1_200;
 
 export const ASSISTANT_MODEL =
-  process.env.ANTHROPIC_MODEL || "claude-3-5-haiku-latest";
+  process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 export const ASSISTANT_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 
 export interface AssistantRuntimeConfig {

@@ -80,10 +80,31 @@ function looksLikeOrderQuestion(message: string): boolean {
   );
 }
 
-export async function handleAssistantRequest(
+type GroundedResponse = Pick<
+  AssistantResponse,
+  "status" | "products" | "sources" | "orders"
+>;
+
+/**
+ * Result of the deterministic grounding step. `early` short-circuits generation
+ * (validation, offline, or signed-out order lookups); `ready` carries the
+ * grounded context that both the streaming and non-streaming paths generate from.
+ */
+export type AssistantGroundResult =
+  | { kind: "early"; response: AssistantResponse }
+  | {
+      kind: "ready";
+      apiKey: string;
+      model: string;
+      locale: AssistantContext["locale"];
+      grounded: GroundedResponse;
+      context: AssistantContext;
+    };
+
+export async function groundAssistantRequest(
   payload: AssistantRequestPayload,
   deps: AssistantDeps,
-): Promise<AssistantResponse> {
+): Promise<AssistantGroundResult> {
   const runtimeConfig = getAssistantRuntimeConfig();
   const locale = normalizeAssistantLocale(payload.locale);
   const messages = sanitizeMessages(payload.messages, runtimeConfig.maxHistory);
@@ -91,13 +112,19 @@ export async function handleAssistantRequest(
   const latestUserMessage = lastMessage?.content ?? "";
 
   if (!latestUserMessage || lastMessage?.role !== "user") {
-    return emptyResponse("invalid", fallbackMessage("invalid", locale));
+    return {
+      kind: "early",
+      response: emptyResponse("invalid", fallbackMessage("invalid", locale)),
+    };
   }
 
   const apiKey = deps.apiKey?.trim() ?? "";
 
   if (!assistantConfigured(apiKey)) {
-    return emptyResponse("offline", fallbackMessage("offline", locale));
+    return {
+      kind: "early",
+      response: emptyResponse("offline", fallbackMessage("offline", locale)),
+    };
   }
 
   const [products, faqs, contentBlocks] = await Promise.all([
@@ -133,8 +160,8 @@ export async function handleAssistantRequest(
     orders = shapeOrderSummaries(signedInOrders, runtimeConfig.maxOrders);
   }
 
-  const grounded = {
-    status: "ok" as const,
+  const grounded: GroundedResponse = {
+    status: "ok",
     products: productMatches,
     sources,
     orders,
@@ -152,17 +179,35 @@ export async function handleAssistantRequest(
 
   if (looksLikeOrderQuestion(latestUserMessage) && !deps.customerId && !guestLookup) {
     return {
-      ...grounded,
-      message: signedOutOrderMessage(locale),
-      followups: [],
+      kind: "early",
+      response: {
+        ...grounded,
+        message: signedOutOrderMessage(locale),
+        followups: [],
+      },
     };
   }
+
+  return { kind: "ready", apiKey, model: deps.model, locale, grounded, context };
+}
+
+export async function handleAssistantRequest(
+  payload: AssistantRequestPayload,
+  deps: AssistantDeps,
+): Promise<AssistantResponse> {
+  const ground = await groundAssistantRequest(payload, deps);
+
+  if (ground.kind === "early") {
+    return ground.response;
+  }
+
+  const { apiKey, model, locale, grounded, context } = ground;
 
   try {
     const generated = await deps.generate({
       apiKey,
-      model: deps.model,
-      latestUserMessage,
+      model,
+      latestUserMessage: context.latestUserMessage,
       context,
       response: grounded,
     });
@@ -170,9 +215,9 @@ export async function handleAssistantRequest(
     return {
       status: "ok",
       message: generated.message,
-      products: productMatches,
-      sources,
-      orders,
+      products: grounded.products,
+      sources: grounded.sources,
+      orders: grounded.orders,
       followups: generated.followups,
     };
   } catch {
