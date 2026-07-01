@@ -6,16 +6,18 @@ RUN apk add --no-cache openssl libc6-compat
 COPY package*.json ./
 # Prisma schema is needed for the postinstall `prisma generate`.
 COPY prisma ./prisma
-RUN npm ci
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
 # NEXT_PUBLIC_* must be present at build time (Next inlines them).
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_S3_PUBLIC_URL
 ARG NEXT_PUBLIC_BETTER_AUTH_URL
 ARG BETTER_AUTH_SECRET
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
     NEXT_PUBLIC_S3_PUBLIC_URL=$NEXT_PUBLIC_S3_PUBLIC_URL \
     NEXT_PUBLIC_BETTER_AUTH_URL=$NEXT_PUBLIC_BETTER_AUTH_URL \
     BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET \

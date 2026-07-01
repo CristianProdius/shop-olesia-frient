@@ -6,7 +6,7 @@ RUN apk add --no-cache openssl libc6-compat
 COPY package*.json ./
 # Prisma schema is needed for the postinstall `prisma generate`.
 COPY prisma ./prisma
-RUN npm ci
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
