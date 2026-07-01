@@ -25,11 +25,14 @@ const SocialProof = async ({ locale }: SocialProofProps) => {
                 <h2 className="text-center text-xs font-medium tracking-[0.2em] uppercase text-muted-strong">
                     {t("heading")}
                 </h2>
-                <dl className="mt-8 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+                {/* Fixed-width items in a centered flex wrap so any number of
+                    stats (4, 5, 6…) stays balanced: a full row centers, and any
+                    remainder wraps to a centered row instead of hanging left. */}
+                <dl className="mt-8 flex flex-wrap items-start justify-center gap-x-12 gap-y-10 sm:gap-x-20 lg:gap-x-28">
                     {stats.map((stat) => (
                         <div
                             key={stat.id}
-                            className="flex flex-col items-center gap-y-2 text-center"
+                            className="flex w-[130px] flex-col items-center gap-y-2 text-center sm:w-[150px]"
                         >
                             <dt className="text-4xl font-light tracking-tight text-ink lg:text-5xl">
                                 {stat.value}
