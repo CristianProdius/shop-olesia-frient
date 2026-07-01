@@ -7,6 +7,8 @@ import JsonLd from "@/components/json-ld";
 import ProductList from "@/components/product-list";
 import ProductReviews from "@/components/product-reviews";
 import RecentlyViewed from "@/components/recently-viewed";
+import SizeGuideTable from "@/components/size-guide";
+import getSizeGuides from "@/actions/get-size-guides";
 import Container from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
 import { localizedField } from "@/lib/i18n-content";
@@ -60,6 +62,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
     if (!product) notFound();
     const reviews = await getReviews(productId);
     const aggregateRating = aggregateRatingJsonLd(reviews) ?? undefined;
+    const sizeGuides = await getSizeGuides(product.category?.id);
 
     const productName = localizedField(product.nameI18n, locale, product.name);
     const categoryName = localizedField(
@@ -129,6 +132,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
                         <div className="mt-10 lg:mt-0">
                             {/* Info */}
                             <Info data={product} rating={aggregateRating} />
+                            <SizeGuideTable guides={sizeGuides} className="mt-8" />
                         </div>
                     </div>
                     <hr className="my-16 border-border" />

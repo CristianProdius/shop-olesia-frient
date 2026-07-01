@@ -89,6 +89,22 @@ export interface Stat {
     isPublished: boolean;
 }
 
+export interface SizeGuideRow {
+    label: string;
+    values: string[];
+}
+
+export interface SizeGuide {
+    id: string;
+    categoryId: string;
+    title?: string | null;
+    titleI18n?: I18nField | null;
+    columnsI18n?: { en?: string[]; ru?: string[]; ro?: string[] } | null;
+    rows?: SizeGuideRow[] | null;
+    order: number;
+    isPublished: boolean;
+}
+
 export interface Image {
     id: string;
     url: string;

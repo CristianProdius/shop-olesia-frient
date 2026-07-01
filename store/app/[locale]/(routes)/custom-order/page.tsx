@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/container";
 import { SITE_URL, buildAlternates } from "@/lib/seo";
 import CustomOrderForm from "./components/custom-order-form";
+import SizeGuideTable from "@/components/size-guide";
+import getSizeGuides from "@/actions/get-size-guides";
 
 export const revalidate = 0;
 
@@ -30,6 +32,7 @@ const CustomOrderPage = async ({
 
     const t = await getTranslations("CustomOrder");
     const guideLines = t.raw("measurementGuideLines") as string[];
+    const sizeGuides = await getSizeGuides();
 
     return (
         <div className="bg-white">
@@ -60,6 +63,7 @@ const CustomOrderPage = async ({
                                       ))
                                     : null}
                             </ul>
+                            <SizeGuideTable guides={sizeGuides} className="mt-6" />
                         </aside>
                     </div>
                 </div>
