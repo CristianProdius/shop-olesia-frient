@@ -328,6 +328,91 @@ export function orderShippedEmail(
     return { subject: d.subject(order.id), html };
 }
 
+const reviewRequestDict: Record<
+    Locale,
+    {
+        subject: (id: string) => string;
+        greeting: (name: string) => string;
+        intro: string;
+        cta: string;
+        reviewLink: (product: string) => string;
+        thanks: string;
+    }
+> = {
+    en: {
+        subject: () => `How did you like your LILETTI pieces?`,
+        greeting: (name) => (name ? `Hi ${name},` : "Hi,"),
+        intro:
+            "Your order has been delivered — we'd love to hear what you think. Your review helps other shoppers and takes just a moment.",
+        cta: "Leave a review",
+        reviewLink: (product) => `Review ${product}`,
+        thanks: "Thank you for shopping with LILETTI.",
+    },
+    ru: {
+        subject: () => `Как вам изделия LILETTI?`,
+        greeting: (name) => (name ? `Здравствуйте, ${name}!` : "Здравствуйте!"),
+        intro:
+            "Ваш заказ доставлен — поделитесь впечатлениями. Ваш отзыв поможет другим покупателям и займёт всего минуту.",
+        cta: "Оставить отзыв",
+        reviewLink: (product) => `Оставить отзыв: ${product}`,
+        thanks: "Спасибо, что выбрали LILETTI.",
+    },
+    ro: {
+        subject: () => `Cum vi s-au părut piesele LILETTI?`,
+        greeting: (name) => (name ? `Bună, ${name},` : "Bună,"),
+        intro:
+            "Comanda dvs. a fost livrată — ne-ar plăcea să aflăm părerea dvs. Recenzia dvs. îi ajută pe alți cumpărători și durează doar un moment.",
+        cta: "Lăsați o recenzie",
+        reviewLink: (product) => `Recenzie: ${product}`,
+        thanks: "Vă mulțumim că ați ales LILETTI.",
+    },
+};
+
+// Post-delivery review-request email. `storeUrl` is the storefront origin
+// (no trailing slash); links point at each product's reviews section.
+export function orderReviewRequestEmail(
+    order: EmailOrder,
+    storeUrl: string,
+    localeInput?: string | null,
+): { subject: string; html: string } {
+    const locale = normalizeLocale(localeInput ?? order.locale);
+    const d = reviewRequestDict[locale];
+
+    const name = escapeHtml((order.customerName ?? "").trim());
+    const base = storeUrl.replace(/\/+$/, "");
+    const items = order.orderItems ?? [];
+
+    const seen = new Set<string>();
+    const links = items
+        .filter((it) => {
+            const pid = (it.productId ?? "").toString();
+            if (!pid || seen.has(pid)) return false;
+            seen.add(pid);
+            return true;
+        })
+        .map((it) => {
+            const pid = encodeURIComponent((it.productId ?? "").toString());
+            const label = escapeHtml(
+                (it.productName ?? it.productId ?? "").toString(),
+            );
+            const href = `${base}/${locale}/product/${pid}#reviews`;
+            return `<p style="margin:0 0 8px;"><a href="${href}" style="color:#1a1a1a;">${d.reviewLink(label)}</a></p>`;
+        })
+        .join("");
+
+    const cta = `<p style="margin:16px 0;"><a href="${base}/${locale}" style="display:inline-block;background:#1a1a1a;color:#fff;padding:12px 20px;text-decoration:none;">${d.cta}</a></p>`;
+
+    const html = `${WRAP_OPEN}
+    <h1 style="font-size:20px;margin:0 0 16px;">LILETTI</h1>
+    <p style="margin:0 0 8px;">${d.greeting(name)}</p>
+    <p style="margin:0 0 16px;">${d.intro}</p>
+    ${links || cta}
+    <p style="margin:16px 0 0;">${d.thanks}</p>
+  ${WRAP_CLOSE}`;
+
+    return { subject: d.subject(order.id), html };
+}
+
 // --- Custom order (made-to-measure) requests --------------------------------
 
 // Minimal shape for custom-order request emails. Like `EmailOrder`, this is a

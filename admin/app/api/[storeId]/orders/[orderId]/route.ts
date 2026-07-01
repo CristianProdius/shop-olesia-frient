@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { getUserId } from "@/lib/server-auth";
 import { sendEmail } from "@/lib/email";
-import { orderShippedEmail } from "@/lib/email-templates";
+import { orderShippedEmail, orderReviewRequestEmail } from "@/lib/email-templates";
 import { NextResponse } from "next/server";
 import * as z from "zod";
 
@@ -113,7 +113,7 @@ export async function PATCH(
         // unrelated PATCHes that keep status === "shipped").
         const existing = await prismadb.order.findFirst({
             where: { id: orderId, storeId },
-            select: { status: true },
+            select: { status: true, reviewRequestSentAt: true },
         });
 
         if (!existing) {
@@ -152,6 +152,68 @@ export async function PATCH(
                     await sendEmail({ to: updated.email, subject, html });
                 } catch (mailErr) {
                     console.error("[ORDER_SHIPPED_EMAIL]", mailErr);
+                }
+            }
+        }
+
+        // Send the review-request email once, on the transition into
+        // "delivered", guarded by reviewRequestSentAt so it never repeats.
+        if (
+            status === "delivered" &&
+            existing.status !== "delivered" &&
+            !existing.reviewRequestSentAt
+        ) {
+            const delivered = await prismadb.order.findFirst({
+                where: { id: orderId, storeId },
+                select: {
+                    id: true,
+                    email: true,
+                    customerName: true,
+                    locale: true,
+                    orderItems: {
+                        select: {
+                            quantity: true,
+                            unitPrice: true,
+                            product: { select: { id: true, name: true } },
+                        },
+                    },
+                },
+            });
+
+            if (delivered?.email) {
+                try {
+                    const storeUrl =
+                        process.env.STORE_URL ??
+                        process.env.NEXT_PUBLIC_STORE_URL ??
+                        "https://liletti.delice.my";
+                    const { subject, html } = orderReviewRequestEmail(
+                        {
+                            id: delivered.id,
+                            email: delivered.email,
+                            customerName: delivered.customerName,
+                            locale: delivered.locale,
+                            orderItems: delivered.orderItems.map((oi) => ({
+                                quantity: oi.quantity,
+                                unitPrice: oi.unitPrice,
+                                productId: oi.product?.id ?? null,
+                                productName: oi.product?.name ?? null,
+                            })),
+                        },
+                        storeUrl,
+                        delivered.locale,
+                    );
+                    const result = await sendEmail({ to: delivered.email, subject, html });
+                    // Mark as sent only on an actual send, so a missing key
+                    // (skipped) or a transient error doesn't permanently
+                    // suppress a later retry on re-delivery.
+                    if (result.sent) {
+                        await prismadb.order.updateMany({
+                            where: { id: orderId, storeId },
+                            data: { reviewRequestSentAt: new Date() },
+                        });
+                    }
+                } catch (mailErr) {
+                    console.error("[ORDER_REVIEW_EMAIL]", mailErr);
                 }
             }
         }

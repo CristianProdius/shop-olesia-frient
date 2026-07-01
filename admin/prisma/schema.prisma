@@ -127,6 +127,8 @@ model Order {
   // Store customer who placed the order. Plain string (no FK): customer tables
   // live in the store app's separate Prisma schema. relationMode = "prisma".
   customerId     String?
+  // Set when the post-delivery review-request email is sent, so it fires once.
+  reviewRequestSentAt DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
