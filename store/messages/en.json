@@ -332,5 +332,17 @@
     "occasionWeekend": "Relaxed weekend",
     "occasionWedding": "Wedding guest",
     "occasionTravel": "Travel in style"
+  },
+  "FitFinder": {
+    "title": "Find my size",
+    "usualSizeLabel": "Your usual size",
+    "choose": "Choose your usual size",
+    "fitLabel": "Preferred fit",
+    "fitFitted": "Fitted",
+    "fitRegular": "Regular",
+    "fitRelaxed": "Relaxed",
+    "resultPrefix": "We recommend size",
+    "rationale": "Based on your usual {usual} and a {fit} fit, we suggest {size}.",
+    "outOfStockNote": "{size} is sold out — showing the nearest available size."
   }
 }

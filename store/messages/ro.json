@@ -332,5 +332,17 @@
     "occasionWeekend": "Weekend relaxat",
     "occasionWedding": "Invitat la nuntă",
     "occasionTravel": "Călătorie cu stil"
+  },
+  "FitFinder": {
+    "title": "Găsește mărimea mea",
+    "usualSizeLabel": "Mărimea ta obișnuită",
+    "choose": "Alege mărimea obișnuită",
+    "fitLabel": "Croiala preferată",
+    "fitFitted": "Mulat",
+    "fitRegular": "Regular",
+    "fitRelaxed": "Lejer",
+    "resultPrefix": "Recomandăm mărimea",
+    "rationale": "Pe baza mărimii tale obișnuite {usual} și a unei croieli {fit}, îți sugerăm {size}.",
+    "outOfStockNote": "{size} este epuizată — afișăm cea mai apropiată mărime disponibilă."
   }
 }

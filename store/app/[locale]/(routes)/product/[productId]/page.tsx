@@ -8,6 +8,7 @@ import ProductList from "@/components/product-list";
 import ProductReviews from "@/components/product-reviews";
 import RecentlyViewed from "@/components/recently-viewed";
 import SizeGuideTable from "@/components/size-guide";
+import FitFinder from "@/components/fit-finder";
 import getSizeGuides from "@/actions/get-size-guides";
 import Container from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
@@ -132,7 +133,10 @@ const ProductPage = async ({ params }: { params: Params }) => {
                         <div className="mt-10 lg:mt-0">
                             {/* Info */}
                             <Info data={product} rating={aggregateRating} />
-                            <SizeGuideTable guides={sizeGuides} className="mt-8" />
+                            <div className="mt-8 space-y-3">
+                                <SizeGuideTable guides={sizeGuides} />
+                                <FitFinder product={product} sizeGuides={sizeGuides} />
+                            </div>
                         </div>
                     </div>
                     <hr className="my-16 border-border" />
