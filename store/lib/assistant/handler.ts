@@ -94,7 +94,9 @@ export async function handleAssistantRequest(
     return emptyResponse("invalid", fallbackMessage("invalid", locale));
   }
 
-  if (!assistantConfigured(deps.apiKey)) {
+  const apiKey = deps.apiKey?.trim() ?? "";
+
+  if (!assistantConfigured(apiKey)) {
     return emptyResponse("offline", fallbackMessage("offline", locale));
   }
 
@@ -158,7 +160,7 @@ export async function handleAssistantRequest(
 
   try {
     const generated = await deps.generate({
-      apiKey: deps.apiKey,
+      apiKey,
       model: deps.model,
       latestUserMessage,
       context,

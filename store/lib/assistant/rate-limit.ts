@@ -23,7 +23,9 @@ interface Bucket {
 }
 
 function positiveInteger(value: number | undefined, fallback: number): number {
-  return Number.isInteger(value) && value > 0 ? value : fallback;
+  return typeof value === "number" && Number.isInteger(value) && value > 0
+    ? value
+    : fallback;
 }
 
 export function createAssistantRateLimiter(
