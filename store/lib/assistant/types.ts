@@ -111,23 +111,31 @@ export interface AssistantKnowledgeEntry {
   score?: number;
 }
 
+export interface AssistantKnowledgeSource {
+  id: string;
+  type: "faq" | "content";
+  label: string;
+  excerpt: string;
+}
+
 export interface AssistantOrderItemSummary {
   productId: string;
   variantId?: string | null;
   productName: string;
   quantity: number;
-  unitPrice?: number;
+  unitPrice?: string;
 }
 
 export interface AssistantOrderSummary {
   id: string;
-  orderNumber: string;
+  orderNumber?: string;
   status: string;
   paymentStatus?: string;
-  total: number;
-  currency: string;
+  total: string;
+  currency?: string;
   items: AssistantOrderItemSummary[];
   createdAt: string;
+  tracking?: string;
   carrier?: string | null;
   trackingNumber?: string | null;
 }
