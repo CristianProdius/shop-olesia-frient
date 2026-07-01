@@ -13,9 +13,10 @@ export interface Category {
     id: string;
     name: string;
     nameI18n?: I18nField | null;
-    // The list endpoint returns billboardId; getCategory(id) also nests billboard.
+    // The list endpoint (/categories) returns only billboardId; getCategory(id)
+    // additionally nests the full billboard. Hence billboard is optional.
     billboardId?: string;
-    billboard: Billboard;
+    billboard?: Billboard;
 }
 
 export interface Product {

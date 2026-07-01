@@ -10,6 +10,7 @@ import Container from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
 import { localizedField } from "@/lib/i18n-content";
 import {
+    SITE_URL,
     buildAlternates,
     productJsonLd,
     breadcrumbJsonLd,
@@ -19,8 +20,6 @@ import {
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.delice.my";
 
 type Params = Promise<{ productId: string; locale: string }>
 
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const description =
         localizedField(product.descriptionI18n, locale, product.description ?? "") ||
         `${name} — ${ORG_NAME}`;
-    const meta = buildAlternates(BASE, locale, `/product/${productId}`);
+    const meta = buildAlternates(SITE_URL, locale, `/product/${productId}`);
 
     return {
         title: name,
@@ -67,7 +66,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
         locale,
         product.category?.name ?? "",
     );
-    const canonical = buildAlternates(BASE, locale, `/product/${product.id}`).canonical;
+    const canonical = buildAlternates(SITE_URL, locale, `/product/${product.id}`).canonical;
 
     const productLd = productJsonLd({
         name: productName,
@@ -79,10 +78,10 @@ const ProductPage = async ({ params }: { params: Params }) => {
         aggregateRating,
     });
     const breadcrumbLd = breadcrumbJsonLd([
-        { name: "LILETTI", url: `${BASE}/${locale}` },
+        { name: "LILETTI", url: `${SITE_URL}/${locale}` },
         {
             name: categoryName,
-            url: `${BASE}/${locale}/category/${product.category?.id ?? ""}`,
+            url: `${SITE_URL}/${locale}/category/${product.category?.id ?? ""}`,
         },
         { name: productName, url: canonical },
     ]);

@@ -4,17 +4,18 @@ import { NextResponse } from "next/server"
 
 export async function GET (
     req: Request,
-    { params }: { params: Promise<{ billboardId: string }>}
+    { params }: { params: Promise<{ storeId: string, billboardId: string }>}
 ) {
     try {
-        const { billboardId } = await params;
+        const { storeId, billboardId } = await params;
         if(!billboardId) {
             return new NextResponse("Billboard id is required", { status: 400 });
         }
 
-        const billboard = await prismadb.billboard.findUnique({
+        const billboard = await prismadb.billboard.findFirst({
             where: {
                 id: billboardId,
+                storeId,
             }
         })
 
@@ -66,7 +67,8 @@ export async function PATCH (
 
         const billboard = await prismadb.billboard.updateMany({
             where: {
-                id: billboardId
+                id: billboardId,
+                storeId
             },
             data: {
                 label,
@@ -114,6 +116,7 @@ export async function DELETE (
         const billboard = await prismadb.billboard.deleteMany({
             where: {
                 id: billboardId,
+                storeId
             }
         })
 

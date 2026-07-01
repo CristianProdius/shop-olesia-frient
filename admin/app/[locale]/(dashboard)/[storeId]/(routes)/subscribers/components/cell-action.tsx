@@ -7,9 +7,9 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OrderColumn } from "./columns";
+import { SubscriberColumn } from "./columns";
 import { Button } from "@/components/ui/button";
-import { Copy, Eye, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, MoreHorizontal, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
@@ -19,13 +19,13 @@ import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-    data: OrderColumn;
+    data: SubscriberColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const router = useRouter();
     const params = useParams();
-    const t = useTranslations("Orders");
+    const t = useTranslations("Subscribers");
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -38,7 +38,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/${params.storeId}/orders/${data.id}`);
+            await axios.delete(
+                `/api/${params.storeId}/subscribers/${data.id}`
+            );
             router.refresh();
             toast.success(t("deletedSuccess"));
         } catch {
@@ -69,14 +71,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                     <DropdownMenuItem onClick={() => onCopy(data.id)}>
                         <Copy className="w-4 h-4 mr-2" />
                         {t("copyId")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() =>
-                            router.push(`/${params.storeId}/orders/${data.id}`)
-                        }
-                    >
-                        <Eye className="w-4 h-4 mr-2" />
-                        {t("view")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         className="text-red-500"

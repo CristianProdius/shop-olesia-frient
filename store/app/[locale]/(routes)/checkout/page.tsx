@@ -27,7 +27,7 @@ const CheckoutPage = () => {
     const [phone, setPhone] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
-    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price), 0);
+    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price) * (item.quantity ?? 1), 0);
 
     // Guest checkout: no login required. Prefill name/email from the customer
     // profile when the shopper happens to be signed in.
@@ -46,12 +46,12 @@ const CheckoutPage = () => {
         setSubmitting(true);
         try {
             // Simulated payment: the admin API creates the order and marks it paid.
-            // The cart keeps one line per variant; quantity is 1 per line.
+            // The cart keeps one line per variant, each carrying its own quantity.
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
                 items: items.map((item) => ({
                     productId: item.id,
                     variantId: item.variantId,
-                    quantity: 1,
+                    quantity: item.quantity ?? 1,
                     unitPrice: item.unitPrice,
                 })),
                 customerId: session?.user?.id,

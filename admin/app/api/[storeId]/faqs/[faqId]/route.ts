@@ -5,17 +5,18 @@ import { NextResponse } from "next/server"
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ faqId: string }> }
+    { params }: { params: Promise<{ storeId: string, faqId: string }> }
 ) {
     try {
-        const { faqId } = await params;
+        const { storeId, faqId } = await params;
         if (!faqId) {
             return new NextResponse("Faq id is required", { status: 400 });
         }
 
-        const faq = await prismadb.faq.findUnique({
+        const faq = await prismadb.faq.findFirst({
             where: {
                 id: faqId,
+                storeId,
             }
         })
 
@@ -75,7 +76,8 @@ export async function PATCH(
 
         const faq = await prismadb.faq.updateMany({
             where: {
-                id: faqId
+                id: faqId,
+                storeId
             },
             data: {
                 category: categoryPlain,
@@ -126,6 +128,7 @@ export async function DELETE(
         const faq = await prismadb.faq.deleteMany({
             where: {
                 id: faqId,
+                storeId
             }
         })
 

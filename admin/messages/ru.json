@@ -202,7 +202,10 @@
       "shipped": "Отправлен",
       "delivered": "Доставлен",
       "cancelled": "Отменён"
-    }
+    },
+    "delete": "Удалить",
+    "deletedSuccess": "Заказ успешно удалён.",
+    "deleteError": "Ошибка при удалении заказа."
   },
   "Subscribers": {
     "title": "Подписчики ({count})",
@@ -212,7 +215,14 @@
     "downloadCsv": "Скачать CSV",
     "empty": "Пока нет подписчиков.",
     "columnEmail": "Эл. почта",
-    "columnDate": "Дата"
+    "columnDate": "Дата",
+    "actions": "Действия",
+    "openMenu": "Открыть меню",
+    "copyId": "Копировать ID",
+    "copiedToClipboard": "ID подписчика скопирован в буфер обмена",
+    "delete": "Удалить",
+    "deletedSuccess": "Подписчик успешно удалён.",
+    "deleteError": "Ошибка при удалении подписчика."
   },
   "StockNotifications": {
     "title": "Лист ожидания поступления ({count})",
@@ -629,7 +639,20 @@
       "quoted": "Предложена цена",
       "accepted": "Принят",
       "declined": "Отклонён"
-    }
+    },
+    "delete": "Удалить",
+    "deletedSuccess": "Запрос успешно удалён.",
+    "deleteError": "Ошибка при удалении запроса.",
+    "addNew": "Добавить",
+    "createTitle": "Записать индивидуальный заказ",
+    "createDescription": "Зафиксируйте запрос по телефону или эл. почте",
+    "create": "Создать",
+    "createdToast": "Запрос создан",
+    "namePlaceholder": "Имя клиента",
+    "emailPlaceholder": "name@example.com",
+    "phonePlaceholder": "Номер телефона",
+    "messagePlaceholder": "Что хочет клиент",
+    "measurementsPlaceholder": "Мерки (необязательно)"
   },
   "Blog": {
     "title": "Журнал ({count})",

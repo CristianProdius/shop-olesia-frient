@@ -18,10 +18,12 @@ export async function GET(
 ) {
     try {
         const { storeId, blogId } = await params;
+        const userId = await getUserId();
 
         const post = await prismadb.blogPost.findFirst({
             where: {
                 storeId,
+                ...(userId ? {} : { isPublished: true }),
                 OR: [
                     { id: blogId },
                     { slug: blogId }

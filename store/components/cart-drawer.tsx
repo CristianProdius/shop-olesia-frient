@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -20,11 +20,15 @@ const CartDrawer = () => {
     const { isOpen, onClose } = useCartDrawer();
     const items = useCart((state) => state.items);
     const removeItem = useCart((state) => state.removeItem);
+    const updateQuantity = useCart((state) => state.updateQuantity);
 
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
-    const total = items.reduce((sum, item) => sum + Number(item.unitPrice ?? item.price), 0);
+    const total = items.reduce(
+        (sum, item) => sum + Number(item.unitPrice ?? item.price) * (item.quantity ?? 1),
+        0,
+    );
 
     const onCheckout = () => {
         onClose();
@@ -90,40 +94,70 @@ const CartDrawer = () => {
                                     </div>
                                 ) : (
                                     <ul className="flex-1 divide-y divide-border overflow-y-auto px-6 animate-drawer-in">
-                                        {items.map((item) => (
-                                            <li key={item.variantId ?? item.id} className="flex gap-4 py-5">
+                                        {items.map((item) => {
+                                            const lineId = item.variantId ?? item.id;
+                                            const name = localizedField(item.nameI18n, locale, item.name);
+                                            const quantity = item.quantity ?? 1;
+                                            const lineSubtotal = Number(item.unitPrice ?? item.price) * quantity;
+                                            return (
+                                            <li key={lineId} className="flex gap-4 py-5">
                                                 <div className="relative aspect-[3/4] w-16 shrink-0 overflow-hidden bg-placeholder">
                                                     <Image
                                                         fill
                                                         src={item.images?.[0]?.url}
-                                                        alt=""
+                                                        alt={name}
                                                         sizes="64px"
                                                         className="object-cover"
                                                     />
                                                 </div>
                                                 <div className="flex flex-1 flex-col">
                                                     <p className="text-sm text-text">
-                                                        {localizedField(item.nameI18n, locale, item.name)}
+                                                        {name}
                                                     </p>
                                                     <p className="mt-1 text-xs text-muted-strong">
                                                         {localizedField((item.selectedColor ?? item.color)?.nameI18n, locale, (item.selectedColor ?? item.color)?.name)}
                                                         {" · "}
                                                         {localizedField((item.selectedSize ?? item.size)?.nameI18n, locale, (item.selectedSize ?? item.size)?.name)}
                                                     </p>
-                                                    <div className="mt-auto pt-2 text-sm text-text">
-                                                        <Currency value={item.unitPrice ?? item.price} />
+                                                    <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+                                                        <div className="inline-flex items-center border border-border">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => updateQuantity(lineId, quantity - 1)}
+                                                                disabled={quantity <= 1}
+                                                                aria-label={t("decreaseQuantity")}
+                                                                className="flex size-8 items-center justify-center text-text transition-colors duration-200 ease-out hover:text-muted disabled:opacity-40 disabled:hover:text-text"
+                                                            >
+                                                                <Minus size={14} strokeWidth={1.5} />
+                                                            </button>
+                                                            <span className="min-w-7 text-center text-xs tabular-nums text-text">
+                                                                {quantity}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => updateQuantity(lineId, quantity + 1)}
+                                                                aria-label={t("increaseQuantity")}
+                                                                className="flex size-8 items-center justify-center text-text transition-colors duration-200 ease-out hover:text-muted"
+                                                            >
+                                                                <Plus size={14} strokeWidth={1.5} />
+                                                            </button>
+                                                        </div>
+                                                        <div className="text-sm text-text">
+                                                            <Currency value={lineSubtotal} />
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    onClick={() => removeItem(item.variantId ?? item.id)}
+                                                    onClick={() => removeItem(lineId)}
                                                     aria-label={t("remove")}
                                                     className="flex size-8 shrink-0 items-center justify-center self-start text-text transition-colors duration-200 ease-out hover:text-muted"
                                                 >
                                                     <X size={15} strokeWidth={1.5} />
                                                 </button>
                                             </li>
-                                        ))}
+                                            );
+                                        })}
                                     </ul>
                                 )}
 

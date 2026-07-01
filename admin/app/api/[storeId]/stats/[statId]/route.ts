@@ -5,17 +5,18 @@ import { NextResponse } from "next/server"
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ statId: string }> }
+    { params }: { params: Promise<{ storeId: string, statId: string }> }
 ) {
     try {
-        const { statId } = await params;
+        const { storeId, statId } = await params;
         if (!statId) {
             return new NextResponse("Stat id is required", { status: 400 });
         }
 
-        const stat = await prismadb.stat.findUnique({
+        const stat = await prismadb.stat.findFirst({
             where: {
                 id: statId,
+                storeId,
             }
         })
 
@@ -74,7 +75,8 @@ export async function PATCH(
 
         const stat = await prismadb.stat.updateMany({
             where: {
-                id: statId
+                id: statId,
+                storeId
             },
             data: {
                 key,
@@ -123,6 +125,7 @@ export async function DELETE(
         const stat = await prismadb.stat.deleteMany({
             where: {
                 id: statId,
+                storeId
             }
         })
 

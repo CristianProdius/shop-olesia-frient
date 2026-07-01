@@ -4,17 +4,18 @@ import { NextResponse } from "next/server"
 
 export async function GET (
     req: Request,
-    { params }: { params: Promise<{ categoryId: string }>}
+    { params }: { params: Promise<{ storeId: string, categoryId: string }>}
 ) {
     try {
-        const { categoryId } = await params; 
+        const { storeId, categoryId } = await params;
         if(!categoryId) {
             return new NextResponse("Category id is required", { status: 400 });
         }
 
-        const category = await prismadb.category.findUnique({
+        const category = await prismadb.category.findFirst({
             where: {
                 id: categoryId,
+                storeId,
             },
             include: {
                 billboard: true
@@ -68,7 +69,8 @@ export async function PATCH (
 
         const category = await prismadb.category.updateMany({
             where: {
-                id: categoryId
+                id: categoryId,
+                storeId
             },
             data: {
                 name,
@@ -116,6 +118,7 @@ export async function DELETE (
         const category = await prismadb.category.deleteMany({
             where: {
                 id: categoryId,
+                storeId
             }
         })
 

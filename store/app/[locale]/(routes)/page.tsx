@@ -2,6 +2,7 @@ import Container from "@/components/ui/container";
 import Billboard from "@/components/billboard";
 import ProductList from "@/components/product-list";
 import ValueStrip from "@/components/value-strip";
+import SocialProof from "@/components/social-proof";
 import Newsletter from "@/components/newsletter";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -21,11 +22,12 @@ export async function generateMetadata({
     params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
     const { locale } = await params;
-    const description =
-        "Shop the latest arrivals from LILETTI — minimal-luxury womenswear with refined silhouettes and elevated essentials, curated for the modern wardrobe.";
+    const t = await getTranslations({ locale, namespace: "Home" });
+    const title = t("metaTitle");
+    const description = t("metaDescription");
     const canonical = `${alternates(locale, "").canonical}`;
     return {
-        title: "New In",
+        title,
         description,
         alternates: alternates(locale, ""),
         openGraph: {
@@ -33,7 +35,7 @@ export async function generateMetadata({
             siteName: "LILETTI",
             locale,
             url: canonical,
-            title: "New In",
+            title,
             description,
             images: [{ url: "/og-default.jpg" }],
         },
@@ -63,6 +65,9 @@ const HomePage = async () => {
 
             {/* Trust / value band */}
             <ValueStrip />
+
+            {/* Social proof — admin-authored stats */}
+            <SocialProof locale={locale} />
 
             {/* Shop by Category */}
             {categories.length > 0 && (
@@ -114,7 +119,7 @@ const HomePage = async () => {
                         <Image
                             fill
                             src={editorial.imageUrl}
-                            alt=""
+                            alt={localizedField(editorial.labelI18n, locale, editorial.label)}
                             sizes="(min-width: 768px) 50vw, 100vw"
                             className="object-cover"
                         />

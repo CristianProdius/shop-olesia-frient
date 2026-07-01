@@ -3,9 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/container";
 import ContentSection from "@/components/content-section";
 import getContentBlocks from "@/actions/get-content-blocks";
-import { buildAlternates } from "@/lib/seo";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
+import { SITE_URL, buildAlternates } from "@/lib/seo";
 
 export const revalidate = 0;
 
@@ -19,7 +17,7 @@ export async function generateMetadata({
     return {
         title: t("title"),
         description: t("intro"),
-        alternates: buildAlternates(BASE, locale, "/about"),
+        alternates: buildAlternates(SITE_URL, locale, "/about"),
     };
 }
 

@@ -41,21 +41,21 @@ export async function POST(
             return new NextResponse("Name is required", { status: 400});
         }
 
-        if (!price) new NextResponse("Price is required", { status: 400});
+        if (!price) return new NextResponse("Price is required", { status: 400});
 
-        if (!categoryId) new NextResponse("Category id is required", { status: 400});
+        if (!categoryId) return new NextResponse("Category id is required", { status: 400});
 
-        if (!colorId) new NextResponse("Color id is required", { status: 400});
+        if (!colorId) return new NextResponse("Color id is required", { status: 400});
 
-        if (!sizeId) new NextResponse("Size id is required", { status: 400});
+        if (!sizeId) return new NextResponse("Size id is required", { status: 400});
 
-        if (!isFeatured) new NextResponse("Featured is required", { status: 400});
+        if (isFeatured === undefined) return new NextResponse("Featured is required", { status: 400});
 
-        if (!isArchived) new NextResponse("Archived is required", { status: 400});
+        if (isArchived === undefined) return new NextResponse("Archived is required", { status: 400});
 
-        // if (!images || !images.length) {
-        //     return new NextResponse("Image is required", { status: 400});
-        // }
+        if (!images || !images.length) {
+            return new NextResponse("Image is required", { status: 400});
+        }
 
         if (!storeId) {
             return new NextResponse("Store Id is required", { status: 400});

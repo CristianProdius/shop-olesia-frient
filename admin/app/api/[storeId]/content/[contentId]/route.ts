@@ -7,17 +7,18 @@ const CONTENT_TYPES = ['brand-story', 'behind-the-scenes', 'why-choose-us', 'soc
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ contentId: string }> }
+    { params }: { params: Promise<{ storeId: string, contentId: string }> }
 ) {
     try {
-        const { contentId } = await params;
+        const { storeId, contentId } = await params;
         if (!contentId) {
             return new NextResponse("Content id is required", { status: 400 });
         }
 
-        const contentBlock = await prismadb.contentBlock.findUnique({
+        const contentBlock = await prismadb.contentBlock.findFirst({
             where: {
                 id: contentId,
+                storeId,
             }
         })
 
@@ -75,7 +76,8 @@ export async function PATCH(
 
         const contentBlock = await prismadb.contentBlock.updateMany({
             where: {
-                id: contentId
+                id: contentId,
+                storeId
             },
             data: {
                 type,
@@ -126,6 +128,7 @@ export async function DELETE(
         const contentBlock = await prismadb.contentBlock.deleteMany({
             where: {
                 id: contentId,
+                storeId
             }
         })
 

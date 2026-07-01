@@ -36,6 +36,8 @@
     "invalid": "Please enter a valid email address."
   },
   "Home": {
+    "metaTitle": "New In",
+    "metaDescription": "Shop the latest arrivals from LILETTI — minimal-luxury womenswear with refined silhouettes and elevated essentials, curated for the modern wardrobe.",
     "featuredProducts": "Featured Products",
     "productImageAlt": "Product image",
     "getInspired": "Get Inspired",
@@ -128,6 +130,8 @@
     "email": "Email",
     "outOfStockError": "Sorry, one or more items just sold out. Please review your cart.",
     "remove": "Remove",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity",
     "code": "Code",
     "subtotal": "Subtotal",
     "viewCart": "View Bag",

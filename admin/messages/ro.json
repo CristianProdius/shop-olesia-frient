@@ -202,7 +202,10 @@
       "shipped": "Expediată",
       "delivered": "Livrată",
       "cancelled": "Anulată"
-    }
+    },
+    "delete": "Șterge",
+    "deletedSuccess": "Comanda a fost ștearsă.",
+    "deleteError": "Eroare la ștergerea comenzii."
   },
   "Subscribers": {
     "title": "Abonați ({count})",
@@ -212,7 +215,14 @@
     "downloadCsv": "Descarcă CSV",
     "empty": "Încă nu există abonați.",
     "columnEmail": "Email",
-    "columnDate": "Dată"
+    "columnDate": "Dată",
+    "actions": "Acțiuni",
+    "openMenu": "Deschide meniul",
+    "copyId": "Copiază ID",
+    "copiedToClipboard": "ID-ul abonatului a fost copiat",
+    "delete": "Șterge",
+    "deletedSuccess": "Abonatul a fost șters.",
+    "deleteError": "Eroare la ștergerea abonatului."
   },
   "StockNotifications": {
     "title": "Listă de așteptare reaprovizionare ({count})",
@@ -629,7 +639,20 @@
       "quoted": "Ofertat",
       "accepted": "Acceptat",
       "declined": "Refuzat"
-    }
+    },
+    "delete": "Șterge",
+    "deletedSuccess": "Solicitarea a fost ștearsă.",
+    "deleteError": "Eroare la ștergerea solicitării.",
+    "addNew": "Adaugă",
+    "createTitle": "Înregistrează comandă personalizată",
+    "createDescription": "Înregistrați o solicitare prin telefon sau e-mail",
+    "create": "Creează",
+    "createdToast": "Solicitare creată",
+    "namePlaceholder": "Numele clientului",
+    "emailPlaceholder": "name@example.com",
+    "phonePlaceholder": "Număr de telefon",
+    "messagePlaceholder": "Ce dorește clientul",
+    "measurementsPlaceholder": "Măsurători (opțional)"
   },
   "Blog": {
     "title": "Jurnal ({count})",

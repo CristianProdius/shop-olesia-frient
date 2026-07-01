@@ -79,16 +79,21 @@ export async function GET(
         const { storeId } = await params;
         const { searchParams } = new URL(req.url);
         const type = searchParams.get('type') || undefined;
+        const userId = await getUserId();
 
         if (!storeId) {
             return new NextResponse("Store Id is required", { status: 400 });
         }
 
+        const where: { storeId: string; type?: string; isPublished?: boolean } = {
+            storeId: storeId,
+            type
+        };
+
+        if (!userId) where.isPublished = true;
+
         const contentBlocks = await prismadb.contentBlock.findMany({
-            where: {
-                storeId: storeId,
-                type
-            },
+            where,
             orderBy: {
                 order: 'asc'
             }

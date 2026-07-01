@@ -327,3 +327,186 @@ export function orderShippedEmail(
 
     return { subject: d.subject(order.id), html };
 }
+
+// --- Custom order (made-to-measure) requests --------------------------------
+
+// Minimal shape for custom-order request emails. Like `EmailOrder`, this is a
+// pure value object so the builders never touch next-intl request scope.
+export type EmailCustomOrder = {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    locale?: string | null;
+};
+
+const customOrderConfirmationDict: Record<
+    Locale,
+    {
+        subject: (id: string) => string;
+        greeting: (name: string) => string;
+        intro: string;
+        referenceLabel: string;
+        thanks: string;
+    }
+> = {
+    en: {
+        subject: (id) => `We received your custom order request ${id}`,
+        greeting: (name) => (name ? `Hi ${name},` : "Hi,"),
+        intro:
+            "Thank you for your custom order request! Our Olesia Frient atelier has received it and will review it shortly.",
+        referenceLabel: "Reference",
+        thanks: "We'll be in touch soon with the next steps.",
+    },
+    ru: {
+        subject: (id) => `Мы получили ваш запрос на индивидуальный заказ ${id}`,
+        greeting: (name) => (name ? `Здравствуйте, ${name}!` : "Здравствуйте!"),
+        intro:
+            "Спасибо за ваш запрос на индивидуальный заказ! Ателье Olesia Frient получило его и скоро рассмотрит.",
+        referenceLabel: "Номер запроса",
+        thanks: "Мы свяжемся с вами в ближайшее время для уточнения деталей.",
+    },
+    ro: {
+        subject: (id) => `Am primit solicitarea dvs. de comandă personalizată ${id}`,
+        greeting: (name) => (name ? `Bună, ${name},` : "Bună,"),
+        intro:
+            "Vă mulțumim pentru solicitarea de comandă personalizată! Atelierul Olesia Frient a primit-o și o va analiza în curând.",
+        referenceLabel: "Referință",
+        thanks: "Vă vom contacta în curând cu pașii următori.",
+    },
+};
+
+export function customOrderConfirmationEmail(
+    request: EmailCustomOrder,
+    localeInput?: string | null,
+): { subject: string; html: string } {
+    const locale = normalizeLocale(localeInput ?? request.locale);
+    const d = customOrderConfirmationDict[locale];
+
+    const name = escapeHtml((request.name ?? "").trim());
+
+    const html = `${WRAP_OPEN}
+    <h1 style="font-size:20px;margin:0 0 16px;">LILETTI</h1>
+    <p style="margin:0 0 8px;">${d.greeting(name)}</p>
+    <p style="margin:0 0 16px;">${d.intro}</p>
+    <p style="margin:0 0 12px;"><strong>${d.referenceLabel}:</strong> ${escapeHtml(request.id)}</p>
+    <p style="margin:16px 0 0;">${d.thanks}</p>
+  ${WRAP_CLOSE}`;
+
+    return { subject: d.subject(request.id), html };
+}
+
+type CustomOrderStatus = "quoted" | "accepted" | "declined";
+
+const customOrderStatusDict: Record<
+    CustomOrderStatus,
+    Record<
+        Locale,
+        {
+            subject: (id: string) => string;
+            greeting: (name: string) => string;
+            body: string;
+            referenceLabel: string;
+            thanks: string;
+        }
+    >
+> = {
+    quoted: {
+        en: {
+            subject: (id) => `A quote is ready for your custom order ${id}`,
+            greeting: (name) => (name ? `Hi ${name},` : "Hi,"),
+            body:
+                "Good news — we've prepared a quote for your custom order request. Reply to this email and we'll walk you through the details.",
+            referenceLabel: "Reference",
+            thanks: "Thank you for choosing Olesia Frient.",
+        },
+        ru: {
+            subject: (id) => `Готово предложение по вашему заказу ${id}`,
+            greeting: (name) => (name ? `Здравствуйте, ${name}!` : "Здравствуйте!"),
+            body:
+                "Хорошие новости — мы подготовили предложение по вашему индивидуальному заказу. Ответьте на это письмо, и мы расскажем детали.",
+            referenceLabel: "Номер запроса",
+            thanks: "Спасибо, что выбрали Olesia Frient.",
+        },
+        ro: {
+            subject: (id) => `O ofertă este gata pentru comanda dvs. ${id}`,
+            greeting: (name) => (name ? `Bună, ${name},` : "Bună,"),
+            body:
+                "Vești bune — am pregătit o ofertă pentru solicitarea dvs. de comandă personalizată. Răspundeți la acest e-mail și vă vom prezenta detaliile.",
+            referenceLabel: "Referință",
+            thanks: "Vă mulțumim că ați ales Olesia Frient.",
+        },
+    },
+    accepted: {
+        en: {
+            subject: (id) => `Your custom order ${id} is confirmed`,
+            greeting: (name) => (name ? `Hi ${name},` : "Hi,"),
+            body:
+                "Your custom order request has been accepted and is now in progress. We'll keep you posted on its progress.",
+            referenceLabel: "Reference",
+            thanks: "Thank you for choosing Olesia Frient.",
+        },
+        ru: {
+            subject: (id) => `Ваш индивидуальный заказ ${id} подтверждён`,
+            greeting: (name) => (name ? `Здравствуйте, ${name}!` : "Здравствуйте!"),
+            body:
+                "Ваш запрос на индивидуальный заказ принят и теперь в работе. Мы будем держать вас в курсе.",
+            referenceLabel: "Номер запроса",
+            thanks: "Спасибо, что выбрали Olesia Frient.",
+        },
+        ro: {
+            subject: (id) => `Comanda dvs. personalizată ${id} este confirmată`,
+            greeting: (name) => (name ? `Bună, ${name},` : "Bună,"),
+            body:
+                "Solicitarea dvs. de comandă personalizată a fost acceptată și este acum în lucru. Vă vom ține la curent.",
+            referenceLabel: "Referință",
+            thanks: "Vă mulțumim că ați ales Olesia Frient.",
+        },
+    },
+    declined: {
+        en: {
+            subject: (id) => `Update on your custom order request ${id}`,
+            greeting: (name) => (name ? `Hi ${name},` : "Hi,"),
+            body:
+                "Thank you for your interest. Unfortunately we're unable to take on your custom order request at this time. Please don't hesitate to reach out for anything else.",
+            referenceLabel: "Reference",
+            thanks: "Thank you for considering Olesia Frient.",
+        },
+        ru: {
+            subject: (id) => `Обновление по вашему запросу ${id}`,
+            greeting: (name) => (name ? `Здравствуйте, ${name}!` : "Здравствуйте!"),
+            body:
+                "Спасибо за ваш интерес. К сожалению, сейчас мы не можем взять ваш индивидуальный заказ в работу. Будем рады помочь вам с чем-то ещё.",
+            referenceLabel: "Номер запроса",
+            thanks: "Спасибо, что рассматриваете Olesia Frient.",
+        },
+        ro: {
+            subject: (id) => `Actualizare privind solicitarea dvs. ${id}`,
+            greeting: (name) => (name ? `Bună, ${name},` : "Bună,"),
+            body:
+                "Vă mulțumim pentru interes. Din păcate, momentan nu putem prelua solicitarea dvs. de comandă personalizată. Nu ezitați să ne contactați pentru orice altceva.",
+            referenceLabel: "Referință",
+            thanks: "Vă mulțumim că ați luat în considerare Olesia Frient.",
+        },
+    },
+};
+
+export function customOrderStatusEmail(
+    status: CustomOrderStatus,
+    request: EmailCustomOrder,
+    localeInput?: string | null,
+): { subject: string; html: string } {
+    const locale = normalizeLocale(localeInput ?? request.locale);
+    const d = customOrderStatusDict[status][locale];
+
+    const name = escapeHtml((request.name ?? "").trim());
+
+    const html = `${WRAP_OPEN}
+    <h1 style="font-size:20px;margin:0 0 16px;">LILETTI</h1>
+    <p style="margin:0 0 8px;">${d.greeting(name)}</p>
+    <p style="margin:0 0 16px;">${d.body}</p>
+    <p style="margin:0 0 12px;"><strong>${d.referenceLabel}:</strong> ${escapeHtml(request.id)}</p>
+    <p style="margin:16px 0 0;">${d.thanks}</p>
+  ${WRAP_CLOSE}`;
+
+    return { subject: d.subject(request.id), html };
+}

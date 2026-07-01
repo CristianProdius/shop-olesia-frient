@@ -36,6 +36,8 @@
     "invalid": "Introdu o adresă de email validă."
   },
   "Home": {
+    "metaTitle": "Noutăți",
+    "metaDescription": "Descoperă cele mai noi piese LILETTI — vestimentație feminină minimal-luxury, cu siluete rafinate și esențiale elevate, create pentru garderoba modernă.",
     "featuredProducts": "Produse recomandate",
     "productImageAlt": "Imagine produs",
     "getInspired": "Inspiră-te",
@@ -128,6 +130,8 @@
     "email": "E-mail",
     "outOfStockError": "Ne pare rău, unul sau mai multe produse tocmai s-au epuizat. Te rugăm să verifici coșul.",
     "remove": "Elimină",
+    "increaseQuantity": "Crește cantitatea",
+    "decreaseQuantity": "Scade cantitatea",
     "code": "Cod",
     "subtotal": "Subtotal",
     "viewCart": "Vezi coșul",

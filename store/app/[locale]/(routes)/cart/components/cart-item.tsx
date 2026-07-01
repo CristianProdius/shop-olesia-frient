@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import Currency from '@/components/ui/currency';
 import useCart, { CartLine } from '@/hooks/use-cart';
-import { X } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { localizedField } from '@/lib/i18n-content';
@@ -23,6 +23,9 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
     const color = data.selectedColor ?? data.color;
     const size = data.selectedSize ?? data.size;
 
+    const quantity = data.quantity ?? 1;
+    const lineSubtotal = Number(data.unitPrice ?? data.price) * quantity;
+
     const onRemove = () => {
         cart.removeItem(lineId);
     }
@@ -33,7 +36,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                 <Image
                     fill
                     src={data.images[0].url}
-                    alt=""
+                    alt={localizedField(data.nameI18n, locale, data.name)}
                     className='object-cover object-center'
                 />
             </div>
@@ -65,6 +68,29 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                         </p>
                     )}
                     <Currency value={data.unitPrice ?? data.price} />
+                </div>
+                <div className='flex items-center justify-between gap-2 mt-4'>
+                    <div className='inline-flex items-center border border-border'>
+                        <button
+                            type='button'
+                            onClick={() => cart.updateQuantity(lineId, quantity - 1)}
+                            disabled={quantity <= 1}
+                            aria-label={t('decreaseQuantity')}
+                            className='flex items-center justify-center w-9 h-9 text-text transition-colors duration-200 ease-out hover:text-muted disabled:opacity-40 disabled:hover:text-text'>
+                            <Minus size={14} strokeWidth={1.5} />
+                        </button>
+                        <span className='min-w-8 text-center text-sm tabular-nums text-text'>
+                            {quantity}
+                        </span>
+                        <button
+                            type='button'
+                            onClick={() => cart.updateQuantity(lineId, quantity + 1)}
+                            aria-label={t('increaseQuantity')}
+                            className='flex items-center justify-center w-9 h-9 text-text transition-colors duration-200 ease-out hover:text-muted'>
+                            <Plus size={14} strokeWidth={1.5} />
+                        </button>
+                    </div>
+                    <Currency value={lineSubtotal} className='text-text' />
                 </div>
             </div>
         </li>

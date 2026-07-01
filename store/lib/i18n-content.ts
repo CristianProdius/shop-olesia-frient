@@ -4,7 +4,7 @@
 export function localizedField(
     i18n: unknown,
     locale: string,
-    fallback: string
+    fallback: string | undefined
 ): string {
     if (i18n && typeof i18n === "object") {
         const value = (i18n as Record<string, unknown>)[locale];
@@ -12,5 +12,5 @@ export function localizedField(
             return value;
         }
     }
-    return fallback;
+    return fallback ?? "";
 }

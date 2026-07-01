@@ -1,0 +1,13 @@
+import { CustomOrderForm } from "./components/custom-order-form";
+
+const NewCustomOrderPage = () => {
+    return (
+        <div className="flex-col">
+            <div className="flex-1 p-8 pt-6 space-y-4">
+                <CustomOrderForm />
+            </div>
+        </div>
+    );
+};
+
+export default NewCustomOrderPage;

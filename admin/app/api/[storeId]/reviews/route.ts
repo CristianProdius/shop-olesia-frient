@@ -97,7 +97,14 @@ export async function POST(
                 );
             }
 
-            if (typeof customerId !== "string" || customerId.trim().length === 0) {
+            // customerId is OPTIONAL: anonymous shoppers (guest checkout, no
+            // login required) may submit reviews with a null customerId. Only
+            // reject when it IS provided but is not a non-empty string.
+            if (
+                customerId !== undefined &&
+                customerId !== null &&
+                (typeof customerId !== "string" || customerId.trim().length === 0)
+            ) {
                 return new NextResponse("A valid customerId is required", {
                     status: 400,
                     headers: corsHeaders,
@@ -126,7 +133,7 @@ export async function POST(
                 data: {
                     storeId,
                     productId,
-                    customerId,
+                    customerId: customerId ?? null,
                     customerName: customerName ?? "",
                     rating: ratingNum,
                     body: bodyPlain,

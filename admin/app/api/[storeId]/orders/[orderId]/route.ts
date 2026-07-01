@@ -162,3 +162,56 @@ export async function PATCH(
         return new NextResponse("Internal error", { status: 500 });
     }
 }
+
+export async function DELETE(
+    req: Request,
+    { params }: { params: Promise<{ storeId: string; orderId: string }> }
+) {
+    try {
+        const userId = await getUserId();
+        const { storeId, orderId } = await params;
+
+        if (!userId) {
+            return new NextResponse("Unauthenticated", { status: 401 });
+        }
+
+        if (!orderId) {
+            return new NextResponse("Order id is required", { status: 400 });
+        }
+
+        const storeByUserId = await prismadb.store.findFirst({
+            where: {
+                id: storeId,
+                userId,
+            },
+        });
+
+        if (!storeByUserId) {
+            return new NextResponse("Unauthorized", { status: 403 });
+        }
+
+        // OrderItem has no DB-level cascade (relationMode = "prisma"), so remove
+        // the child rows first, then the order itself — atomically.
+        const [, order] = await prismadb.$transaction([
+            prismadb.orderItem.deleteMany({
+                where: {
+                    order: {
+                        id: orderId,
+                        storeId,
+                    },
+                },
+            }),
+            prismadb.order.deleteMany({
+                where: {
+                    id: orderId,
+                    storeId,
+                },
+            }),
+        ]);
+
+        return NextResponse.json(order);
+    } catch (err) {
+        console.log("[ORDER_DELETE]", err);
+        return new NextResponse("Internal error", { status: 500 });
+    }
+}

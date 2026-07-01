@@ -1,6 +1,7 @@
 "use client"
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
+import { CellAction } from './cell-action';
 
 export type SubscriberColumn = {
     id: string
@@ -26,5 +27,9 @@ export const columns: ColumnDef<SubscriberColumn>[] = [
     {
         accessorKey: 'createdAt',
         header: () => <DateHeader />,
+    },
+    {
+        id: 'actions',
+        cell: ({ row }) => <CellAction data={row.original} />,
     },
 ]

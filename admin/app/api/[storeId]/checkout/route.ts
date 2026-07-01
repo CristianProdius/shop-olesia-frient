@@ -76,9 +76,28 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
         locale,
     } = body ?? {};
 
-    // --- Validate customerId (presence/format only — see SECURITY NOTE above).
-    if (typeof customerId !== "string" || customerId.trim().length === 0) {
+    // --- Validate customerId (format only — see SECURITY NOTE above).
+    // customerId is OPTIONAL: guest checkout ("no login required") creates an
+    // order with a null customerId. Only reject when it IS provided but is not
+    // a non-empty string.
+    if (
+        customerId !== undefined &&
+        customerId !== null &&
+        (typeof customerId !== "string" || customerId.trim().length === 0)
+    ) {
         return new NextResponse("A valid customerId is required", {
+            status: 400,
+            headers: corsHeaders,
+        });
+    }
+
+    // Guest orders must still carry an email so the order is retrievable
+    // (via the orders/lookup endpoint) and the confirmation email can be sent.
+    if (
+        (customerId === undefined || customerId === null) &&
+        (typeof email !== "string" || email.trim().length === 0)
+    ) {
+        return new NextResponse("An email is required for guest checkout", {
             status: 400,
             headers: corsHeaders,
         });
@@ -136,7 +155,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ storeId
                     storeId,
                     isPaid: true,
                     status: "paid",
-                    customerId,
+                    customerId: customerId ?? null,
                     customerName: resolvedName,
                     email: email ?? "",
                     address: address ?? "",

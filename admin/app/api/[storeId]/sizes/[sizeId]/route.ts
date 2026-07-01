@@ -4,17 +4,18 @@ import { NextResponse } from "next/server"
 
 export async function GET (
     req: Request,
-    { params }: { params: Promise<{ sizeId: string }>}
+    { params }: { params: Promise<{ storeId: string, sizeId: string }>}
 ) {
     try {
-        const { sizeId } = await params; 
+        const { storeId, sizeId } = await params;
         if(!sizeId) {
             return new NextResponse("Size id is required", { status: 400 });
         }
 
-        const size = await prismadb.size.findUnique({
+        const size = await prismadb.size.findFirst({
             where: {
                 id: sizeId,
+                storeId,
             }
         })
 
@@ -65,7 +66,8 @@ export async function PATCH (
 
         const size = await prismadb.size.updateMany({
             where: {
-                id: sizeId
+                id: sizeId,
+                storeId
             },
             data: {
                 name,
@@ -113,6 +115,7 @@ export async function DELETE (
         const size = await prismadb.size.deleteMany({
             where: {
                 id: sizeId,
+                storeId
             }
         })
 

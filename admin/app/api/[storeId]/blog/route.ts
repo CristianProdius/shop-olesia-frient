@@ -19,17 +19,18 @@ export async function GET(
     try {
         const { storeId } = await params;
         const { searchParams } = new URL(req.url);
+        const userId = await getUserId();
 
         const where = {
             storeId,
-            ...(searchParams.get('published') ? { isPublished: true } : {})
+            ...(userId ? {} : { isPublished: true })
         };
 
         const posts = await prismadb.blogPost.findMany({
             where,
-            orderBy: searchParams.get('published')
-                ? { publishedAt: 'desc' }
-                : { createdAt: 'desc' }
+            orderBy: userId
+                ? { createdAt: 'desc' }
+                : { publishedAt: 'desc' }
         });
 
         return NextResponse.json(posts, { headers: corsHeaders });

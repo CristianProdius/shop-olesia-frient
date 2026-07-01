@@ -3,30 +3,15 @@
 import Button from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
 import useCart from '@/hooks/use-cart';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
-import { useEffect } from 'react';
-import { toast } from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import TrustBadges from '@/components/trust-badges';
 
 const Summary = () => {
     const t = useTranslations('Cart');
     const router = useRouter();
-    const searchParams = useSearchParams();
     const items = useCart(state => state.items);
-    const removeAll = useCart(state => state.removeAll);
-    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price), 0)
-
-    useEffect(() => {
-        if(searchParams.get('success')) {
-            toast.success(t("paymentCompleted"));
-            removeAll();
-        }
-        if(searchParams.get("canceled")) {
-            toast.error(t("somethingWentWrong"))
-        }
-    }, [searchParams, removeAll, t])
+    const totalPrice = items.reduce((total, item) => total + Number(item.unitPrice ?? item.price) * (item.quantity ?? 1), 0)
 
     const onCheckout = () => {
         // Guest checkout — no login required.

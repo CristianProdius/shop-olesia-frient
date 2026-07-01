@@ -202,7 +202,10 @@
       "shipped": "Shipped",
       "delivered": "Delivered",
       "cancelled": "Cancelled"
-    }
+    },
+    "delete": "Delete",
+    "deletedSuccess": "Order deleted successfully.",
+    "deleteError": "Error deleting order."
   },
   "Subscribers": {
     "title": "Subscribers ({count})",
@@ -212,7 +215,14 @@
     "downloadCsv": "Download CSV",
     "empty": "No subscribers yet.",
     "columnEmail": "Email",
-    "columnDate": "Date"
+    "columnDate": "Date",
+    "actions": "Actions",
+    "openMenu": "Open menu",
+    "copyId": "Copy ID",
+    "copiedToClipboard": "Subscriber ID copied to clipboard",
+    "delete": "Delete",
+    "deletedSuccess": "Subscriber deleted successfully.",
+    "deleteError": "Error deleting subscriber."
   },
   "StockNotifications": {
     "title": "Back-in-stock waitlist ({count})",
@@ -629,7 +639,20 @@
       "quoted": "Quoted",
       "accepted": "Accepted",
       "declined": "Declined"
-    }
+    },
+    "delete": "Delete",
+    "deletedSuccess": "Request deleted successfully.",
+    "deleteError": "Error deleting request.",
+    "addNew": "Add New",
+    "createTitle": "Log Custom Order",
+    "createDescription": "Record a phone or email made-to-measure request",
+    "create": "Create",
+    "createdToast": "Request created",
+    "namePlaceholder": "Customer name",
+    "emailPlaceholder": "name@example.com",
+    "phonePlaceholder": "Phone number",
+    "messagePlaceholder": "What the customer is looking for",
+    "measurementsPlaceholder": "Optional measurements"
   },
   "Blog": {
     "title": "Journal ({count})",

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/container";
-import { buildAlternates } from "@/lib/seo";
+import { SITE_URL, buildAlternates } from "@/lib/seo";
 import CustomOrderForm from "./components/custom-order-form";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://liletti.md";
 
 export const revalidate = 0;
 
@@ -18,7 +16,7 @@ export async function generateMetadata({
     return {
         title: t("title"),
         description: t("intro"),
-        alternates: buildAlternates(BASE, locale, "/custom-order"),
+        alternates: buildAlternates(SITE_URL, locale, "/custom-order"),
     };
 }
 

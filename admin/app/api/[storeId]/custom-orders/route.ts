@@ -3,6 +3,8 @@ import { z } from "zod";
 import { getUserId } from "@/lib/server-auth";
 import prismadb from "@/lib/prismadb";
 import { rateLimit } from "@/lib/rate-limit";
+import { sendEmail } from "@/lib/email";
+import { customOrderConfirmationEmail } from "@/lib/email-templates";
 
 // CORS headers so the store (a different origin) can POST a made-to-measure
 // request. Mirrors the public subscribers/checkout routes.
@@ -75,7 +77,7 @@ export async function POST(
         const { name, email, phone, message, measurements, locale } =
             parsed.data;
 
-        await prismadb.customOrderRequest.create({
+        const created = await prismadb.customOrderRequest.create({
             data: {
                 storeId,
                 name: name.trim(),
@@ -87,6 +89,26 @@ export async function POST(
                 status: "new",
             },
         });
+
+        // Fire a confirmation email to the requester (env-gated; sendEmail never
+        // throws, but we still guard so a comms failure can never break the
+        // submission).
+        if (created.email) {
+            try {
+                const { subject, html } = customOrderConfirmationEmail(
+                    {
+                        id: created.id,
+                        name: created.name,
+                        email: created.email,
+                        locale: created.locale,
+                    },
+                    created.locale
+                );
+                await sendEmail({ to: created.email, subject, html });
+            } catch (mailErr) {
+                console.error("[CUSTOM_ORDERS_CONFIRMATION_EMAIL]", mailErr);
+            }
+        }
 
         return NextResponse.json(
             { success: true },
