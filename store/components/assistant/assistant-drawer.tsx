@@ -55,10 +55,13 @@ const AssistantDrawer = ({ open, onClose }: Props) => {
     }
   }, [messages]);
 
-  // Focus the composer once the drawer has opened.
+  // Focus the composer once the drawer has opened. preventScroll stops the
+  // browser scrolling the still-off-screen panel into view mid-transition.
   useEffect(() => {
     if (!open) return;
-    const frame = requestAnimationFrame(() => inputRef.current?.focus());
+    const frame = requestAnimationFrame(() =>
+      inputRef.current?.focus({ preventScroll: true }),
+    );
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
@@ -87,7 +90,9 @@ const AssistantDrawer = ({ open, onClose }: Props) => {
     abortRef.current = null;
     setMessages([]);
     setLoading(false);
-    requestAnimationFrame(() => inputRef.current?.focus());
+    requestAnimationFrame(() =>
+      inputRef.current?.focus({ preventScroll: true }),
+    );
   };
 
   const sendMessage = async (value: string) => {
