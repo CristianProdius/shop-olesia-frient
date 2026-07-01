@@ -1,5 +1,6 @@
 import Container from "@/components/ui/container";
 import Billboard from "@/components/billboard";
+import ForYou from "@/components/for-you";
 import ProductList from "@/components/product-list";
 import ValueStrip from "@/components/value-strip";
 import SocialProof from "@/components/social-proof";
@@ -52,6 +53,8 @@ const HomePage = async () => {
     const editorial = billboards[1] ?? billboards[0];
     const categories = (await getCategories()) ?? [];
     const products = await getProducts({ isFeatured: true });
+    // Broader pool for the personalized "For You" edit (client-side ranking).
+    const forYouPool = (await getProducts({})).slice(0, 60);
 
     // Map billboardId -> image so each category tile can show its hero image.
     const billboardImage = new Map(billboards.map((b) => [b.id, b.imageUrl]));
@@ -143,6 +146,9 @@ const HomePage = async () => {
                     </div>
                 </div>
             </section>
+
+            {/* Personalized edit — only renders when there's browsing history */}
+            <ForYou pool={forYouPool} />
 
             {/* New In — a curated taste, with a link to the full catalog */}
             <Container>
