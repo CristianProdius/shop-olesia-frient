@@ -34,12 +34,19 @@ const csvToArray = (value?: string): string[] =>
 const arrayToCsv = (value?: string[]): string => (value ?? []).join(', ');
 const rowsToText = (rows: SizeGuideRow[]): string =>
     rows.map((r) => [r.label, ...(r.values ?? [])].join(', ')).join('\n');
+const stripTrailingEmpty = (values: string[]): string[] => {
+    const copy = [...values];
+    while (copy.length > 0 && copy[copy.length - 1] === '') copy.pop();
+    return copy;
+};
+// Keep interior blanks so values stay aligned under their column header
+// (e.g. "S, 80, , 90" → ['80','','90']); only trailing empties are dropped.
 const textToRows = (text?: string): SizeGuideRow[] =>
     (text ?? '')
         .split('\n')
         .map((line) => line.split(',').map((c) => c.trim()))
         .filter((parts) => parts.length > 0 && parts[0])
-        .map((parts) => ({ label: parts[0], values: parts.slice(1).filter((v) => v.length > 0) }));
+        .map((parts) => ({ label: parts[0], values: stripTrailingEmpty(parts.slice(1)) }));
 
 const formSchema = z.object({
     categoryId: z.string().min(1),

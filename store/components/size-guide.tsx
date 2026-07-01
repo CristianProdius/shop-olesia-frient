@@ -49,12 +49,9 @@ const SizeGuideTable = ({ guides, className }: Props) => {
         return (
           <details key={guide.id} className="border border-border">
             <summary className="cursor-pointer list-none px-4 py-3 text-xs font-bold uppercase tracking-[0.1em] text-ink transition-colors duration-200 ease-out hover:text-muted motion-reduce:transition-none">
-              {t("sizeGuide")}
+              {caption ? `${t("sizeGuide")} — ${caption}` : t("sizeGuide")}
             </summary>
             <div className="overflow-x-auto px-4 pb-4">
-              {caption && (
-                <p className="mb-3 text-sm text-muted-strong">{caption}</p>
-              )}
               <table className="w-full border-collapse text-sm">
                 {columns.length > 0 && (
                   <thead>
