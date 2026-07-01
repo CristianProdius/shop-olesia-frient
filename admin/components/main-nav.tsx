@@ -84,6 +84,7 @@ export function useNavGroups(): { groups: NavGroup[]; settings: NavItem } {
                 item('blog', t('blog'), Newspaper),
                 item('content', t('content'), FileText),
                 item('faqs', t('faqs'), HelpCircle),
+                item('size-guides', t('sizeGuides'), Ruler),
             ],
         },
         {
