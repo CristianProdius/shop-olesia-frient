@@ -1,4 +1,8 @@
+import type { Product, ProductVariant } from "@/types";
+
 export type AssistantRole = "user" | "assistant";
+export type AssistantLocale = "en" | "ro" | "ru";
+export type AssistantStatus = "ok" | "offline" | "invalid" | "rate_limited" | "error";
 
 export interface AssistantMessage {
   id: string;
@@ -26,6 +30,20 @@ export interface AssistantConversationInput {
   };
 }
 
+export interface AssistantRequestPayload {
+  locale?: string;
+  messages?: AssistantMessage[];
+  page?: {
+    path?: string;
+    productId?: string;
+    categoryId?: string;
+  };
+  guestOrder?: {
+    orderId?: string;
+    email?: string;
+  };
+}
+
 export interface AssistantProductVariantSummary {
   id: string;
   sku?: string | null;
@@ -46,6 +64,34 @@ export interface AssistantProductSummary {
   variants: AssistantProductVariantSummary[];
   stockQty: number;
   score?: number;
+}
+
+export type AssistantProductCartLine = Product & {
+  variantId: string;
+  selectedSize: ProductVariant["size"];
+  selectedColor: ProductVariant["color"];
+  unitPrice: string;
+  quantity?: number;
+};
+
+export interface AssistantProductRecommendation {
+  product: Product;
+  productId: string;
+  name: string;
+  description?: string;
+  price: string;
+  imageUrl?: string;
+  categoryName?: string;
+  reason: string;
+  stockState: "in" | "low" | "out";
+  variants: Array<{
+    id: string;
+    size: string;
+    color: string;
+    colorValue: string;
+    stockQty: number;
+  }>;
+  cartLine?: AssistantProductCartLine;
 }
 
 export interface AssistantCatalogContext {
