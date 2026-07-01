@@ -3,82 +3,82 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Store {
-  id              String    @id @default(uuid())
-  name            String
-  userId          String
-  billboards      Billboard[] @relation("StoreToBillboard")
-  categories      Category[] @relation("StoreToCategory")
-  products        Product[]  @relation("StoreToProduct")
-  sizes           Size[]     @relation("StoreToSize")
-  colors          Color[]     @relation("StoreToColor")
-  orders          Order[]     @relation("StoreToOrder")
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id         String      @id @default(uuid())
+  name       String
+  userId     String
+  billboards Billboard[] @relation("StoreToBillboard")
+  categories Category[]  @relation("StoreToCategory")
+  products   Product[]   @relation("StoreToProduct")
+  sizes      Size[]      @relation("StoreToSize")
+  colors     Color[]     @relation("StoreToColor")
+  orders     Order[]     @relation("StoreToOrder")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model Billboard {
-  id          String @id @default(uuid())
-  storeId     String
-  store       Store @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label       String
-  labelI18n   Json?    // { en, ru, ro } translations; falls back to `label`
-  imageUrl    String
-  categories  Category[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String     @id @default(uuid())
+  storeId    String
+  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label      String
+  labelI18n  Json? // { en, ru, ro } translations; falls back to `label`
+  imageUrl   String
+  categories Category[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
   @@index([storeId])
 }
 
 model Category {
-  id          String      @id @default(uuid())
-  storeId     String      // Foreign Key to Store
-  store       Store       @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboardId String      // Foreign Key to Billboard
-  billboard   Billboard   @relation(fields: [billboardId], references: [id])
+  id          String    @id @default(uuid())
+  storeId     String // Foreign Key to Store
+  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboardId String // Foreign Key to Billboard
+  billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
-  nameI18n    Json?       // { en, ru, ro } translations; falls back to `name`
-  products    Product[]   @relation("CategoryToProduct")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  nameI18n    Json? // { en, ru, ro } translations; falls back to `name`
+  products    Product[] @relation("CategoryToProduct")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
   @@index([billboardId])
 }
 
 model Product {
-  id          String    @id @default(uuid())
-  storeId     String    // Foreign Key to Store
-  store       Store     @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String    // Foreign Key to Category
-  category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  nameI18n    Json?     // { en, ru, ro } translations; falls back to `name`
-  description     String?   // long-form copy
-  descriptionI18n Json?     // { en, ru, ro }; falls back to `description`
-  material        String?   // e.g. "100% silk"
-  materialI18n    Json?     // { en, ru, ro }; falls back to `material`
-  care            String?   // care instructions
-  careI18n        Json?     // { en, ru, ro }; falls back to `care`
-  sku             String?   // stock-keeping unit
-  price       Decimal
-  isFeatured  Boolean   @default(false)
-  isArchived  Boolean   @default(false)
-  sizeId      String    // Foreign Key to Size
-  size        Size      @relation(fields: [sizeId], references: [id])
-  colorId     String    // Foreign Key to Color
-  color       Color     @relation(fields: [colorId], references: [id])
-  images      Image[]   // Relation to Image model
-  orderItems  OrderItem[]   // Relation to Order model
-  variants    ProductVariant[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String           @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store           Store            @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId      String // Foreign Key to Category
+  category        Category         @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name            String
+  nameI18n        Json? // { en, ru, ro } translations; falls back to `name`
+  description     String? // long-form copy
+  descriptionI18n Json? // { en, ru, ro }; falls back to `description`
+  material        String? // e.g. "100% silk"
+  materialI18n    Json? // { en, ru, ro }; falls back to `material`
+  care            String? // care instructions
+  careI18n        Json? // { en, ru, ro }; falls back to `care`
+  sku             String? // stock-keeping unit
+  price           Decimal
+  isFeatured      Boolean          @default(false)
+  isArchived      Boolean          @default(false)
+  sizeId          String // Foreign Key to Size
+  size            Size             @relation(fields: [sizeId], references: [id])
+  colorId         String // Foreign Key to Color
+  color           Color            @relation(fields: [colorId], references: [id])
+  images          Image[] // Relation to Image model
+  orderItems      OrderItem[] // Relation to Order model
+  variants        ProductVariant[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -104,85 +104,85 @@ model ProductVariant {
 }
 
 model Order {
-  id        String    @id @default(uuid())
-  storeId     String    // Foreign Key to Store
-  store       Store     @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean   @default(false)
-  phone      String    @default("")
-  address    String    @default("")
-  email      String    @default("")
+  id             String      @id @default(uuid())
+  storeId        String // Foreign Key to Store
+  store          Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems     OrderItem[] // Relation to OrderItem model
+  isPaid         Boolean     @default(false)
+  phone          String      @default("")
+  address        String      @default("")
+  email          String      @default("")
   // Fulfillment fields (additive). `status` tracks lifecycle:
   // pending | paid | shipped | delivered | cancelled.
-  status         String  @default("pending")
+  status         String      @default("pending")
   carrier        String?
   trackingNumber String?
   // Real customer name (no longer folded into `address`).
-  customerName   String  @default("")
+  customerName   String      @default("")
   // Locale the order was placed in (en | ru | ro) for localized comms.
-  locale         String  @default("en")
+  locale         String      @default("en")
   // Store customer who placed the order. Plain string (no FK): customer tables
   // live in the store app's separate Prisma schema. relationMode = "prisma".
-  customerId String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  customerId     String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   @@index([storeId])
 }
 
 // Intermediary for a many-to-many relationship
 model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String  // Foreign Key to Order
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String  // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  id        String   @id @default(uuid())
+  orderId   String // Foreign Key to Order
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId String // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id])
   // Fulfillment fields (additive).
   quantity  Int      @default(1)
   unitPrice Decimal? // price snapshot at purchase time
-  variantId String?  // selected ProductVariant (no FK; relationMode = "prisma")
+  variantId String? // selected ProductVariant (no FK; relationMode = "prisma")
 
   @@index([orderId])
   @@index([productId])
 }
 
 model Size {
-  id          String    @id @default(uuid())
-  storeId     String    // Foreign Key to Store
-  store       Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name        String
-  nameI18n    Json?     // { en, ru, ro } translations; falls back to `name`
-  value       String
-  products    Product[] // Relation to Product model
-  variants    ProductVariant[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String           @id @default(uuid())
+  storeId   String // Foreign Key to Store
+  store     Store            @relation("StoreToSize", fields: [storeId], references: [id])
+  name      String
+  nameI18n  Json? // { en, ru, ro } translations; falls back to `name`
+  value     String
+  products  Product[] // Relation to Product model
+  variants  ProductVariant[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@index([storeId])
 }
 
 model Color {
-  id          String   @id @default(uuid())
-  storeId     String   // Foreign Key to Store
-  store       Store    @relation("StoreToColor", fields: [storeId], references: [id])
-  name        String
-  nameI18n    Json?    // { en, ru, ro } translations; falls back to `name`
-  value       String
-  products    Product[] // Relation to Product model
-  variants    ProductVariant[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String           @id @default(uuid())
+  storeId   String // Foreign Key to Store
+  store     Store            @relation("StoreToColor", fields: [storeId], references: [id])
+  name      String
+  nameI18n  Json? // { en, ru, ro } translations; falls back to `name`
+  value     String
+  products  Product[] // Relation to Product model
+  variants  ProductVariant[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@index([storeId])
 }
 
 model Image {
-  id          String   @id @default(uuid())
-  productId   String   // Foreign Key to Product
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url         String   // URL of the image
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  productId String // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String // URL of the image
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([productId])
 }
@@ -195,20 +195,20 @@ model Image {
 // ----------------------------------------------------------------------------
 
 model Review {
-  id           String   @id @default(uuid())
+  id           String        @id @default(uuid())
   storeId      String
   productId    String
   customerId   String?
-  customerName String   @default("")
+  customerName String        @default("")
   rating       Int
   body         String?
   bodyI18n     Json?
-  status       String   @default("pending") // pending | approved | rejected
-  source       String   @default("web")     // web | instagram | import
+  status       String        @default("pending") // pending | approved | rejected
+  source       String        @default("web") // web | instagram | import
   fitVote      String?
-  verified     Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  verified     Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   images       ReviewImage[]
 
   @@index([storeId])
@@ -237,11 +237,11 @@ model BlogPost {
   storeId     String
   slug        String
   title       String
-  titleI18n   Json?     // { en, ru, ro }; falls back to `title`
+  titleI18n   Json? // { en, ru, ro }; falls back to `title`
   excerpt     String?
-  excerptI18n Json?     // { en, ru, ro }; falls back to `excerpt`
+  excerptI18n Json? // { en, ru, ro }; falls back to `excerpt`
   content     String
-  contentI18n Json?     // { en, ru, ro }; falls back to `content`
+  contentI18n Json? // { en, ru, ro }; falls back to `content`
   coverImage  String?
   isPublished Boolean   @default(false)
   publishedAt DateTime?
@@ -476,4 +476,24 @@ model Stat {
   updatedAt   DateTime @updatedAt
 
   @@index([storeId])
+}
+
+// Category-scoped size / measurement guides. storeId + categoryId scoped (no DB
+// FK; relationMode = "prisma"). columnsI18n = localized measurement headers
+// { en: [], ru: [], ro: [] }; rows = [{ label, values: [] }] aligned to columns.
+model SizeGuide {
+  id          String   @id @default(uuid())
+  storeId     String
+  categoryId  String
+  title       String?
+  titleI18n   Json?
+  columnsI18n Json?
+  rows        Json?
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
 }
