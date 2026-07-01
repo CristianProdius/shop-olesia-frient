@@ -53,8 +53,10 @@ const HomePage = async () => {
     const editorial = billboards[1] ?? billboards[0];
     const categories = (await getCategories()) ?? [];
     const products = await getProducts({ isFeatured: true });
-    // Broader pool for the personalized "For You" edit (client-side ranking).
-    const forYouPool = (await getProducts({})).slice(0, 60);
+    // Pool for the personalized "For You" edit. Ranking is client-side (the
+    // signal lives in localStorage), so a pool must ship to the client — keep
+    // it modest to bound the payload on this top-traffic page.
+    const forYouPool = (await getProducts({})).slice(0, 24);
 
     // Map billboardId -> image so each category tile can show its hero image.
     const billboardImage = new Map(billboards.map((b) => [b.id, b.imageUrl]));

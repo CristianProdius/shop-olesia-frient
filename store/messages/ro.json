@@ -321,6 +321,7 @@
     "save": "Salvează ținuta",
     "saved": "Salvat",
     "thinking": "Compunem ținuta ta...",
+    "announceReady": "Ținuta e gata, {count} piese.",
     "empty": "Spune-mi o ocazie pentru a începe.",
     "noLook": "Nu am putut compune o ținută. Încearcă altă ocazie.",
     "error": "A apărut o eroare. Încearcă din nou.",

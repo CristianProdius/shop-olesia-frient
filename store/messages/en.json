@@ -321,6 +321,7 @@
     "save": "Save look",
     "saved": "Saved",
     "thinking": "Composing your look...",
+    "announceReady": "Look ready, {count} pieces.",
     "empty": "Tell me an occasion to get started.",
     "noLook": "I couldn't compose a look for that. Try another occasion.",
     "error": "Something went wrong. Please try again.",

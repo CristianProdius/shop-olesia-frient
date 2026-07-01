@@ -97,6 +97,17 @@ const StylistClient = () => {
 
   const hasLook = look?.status === "ok" && look.products.length > 0;
 
+  // Announce only a short status string — never the whole product grid.
+  const statusMessage = loading
+    ? t("thinking")
+    : look && look.status !== "ok"
+      ? look.status === "offline"
+        ? t("offline")
+        : t("error")
+      : hasLook && look
+        ? t("announceReady", { count: look.products.length })
+        : "";
+
   return (
     <div className="mx-auto max-w-[1100px] px-4 py-20 sm:px-6 md:py-24 lg:px-8">
       <div className="max-w-[640px]">
@@ -156,8 +167,12 @@ const StylistClient = () => {
         ))}
       </div>
 
-      <div className="mt-14" aria-live="polite">
-        {loading && <StylistSkeleton label={t("thinking")} />}
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {statusMessage}
+      </p>
+
+      <div className="mt-14">
+        {loading && <StylistSkeleton />}
 
         {!loading && look && look.status !== "ok" && (
           <p className="text-sm text-muted-strong">
@@ -246,12 +261,9 @@ const ActionButton = ({
   </button>
 );
 
-const StylistSkeleton = ({ label }: { label: string }) => (
-  <div>
-    <span className="sr-only" role="status">
-      {label}
-    </span>
-    <div className="h-4 w-24 bg-surface-2" aria-hidden="true" />
+const StylistSkeleton = () => (
+  <div aria-hidden="true">
+    <div className="h-4 w-24 bg-surface-2" />
     <div className="mt-3 h-6 w-56 bg-surface-2" aria-hidden="true" />
     <ul
       className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4"
