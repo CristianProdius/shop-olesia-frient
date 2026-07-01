@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { s3, S3_BUCKET, S3_PUBLIC_URL, assertS3Config } from "@/lib/s3";
+import { getS3, S3_BUCKET, S3_PUBLIC_URL, assertS3Config } from "@/lib/s3";
 import { getUserId } from "@/lib/server-auth";
 
 // Returns a short-lived presigned PUT URL the browser uses to upload a file
@@ -24,14 +24,15 @@ export async function POST(req: Request) {
     const safeName = String(fileName).replace(/[^a-zA-Z0-9.\-_]/g, "_");
     const key = `products/${randomUUID()}-${safeName}`;
 
+    const bucket = S3_BUCKET();
     const command = new PutObjectCommand({
-        Bucket: S3_BUCKET,
+        Bucket: bucket,
         Key: key,
         ContentType: contentType,
     });
 
-    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
-    const publicUrl = `${S3_PUBLIC_URL}/${S3_BUCKET}/${key}`;
+    const uploadUrl = await getSignedUrl(getS3(), command, { expiresIn: 60 });
+    const publicUrl = `${S3_PUBLIC_URL()}/${bucket}/${key}`;
 
     return NextResponse.json({ uploadUrl, publicUrl });
 }
