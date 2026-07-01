@@ -7,10 +7,14 @@ const URL = `${process.env.NEXT_PUBLIC_API_URL}/stats`;
 // by `isPublished` and sort by `order` client-side so the store never renders
 // unpublished or unordered entries even if the API contract changes.
 const getStats = async (): Promise<Stat[]> => {
-    const res = await fetch(URL);
-    if (!res.ok) return [];
-    const stats: Stat[] = await res.json();
-    return publishedSorted(stats);
+    try {
+        const res = await fetch(URL);
+        if (!res.ok) return [];
+        const stats: Stat[] = await res.json();
+        return publishedSorted(stats);
+    } catch {
+        return [];
+    }
 };
 
 export default getStats;

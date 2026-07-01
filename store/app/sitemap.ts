@@ -16,8 +16,22 @@ function languagesFor(path: string): Record<string, string> {
 
 // Resilient fetch: any failure (network, non-OK, non-JSON) yields [].
 async function fetchList(endpoint: string): Promise<any[]> {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+    if (!apiUrl) return [];
+
+    let baseUrl: URL;
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`);
+        baseUrl = new URL(apiUrl);
+    } catch {
+        return [];
+    }
+
+    if (baseUrl.protocol !== "http:" && baseUrl.protocol !== "https:") {
+        return [];
+    }
+
+    try {
+        const res = await fetch(new URL(endpoint, baseUrl).toString());
         if (!res.ok) return [];
         const data = await res.json();
         return Array.isArray(data) ? data : [];
