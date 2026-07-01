@@ -156,6 +156,13 @@ export interface AssistantResponse {
   followups: string[];
 }
 
+export interface AssistantStylistLook {
+  status: AssistantStatus;
+  title: string;
+  rationale: string;
+  products: AssistantProductRecommendation[];
+}
+
 export interface AssistantContext {
   locale: AssistantLocale;
   latestUserMessage: string;

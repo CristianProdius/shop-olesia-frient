@@ -27,6 +27,12 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
         active: pathname === '/blog' || pathname.startsWith('/blog/'),
     })
 
+    routes.push({
+        href: '/stylist',
+        label: t('stylist'),
+        active: pathname === '/stylist' || pathname.startsWith('/stylist'),
+    })
+
     return (
         <nav className='flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:gap-x-8'>
             {routes.map(route => (

@@ -12,7 +12,8 @@
     "menu": "Meniu",
     "closeMenu": "Închide meniul",
     "home": "Acasă",
-    "journal": "Jurnal"
+    "journal": "Jurnal",
+    "stylist": "Stilist"
   },
   "Footer": {
     "copyright": "© {year} LILETTI. Toate drepturile rezervate.",
@@ -304,5 +305,29 @@
     "suggestCare": "Cum îngrijesc piesele din mătase?",
     "suggestOrder": "Unde este comanda mea?",
     "suggestCustom": "Pot solicita o piesă pe măsură?"
+  },
+  "Stylist": {
+    "title": "Stilist AI",
+    "tagline": "Completează ținuta",
+    "intro": "Descrie o ocazie, iar stilistul nostru va compune o ținută completă din colecție.",
+    "placeholder": "ex. o nuntă de iarnă, un vernisaj, o escapadă de weekend",
+    "cta": "Stilizează-mă",
+    "restyle": "Restilizează",
+    "shuffle": "Amestecă",
+    "theLook": "Ținuta",
+    "addAll": "Adaugă tot în coș",
+    "added": "Adăugat în coș",
+    "save": "Salvează ținuta",
+    "saved": "Salvat",
+    "thinking": "Compunem ținuta ta...",
+    "empty": "Spune-mi o ocazie pentru a începe.",
+    "noLook": "Nu am putut compune o ținută. Încearcă altă ocazie.",
+    "error": "A apărut o eroare. Încearcă din nou.",
+    "offline": "Stilistul este indisponibil momentan.",
+    "occasionEvening": "Eveniment de seară",
+    "occasionOffice": "De la birou la cină",
+    "occasionWeekend": "Weekend relaxat",
+    "occasionWedding": "Invitat la nuntă",
+    "occasionTravel": "Călătorie cu stil"
   }
 }

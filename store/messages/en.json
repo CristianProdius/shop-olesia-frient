@@ -12,7 +12,8 @@
     "menu": "Menu",
     "closeMenu": "Close menu",
     "home": "Home",
-    "journal": "Journal"
+    "journal": "Journal",
+    "stylist": "Stylist"
   },
   "Footer": {
     "copyright": "© {year} LILETTI. All rights reserved.",
@@ -304,5 +305,29 @@
     "suggestCare": "How do I care for silk pieces?",
     "suggestOrder": "Where is my order?",
     "suggestCustom": "Can I request made-to-measure?"
+  },
+  "Stylist": {
+    "title": "AI Stylist",
+    "tagline": "Complete the look",
+    "intro": "Describe an occasion and our stylist will compose a head-to-toe look from the collection.",
+    "placeholder": "e.g. a winter wedding, an art opening, a weekend away",
+    "cta": "Style me",
+    "restyle": "Restyle",
+    "shuffle": "Shuffle",
+    "theLook": "The look",
+    "addAll": "Add all to bag",
+    "added": "Added to bag",
+    "save": "Save look",
+    "saved": "Saved",
+    "thinking": "Composing your look...",
+    "empty": "Tell me an occasion to get started.",
+    "noLook": "I couldn't compose a look for that. Try another occasion.",
+    "error": "Something went wrong. Please try again.",
+    "offline": "The stylist is unavailable right now.",
+    "occasionEvening": "Evening event",
+    "occasionOffice": "Office to dinner",
+    "occasionWeekend": "Relaxed weekend",
+    "occasionWedding": "Wedding guest",
+    "occasionTravel": "Travel in style"
   }
 }
