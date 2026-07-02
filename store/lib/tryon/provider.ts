@@ -27,38 +27,25 @@ export function tryOnConfigured(): boolean {
   return OPENAI_API_KEY.trim().length > 0;
 }
 
-export interface RunTryOnInput {
-  garmentImageUrl: string;
-  stylePrompt: string;
-  fetchImpl?: typeof fetch;
+async function fetchImageBlob(
+  url: string,
+  fetcher: typeof fetch,
+): Promise<Blob> {
+  const res = await fetcher(url);
+  if (!res.ok) {
+    throw new Error(`Could not load garment image (${res.status})`);
+  }
+  const type = res.headers.get("content-type") || "image/png";
+  return new Blob([await res.arrayBuffer()], { type });
 }
 
-export async function runTryOn(input: RunTryOnInput): Promise<{ imageUrl: string }> {
-  const fetcher = input.fetchImpl ?? fetch;
-
-  // Fetch the garment (product) image bytes to upload as the edit input.
-  const imgRes = await fetcher(input.garmentImageUrl);
-  if (!imgRes.ok) {
-    throw new Error(`Could not load garment image (${imgRes.status})`);
-  }
-  const contentType = imgRes.headers.get("content-type") || "image/png";
-  const bytes = await imgRes.arrayBuffer();
-
-  const form = new FormData();
+async function callImageEdit(
+  form: FormData,
+  fetcher: typeof fetch,
+): Promise<{ imageUrl: string }> {
   form.append("model", OPENAI_IMAGE_MODEL);
   form.append("size", OPENAI_IMAGE_SIZE);
   form.append("n", "1");
-  form.append(
-    "image",
-    new Blob([bytes], { type: contentType }),
-    "garment.png",
-  );
-  form.append(
-    "prompt",
-    `Generate a photorealistic, full-body fashion photograph of a model wearing this exact garment, ${input.stylePrompt}. ` +
-      "Preserve the garment's design, colour, pattern, and proportions faithfully. " +
-      "Show the whole outfit head to toe. No text or watermark.",
-  );
 
   const res = await fetcher("https://api.openai.com/v1/images/edits", {
     method: "POST",
@@ -82,4 +69,61 @@ export async function runTryOn(input: RunTryOnInput): Promise<{ imageUrl: string
     return { imageUrl: first.url };
   }
   throw new Error("OpenAI returned no image");
+}
+
+export interface RunTryOnInput {
+  garmentImageUrl: string;
+  stylePrompt: string;
+  fetchImpl?: typeof fetch;
+}
+
+/** On-a-model: generates a model wearing the product's garment in a style. */
+export async function runTryOn(input: RunTryOnInput): Promise<{ imageUrl: string }> {
+  const fetcher = input.fetchImpl ?? fetch;
+  const garment = await fetchImageBlob(input.garmentImageUrl, fetcher);
+
+  const form = new FormData();
+  form.append("image", garment, "garment.png");
+  form.append(
+    "prompt",
+    `Generate a photorealistic, full-body fashion photograph of a model wearing this exact garment, ${input.stylePrompt}. ` +
+      "Preserve the garment's design, colour, pattern, and proportions faithfully. " +
+      "Show the whole outfit head to toe. No text or watermark.",
+  );
+  return callImageEdit(form, fetcher);
+}
+
+export interface RunTryOnPersonInput {
+  garmentImageUrl: string;
+  personBytes: ArrayBuffer;
+  personType: string;
+  fetchImpl?: typeof fetch;
+}
+
+/**
+ * On-me: dresses the shopper (first image) in the product's garment (second
+ * image). The person photo is processed in-memory only and never persisted.
+ */
+export async function runTryOnOnPerson(
+  input: RunTryOnPersonInput,
+): Promise<{ imageUrl: string }> {
+  const fetcher = input.fetchImpl ?? fetch;
+  const garment = await fetchImageBlob(input.garmentImageUrl, fetcher);
+
+  const form = new FormData();
+  // Order matters: the person is the image being edited; the garment is the
+  // reference. gpt-image-1 accepts multiple inputs via repeated image[].
+  form.append(
+    "image[]",
+    new Blob([input.personBytes], { type: input.personType || "image/png" }),
+    "person.png",
+  );
+  form.append("image[]", garment, "garment.png");
+  form.append(
+    "prompt",
+    "Edit the first image (a person) so they are wearing the exact garment shown in the second image. " +
+      "Preserve the person's face, hair, skin tone, body shape, and pose; keep it photorealistic. " +
+      "Reproduce the garment's design, colour, pattern, and proportions faithfully. No text or watermark.",
+  );
+  return callImageEdit(form, fetcher);
 }

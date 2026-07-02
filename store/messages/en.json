@@ -347,7 +347,12 @@
   },
   "TryOn": {
     "title": "Virtual try-on",
-    "presetNote": "See this piece worn on a model. Pick a style and we'll generate a preview — no photo of you required.",
+    "modeMe": "On me",
+    "modeModel": "On a model",
+    "close": "Close",
+    "uploadHint": "Upload a full-body photo of yourself",
+    "photoPreviewAlt": "Your uploaded photo",
+    "consent": "Your photo is used only to create this preview and is never stored.",
     "chooseStyle": "Choose a style",
     "styleStudio": "Studio",
     "styleEditorial": "Editorial",

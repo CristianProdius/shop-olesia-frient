@@ -347,7 +347,12 @@
   },
   "TryOn": {
     "title": "Probă virtuală",
-    "presetNote": "Vezi această piesă purtată pe un model. Alege un stil și generăm o previzualizare — fără nicio fotografie a ta.",
+    "modeMe": "Pe mine",
+    "modeModel": "Pe un model",
+    "close": "Închide",
+    "uploadHint": "Încarcă o fotografie a ta din cap până în picioare",
+    "photoPreviewAlt": "Fotografia ta încărcată",
+    "consent": "Fotografia ta este folosită doar pentru a crea această previzualizare și nu este niciodată stocată.",
     "chooseStyle": "Alege un stil",
     "styleStudio": "Studio",
     "styleEditorial": "Editorial",
