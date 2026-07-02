@@ -3,40 +3,40 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { TRYON_PRESET_MODELS, tryOnEnabled } from "@/lib/tryon/presets";
+import { TRYON_STYLES } from "@/lib/tryon/presets";
 import type { TryOnResult } from "@/lib/tryon/provider";
 import type { Product } from "@/types";
 import { cn } from "@/lib/utils";
 
 type Props = {
   product: Product;
+  enabled: boolean;
 };
 
 /**
- * Virtual Try-On (preset model bodies only — no shopper photo upload). Renders
- * nothing unless try-on is enabled + configured (see lib/tryon/presets.ts).
- * The result image comes from the vendor CDN, so a plain <img> is used to avoid
- * per-vendor next/image remotePatterns config.
+ * Virtual Try-On (preset styles — no shopper photo upload). Renders nothing
+ * unless `enabled` (decided server-side by the presence of the image API key).
+ * The generated result is a data URI, rendered with a plain <img>.
  */
-const TryOn = ({ product }: Props) => {
+const TryOn = ({ product, enabled }: Props) => {
   const t = useTranslations("TryOn");
-  const [modelId, setModelId] = useState(TRYON_PRESET_MODELS[0]?.id ?? "");
+  const [styleId, setStyleId] = useState(TRYON_STYLES[0]?.id ?? "");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<TryOnResult | null>(null);
 
-  if (!tryOnEnabled()) {
+  if (!enabled) {
     return null;
   }
 
   const generate = async () => {
-    if (!modelId || loading) return;
+    if (!styleId || loading) return;
     setLoading(true);
     setResult(null);
     try {
       const res = await fetch("/api/tryon", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: product.id, modelId }),
+        body: JSON.stringify({ productId: product.id, styleId }),
       });
       setResult((await res.json()) as TryOnResult);
     } catch {
@@ -56,28 +56,24 @@ const TryOn = ({ product }: Props) => {
 
         <div
           role="radiogroup"
-          aria-label={t("chooseModel")}
+          aria-label={t("chooseStyle")}
           className="flex flex-wrap gap-2"
         >
-          {TRYON_PRESET_MODELS.map((model) => (
+          {TRYON_STYLES.map((style) => (
             <button
-              key={model.id}
+              key={style.id}
               type="button"
               role="radio"
-              aria-checked={modelId === model.id}
-              aria-label={t(model.labelKey)}
-              onClick={() => setModelId(model.id)}
+              aria-checked={styleId === style.id}
+              onClick={() => setStyleId(style.id)}
               className={cn(
-                "relative size-16 overflow-hidden border bg-placeholder focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-border-strong",
-                modelId === model.id ? "border-ink" : "border-border",
+                "border px-3 py-2 text-sm transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-border-strong motion-reduce:transition-none",
+                styleId === style.id
+                  ? "border-ink text-ink"
+                  : "border-border text-text hover:border-ink",
               )}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={model.imageUrl}
-                alt={t(model.labelKey)}
-                className="size-full object-cover"
-              />
+              {t(style.labelKey)}
             </button>
           ))}
         </div>
@@ -94,7 +90,7 @@ const TryOn = ({ product }: Props) => {
         <div aria-live="polite">
           {loading && (
             <div
-              className="aspect-[3/4] w-full max-w-[280px] bg-surface-2"
+              className="aspect-[2/3] w-full max-w-[280px] bg-surface-2"
               role="status"
               aria-label={t("generating")}
             />
@@ -111,6 +107,10 @@ const TryOn = ({ product }: Props) => {
             <p className="text-sm text-muted-strong">{t("error")}</p>
           )}
         </div>
+
+        <p className="text-[11px] text-muted-strong text-pretty">
+          {t("aiNote")}
+        </p>
       </div>
     </details>
   );

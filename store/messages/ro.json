@@ -347,14 +347,15 @@
   },
   "TryOn": {
     "title": "Probă virtuală",
-    "presetNote": "Vezi această piesă pe unul dintre modelele noastre. Alege un model ca să vezi croiala — fără nicio fotografie a ta.",
-    "chooseModel": "Alege un model",
-    "modelA": "Model A",
-    "modelB": "Model B",
-    "modelC": "Model C",
+    "presetNote": "Vezi această piesă purtată pe un model. Alege un stil și generăm o previzualizare — fără nicio fotografie a ta.",
+    "chooseStyle": "Alege un stil",
+    "styleStudio": "Studio",
+    "styleEditorial": "Editorial",
+    "styleStreet": "Stradal",
     "generate": "Probează",
     "generating": "Generăm previzualizarea...",
     "resultAlt": "Previzualizare probă virtuală",
-    "error": "Previzualizarea nu a putut fi generată. Încearcă din nou."
+    "error": "Previzualizarea nu a putut fi generată. Încearcă din nou.",
+    "aiNote": "Previzualizare generată de AI, cu titlu ilustrativ — croiala și culoarea reale pot diferi."
   }
 }

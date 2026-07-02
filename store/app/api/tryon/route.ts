@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import getProduct from "@/actions/get-product";
 import { assistantRateLimiter } from "@/lib/assistant/rate-limit";
-import { findPresetModel } from "@/lib/tryon/presets";
+import { findStyle } from "@/lib/tryon/presets";
 import {
   runTryOn,
   tryOnConfigured,
@@ -29,18 +29,18 @@ export async function POST(req: Request) {
     });
   }
 
-  let body: { productId?: string; modelId?: string };
+  let body: { productId?: string; styleId?: string };
   try {
-    body = (await req.json()) as { productId?: string; modelId?: string };
+    body = (await req.json()) as { productId?: string; styleId?: string };
   } catch {
     return NextResponse.json({ status: "invalid" } satisfies TryOnResult, {
       status: 400,
     });
   }
 
-  const { productId, modelId } = body;
-  const model = modelId ? findPresetModel(modelId) : undefined;
-  if (!productId || !model) {
+  const { productId, styleId } = body;
+  const style = styleId ? findStyle(styleId) : undefined;
+  if (!productId || !style) {
     return NextResponse.json({ status: "invalid" } satisfies TryOnResult, {
       status: 400,
     });
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
   try {
     const { imageUrl } = await runTryOn({
       garmentImageUrl,
-      modelImageUrl: model.imageUrl,
+      stylePrompt: style.prompt,
     });
     return NextResponse.json({ status: "ok", imageUrl } satisfies TryOnResult, {
       status: 200,

@@ -347,14 +347,15 @@
   },
   "TryOn": {
     "title": "Virtual try-on",
-    "presetNote": "Preview this piece on one of our models. Pick a model to see the fit — no photo of you required.",
-    "chooseModel": "Choose a model",
-    "modelA": "Model A",
-    "modelB": "Model B",
-    "modelC": "Model C",
+    "presetNote": "See this piece worn on a model. Pick a style and we'll generate a preview — no photo of you required.",
+    "chooseStyle": "Choose a style",
+    "styleStudio": "Studio",
+    "styleEditorial": "Editorial",
+    "styleStreet": "Street",
     "generate": "Try it on",
     "generating": "Generating your preview...",
     "resultAlt": "Virtual try-on preview",
-    "error": "The preview couldn't be generated. Please try again."
+    "error": "The preview couldn't be generated. Please try again.",
+    "aiNote": "AI-generated preview for illustration — actual fit and colour may vary."
   }
 }

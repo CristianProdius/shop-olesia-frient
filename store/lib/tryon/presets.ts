@@ -1,36 +1,35 @@
-// Client-safe Virtual Try-On config: preset model bodies + the enabled flag.
-//
-// PRESET MODELS ONLY — no shopper photo upload, so there is no consent,
-// storage, or likeness burden. To activate try-on the store owner must:
-//   1. Host a few model/mannequin photos (front-facing, neutral background) on
-//      a CDN/MinIO and set their URLs via NEXT_PUBLIC_TRYON_MODEL_A/B/C.
-//   2. Set NEXT_PUBLIC_TRYON_ENABLED="true".
-//   3. Set the server-side VTON_API_KEY (see lib/tryon/provider.ts).
-// Until then `tryOnEnabled()` is false and the UI renders nothing.
+// Client-safe Virtual Try-On config: preset STYLES (no shopper photo upload and
+// no hosted model photos needed). Each style maps to a prompt fragment; the
+// image model generates a model wearing the product's garment in that setting.
+// Enablement is decided server-side (presence of the image API key) and passed
+// to the UI as a prop — see lib/tryon/provider.ts `tryOnConfigured()`.
 
-export type TryOnPresetModel = {
+export type TryOnStyle = {
   id: string;
-  labelKey: "modelA" | "modelB" | "modelC";
-  imageUrl: string;
+  labelKey: "styleStudio" | "styleEditorial" | "styleStreet";
+  prompt: string;
 };
 
-const ALL_PRESET_MODELS: TryOnPresetModel[] = [
-  { id: "a", labelKey: "modelA", imageUrl: process.env.NEXT_PUBLIC_TRYON_MODEL_A ?? "" },
-  { id: "b", labelKey: "modelB", imageUrl: process.env.NEXT_PUBLIC_TRYON_MODEL_B ?? "" },
-  { id: "c", labelKey: "modelC", imageUrl: process.env.NEXT_PUBLIC_TRYON_MODEL_C ?? "" },
+export const TRYON_STYLES: TryOnStyle[] = [
+  {
+    id: "studio",
+    labelKey: "styleStudio",
+    prompt:
+      "standing in a clean photography studio with soft, even lighting and a neutral seamless background",
+  },
+  {
+    id: "editorial",
+    labelKey: "styleEditorial",
+    prompt:
+      "in an elegant editorial fashion pose with tasteful dramatic lighting",
+  },
+  {
+    id: "street",
+    labelKey: "styleStreet",
+    prompt: "in a natural outdoor street-style setting in soft daylight",
+  },
 ];
 
-export const TRYON_PRESET_MODELS: TryOnPresetModel[] = ALL_PRESET_MODELS.filter(
-  (model) => model.imageUrl.trim().length > 0,
-);
-
-export function tryOnEnabled(): boolean {
-  return (
-    process.env.NEXT_PUBLIC_TRYON_ENABLED === "true" &&
-    TRYON_PRESET_MODELS.length > 0
-  );
-}
-
-export function findPresetModel(id: string): TryOnPresetModel | undefined {
-  return TRYON_PRESET_MODELS.find((model) => model.id === id);
+export function findStyle(id: string): TryOnStyle | undefined {
+  return TRYON_STYLES.find((style) => style.id === id);
 }
